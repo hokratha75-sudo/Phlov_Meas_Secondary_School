@@ -1,5 +1,6 @@
 import { useI18n } from "@/lib/i18n";
-import { MapPin, Phone, Mail, Clock } from "lucide-react";
+import { MapPin, Phone, Mail, Clock, Youtube } from "lucide-react";
+import { SiTiktok, SiFacebook } from "react-icons/si";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
@@ -47,7 +48,7 @@ export default function Contact() {
                 <div>
                   <h4 className="font-bold text-gray-900 text-lg mb-1">{t("Our Location", "ទីតាំងរបស់យើង")}</h4>
                   <p className="text-gray-600">
-                    {t("National Road 5, Sdav Commune, Battambang Province, Cambodia", "ផ្លូវជាតិលេខ៥ ឃុំស្ដៅ ខេត្តបាត់ដំបង ប្រទេសកម្ពុជា")}
+                    {t("Sdau Commune, Rotanak Mondol District, Battambang, Cambodia", "ឃុំស្ដៅ ស្រុករតនៈមណ្ឌល ខេត្តបាត់ដំបង ប្រទេសកម្ពុជា")}
                   </p>
                 </div>
               </div>
@@ -58,7 +59,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="font-bold text-gray-900 text-lg mb-1">{t("Phone Number", "លេខទូរស័ព្ទ")}</h4>
-                  <p className="text-gray-600">+855 12 345 678<br />+855 98 765 432</p>
+                  <p className="text-gray-600">096 944 7122</p>
                 </div>
               </div>
               
@@ -68,7 +69,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="font-bold text-gray-900 text-lg mb-1">{t("Email Address", "អ៊ីមែល")}</h4>
-                  <p className="text-gray-600">info@sdavsantiphear.edu.kh<br />admissions@sdavsantiphear.edu.kh</p>
+                  <p className="text-gray-600">vmc.sdaosantepheap@gmail.com</p>
                 </div>
               </div>
 
@@ -83,6 +84,25 @@ export default function Contact() {
                     {t("Saturday: 7:00 AM - 11:30 AM", "សៅរ៍: ៧:០០ ព្រឹក - ១១:៣០ ព្រឹក")}
                   </p>
                 </div>
+              </div>
+            </div>
+
+            {/* Social Media */}
+            <div>
+              <h4 className="font-bold text-gray-900 text-lg mb-4">{t("Follow Us", "តាមដានពួកយើង")}</h4>
+              <div className="flex items-center gap-3">
+                <a href="https://www.facebook.com/highschool2k15" target="_blank" rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-full bg-[#1877F2] text-white flex items-center justify-center hover:opacity-90 transition-opacity">
+                  <SiFacebook size={20} />
+                </a>
+                <a href="https://www.youtube.com/@SdaoSantepheap" target="_blank" rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-full bg-[#FF0000] text-white flex items-center justify-center hover:opacity-90 transition-opacity">
+                  <Youtube size={20} />
+                </a>
+                <a href="https://www.tiktok.com/@user3802703881381" target="_blank" rel="noopener noreferrer"
+                  className="w-11 h-11 rounded-full bg-black text-white flex items-center justify-center hover:opacity-90 transition-opacity">
+                  <SiTiktok size={18} />
+                </a>
               </div>
             </div>
           </div>

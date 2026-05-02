@@ -1,6 +1,7 @@
 import { Link, useLocation } from "wouter";
 import { useI18n } from "@/lib/i18n";
-import { Phone, Mail, MapPin, Facebook, ChevronDown, Menu, X } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Menu, X, Youtube } from "lucide-react";
+import { SiTiktok } from "react-icons/si";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
 
@@ -34,16 +35,22 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="hidden md:flex items-center space-x-6">
           <div className="flex items-center space-x-2">
             <Phone size={14} />
-            <span>+855 12 345 678</span>
+            <span>096 944 7122</span>
           </div>
           <div className="flex items-center space-x-2">
             <Mail size={14} />
-            <span>sdaosontepheap@gmail.com</span>
+            <span>vmc.sdaosantepheap@gmail.com</span>
           </div>
         </div>
         <div className="flex items-center space-x-4 ml-auto">
           <a href="https://www.facebook.com/highschool2k15" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="Facebook">
             <Facebook size={16} />
+          </a>
+          <a href="https://www.youtube.com/@SdaoSantepheap" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="YouTube">
+            <Youtube size={16} />
+          </a>
+          <a href="https://www.tiktok.com/@user3802703881381" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="TikTok">
+            <SiTiktok size={14} />
           </a>
           <div className="h-4 w-px bg-white/30"></div>
           <div className="flex items-center space-x-2">
@@ -186,18 +193,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <MapPin className="text-secondary mt-1 shrink-0" size={18} />
                 <span>
                   {t(
-                    "National Road 5, Sdav Commune, Battambang Province, Cambodia",
-                    "ផ្លូវជាតិលេខ៥ ឃុំស្ដៅ ខេត្តបាត់ដំបង ប្រទេសកម្ពុជា"
+                    "Sdau Commune, Rotanak Mondol District, Battambang, Cambodia",
+                    "ឃុំស្ដៅ ស្រុករតនៈមណ្ឌល ខេត្តបាត់ដំបង ប្រទេសកម្ពុជា"
                   )}
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="text-secondary shrink-0" size={18} />
-                <span>+855 12 345 678</span>
+                <span>096 944 7122</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="text-secondary shrink-0" size={18} />
-                <span>sdaosontepheap@gmail.com</span>
+                <span>vmc.sdaosantepheap@gmail.com</span>
               </li>
             </ul>
           </div>
