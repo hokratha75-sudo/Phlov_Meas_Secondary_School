@@ -80,7 +80,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       >
         <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
           <Link href="/" className="flex items-center gap-3">
-            <img src="/school-logo.png" alt="School Logo" className="h-12 w-12 md:h-16 md:w-16 object-contain" />
+            <img src="/school-logo.png" alt="School Logo" className="h-12 w-12 md:h-16 md:w-16 object-cover rounded-full" />
             <div className="flex flex-col">
               <span className="text-primary font-bold text-lg md:text-xl font-khmer leading-tight">
                 វិទ្យាល័យ ស្ដៅសន្តិភាព
@@ -151,7 +151,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="container mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-3 mb-6">
-              <img src="/school-logo.png" alt="School Logo" className="h-14 w-14 object-cover rounded-sm" />
+              <img src="/school-logo.png" alt="School Logo" className="h-14 w-14 object-cover rounded-full" />
               <div className="flex flex-col">
                 <span className="font-bold text-xl font-khmer text-white leading-tight">
                   វិទ្យាល័យ ស្ដៅសន្តិភាព
