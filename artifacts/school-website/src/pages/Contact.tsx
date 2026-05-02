@@ -147,12 +147,36 @@ export default function Contact() {
           </div>
         </div>
 
-        {/* Map Placeholder */}
-        <div className="mt-16 w-full h-[400px] bg-gray-200 border relative overflow-hidden">
-          <div className="absolute inset-0 flex items-center justify-center flex-col text-gray-500">
-            <MapPin size={48} className="mb-4 opacity-50" />
-            <p className="font-semibold text-lg">{t("Interactive Map Placeholder", "ផែនទី")}</p>
-            <p className="text-sm">{t("Sdao Sontepheap High School Location", "ទីតាំង វិទ្យាល័យ ស្ដៅសន្តិភាព")}</p>
+        {/* Google Map */}
+        <div className="mt-16 w-full">
+          <div className="flex items-center gap-3 mb-4">
+            <MapPin className="text-secondary shrink-0" size={20} />
+            <p className="font-semibold text-gray-700">
+              {t("Sdau Commune, Rotanak Mondol District, Battambang, Cambodia", "ឃុំស្ដៅ ស្រុករតនៈមណ្ឌល ខេត្តបាត់ដំបង ប្រទេសកម្ពុជា")}
+            </p>
+          </div>
+          <div className="w-full h-[450px] border shadow-sm overflow-hidden">
+            <iframe
+              title="Sdao Sontepheap High School Location"
+              src="https://maps.google.com/maps?q=Sdao+Sontepheap+High+School+Battambang+Cambodia&output=embed&z=15"
+              width="100%"
+              height="100%"
+              style={{ border: 0 }}
+              allowFullScreen
+              loading="lazy"
+              referrerPolicy="no-referrer-when-downgrade"
+            />
+          </div>
+          <div className="mt-3 flex justify-end">
+            <a
+              href="https://maps.google.com/maps?q=Sdao+Sontepheap+High+School+Battambang+Cambodia"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="text-sm text-secondary font-semibold hover:underline flex items-center gap-1"
+            >
+              <MapPin size={14} />
+              {t("Open in Google Maps", "បើកក្នុង Google Maps")}
+            </a>
           </div>
         </div>
       </div>
