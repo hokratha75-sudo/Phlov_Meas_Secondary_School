@@ -6,4 +6,28 @@
  * OpenAPI spec version: 0.1.0
  */
 
+export * from "./activity";
+export * from "./activityListResponse";
+export * from "./adminUser";
+export * from "./contactListResponse";
+export * from "./contactMessage";
+export * from "./createActivityRequest";
+export * from "./createNewsRequest";
+export * from "./createStudentRequest";
+export * from "./createTeacherRequest";
+export * from "./dashboardStats";
+export * from "./errorResponse";
 export * from "./healthStatus";
+export * from "./listActivitiesParams";
+export * from "./listContactsParams";
+export * from "./listNewsParams";
+export * from "./listStudentsParams";
+export * from "./loginRequest";
+export * from "./loginResponse";
+export * from "./messageResponse";
+export * from "./newsArticle";
+export * from "./newsListResponse";
+export * from "./student";
+export * from "./studentListResponse";
+export * from "./teacher";
+export * from "./teacherListResponse";

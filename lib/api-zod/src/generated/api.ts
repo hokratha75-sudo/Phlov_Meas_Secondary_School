@@ -8,9 +8,500 @@
 import * as zod from "zod";
 
 /**
- * Returns server health status
  * @summary Health check
  */
 export const HealthCheckResponse = zod.object({
   status: zod.string(),
+});
+
+/**
+ * @summary Admin login
+ */
+export const AdminLoginBody = zod.object({
+  username: zod.string(),
+  password: zod.string(),
+});
+
+export const AdminLoginResponse = zod.object({
+  token: zod.string(),
+  user: zod.object({
+    id: zod.number(),
+    username: zod.string(),
+    createdAt: zod.string(),
+  }),
+});
+
+/**
+ * @summary Admin logout
+ */
+export const AdminLogoutResponse = zod.object({
+  message: zod.string(),
+});
+
+/**
+ * @summary Get current admin user
+ */
+export const GetMeResponse = zod.object({
+  id: zod.number(),
+  username: zod.string(),
+  createdAt: zod.string(),
+});
+
+/**
+ * @summary Get dashboard statistics
+ */
+export const GetDashboardStatsResponse = zod.object({
+  newsCount: zod.number(),
+  activitiesCount: zod.number(),
+  teachersCount: zod.number(),
+  studentsCount: zod.number(),
+  unreadContactsCount: zod.number(),
+});
+
+/**
+ * @summary List all news
+ */
+export const listNewsQueryLimitDefault = 20;
+export const listNewsQueryOffsetDefault = 0;
+
+export const ListNewsQueryParams = zod.object({
+  limit: zod.coerce.number().default(listNewsQueryLimitDefault),
+  offset: zod.coerce.number().default(listNewsQueryOffsetDefault),
+});
+
+export const ListNewsResponse = zod.object({
+  data: zod.array(
+    zod.object({
+      id: zod.number(),
+      titleEn: zod.string(),
+      titleKh: zod.string(),
+      contentEn: zod.string(),
+      contentKh: zod.string(),
+      imageUrl: zod.string().nullish(),
+      category: zod.string(),
+      isPublished: zod.boolean(),
+      publishedAt: zod.string(),
+      createdAt: zod.string(),
+      updatedAt: zod.string(),
+    }),
+  ),
+  total: zod.number(),
+});
+
+/**
+ * @summary Create news article
+ */
+export const CreateNewsBody = zod.object({
+  titleEn: zod.string(),
+  titleKh: zod.string(),
+  contentEn: zod.string(),
+  contentKh: zod.string(),
+  imageUrl: zod.string().nullish(),
+  category: zod.string(),
+  isPublished: zod.boolean().optional(),
+});
+
+/**
+ * @summary Get news by ID
+ */
+export const GetNewsParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const GetNewsResponse = zod.object({
+  id: zod.number(),
+  titleEn: zod.string(),
+  titleKh: zod.string(),
+  contentEn: zod.string(),
+  contentKh: zod.string(),
+  imageUrl: zod.string().nullish(),
+  category: zod.string(),
+  isPublished: zod.boolean(),
+  publishedAt: zod.string(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Update news article
+ */
+export const UpdateNewsParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const UpdateNewsBody = zod.object({
+  titleEn: zod.string(),
+  titleKh: zod.string(),
+  contentEn: zod.string(),
+  contentKh: zod.string(),
+  imageUrl: zod.string().nullish(),
+  category: zod.string(),
+  isPublished: zod.boolean().optional(),
+});
+
+export const UpdateNewsResponse = zod.object({
+  id: zod.number(),
+  titleEn: zod.string(),
+  titleKh: zod.string(),
+  contentEn: zod.string(),
+  contentKh: zod.string(),
+  imageUrl: zod.string().nullish(),
+  category: zod.string(),
+  isPublished: zod.boolean(),
+  publishedAt: zod.string(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Delete news article
+ */
+export const DeleteNewsParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const DeleteNewsResponse = zod.object({
+  message: zod.string(),
+});
+
+/**
+ * @summary List all activities
+ */
+export const listActivitiesQueryLimitDefault = 20;
+export const listActivitiesQueryOffsetDefault = 0;
+
+export const ListActivitiesQueryParams = zod.object({
+  limit: zod.coerce.number().default(listActivitiesQueryLimitDefault),
+  offset: zod.coerce.number().default(listActivitiesQueryOffsetDefault),
+});
+
+export const ListActivitiesResponse = zod.object({
+  data: zod.array(
+    zod.object({
+      id: zod.number(),
+      titleEn: zod.string(),
+      titleKh: zod.string(),
+      descriptionEn: zod.string(),
+      descriptionKh: zod.string(),
+      category: zod.string(),
+      imageUrl: zod.string().nullish(),
+      eventDate: zod.string(),
+      likes: zod.number(),
+      commentsCount: zod.number(),
+      createdAt: zod.string(),
+      updatedAt: zod.string(),
+    }),
+  ),
+  total: zod.number(),
+});
+
+/**
+ * @summary Create activity
+ */
+export const CreateActivityBody = zod.object({
+  titleEn: zod.string(),
+  titleKh: zod.string(),
+  descriptionEn: zod.string(),
+  descriptionKh: zod.string(),
+  category: zod.string(),
+  imageUrl: zod.string().nullish(),
+  eventDate: zod.string(),
+  likes: zod.number().optional(),
+  commentsCount: zod.number().optional(),
+});
+
+/**
+ * @summary Get activity by ID
+ */
+export const GetActivityParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const GetActivityResponse = zod.object({
+  id: zod.number(),
+  titleEn: zod.string(),
+  titleKh: zod.string(),
+  descriptionEn: zod.string(),
+  descriptionKh: zod.string(),
+  category: zod.string(),
+  imageUrl: zod.string().nullish(),
+  eventDate: zod.string(),
+  likes: zod.number(),
+  commentsCount: zod.number(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Update activity
+ */
+export const UpdateActivityParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const UpdateActivityBody = zod.object({
+  titleEn: zod.string(),
+  titleKh: zod.string(),
+  descriptionEn: zod.string(),
+  descriptionKh: zod.string(),
+  category: zod.string(),
+  imageUrl: zod.string().nullish(),
+  eventDate: zod.string(),
+  likes: zod.number().optional(),
+  commentsCount: zod.number().optional(),
+});
+
+export const UpdateActivityResponse = zod.object({
+  id: zod.number(),
+  titleEn: zod.string(),
+  titleKh: zod.string(),
+  descriptionEn: zod.string(),
+  descriptionKh: zod.string(),
+  category: zod.string(),
+  imageUrl: zod.string().nullish(),
+  eventDate: zod.string(),
+  likes: zod.number(),
+  commentsCount: zod.number(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Delete activity
+ */
+export const DeleteActivityParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const DeleteActivityResponse = zod.object({
+  message: zod.string(),
+});
+
+/**
+ * @summary List all teachers
+ */
+export const ListTeachersResponse = zod.object({
+  data: zod.array(
+    zod.object({
+      id: zod.number(),
+      nameEn: zod.string(),
+      nameKh: zod.string(),
+      subjectEn: zod.string(),
+      subjectKh: zod.string(),
+      photoUrl: zod.string().nullish(),
+      bioEn: zod.string().nullish(),
+      bioKh: zod.string().nullish(),
+      phone: zod.string().nullish(),
+      email: zod.string().nullish(),
+      createdAt: zod.string(),
+      updatedAt: zod.string(),
+    }),
+  ),
+  total: zod.number(),
+});
+
+/**
+ * @summary Create teacher
+ */
+export const CreateTeacherBody = zod.object({
+  nameEn: zod.string(),
+  nameKh: zod.string(),
+  subjectEn: zod.string(),
+  subjectKh: zod.string(),
+  photoUrl: zod.string().nullish(),
+  bioEn: zod.string().nullish(),
+  bioKh: zod.string().nullish(),
+  phone: zod.string().nullish(),
+  email: zod.string().nullish(),
+});
+
+/**
+ * @summary Update teacher
+ */
+export const UpdateTeacherParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const UpdateTeacherBody = zod.object({
+  nameEn: zod.string(),
+  nameKh: zod.string(),
+  subjectEn: zod.string(),
+  subjectKh: zod.string(),
+  photoUrl: zod.string().nullish(),
+  bioEn: zod.string().nullish(),
+  bioKh: zod.string().nullish(),
+  phone: zod.string().nullish(),
+  email: zod.string().nullish(),
+});
+
+export const UpdateTeacherResponse = zod.object({
+  id: zod.number(),
+  nameEn: zod.string(),
+  nameKh: zod.string(),
+  subjectEn: zod.string(),
+  subjectKh: zod.string(),
+  photoUrl: zod.string().nullish(),
+  bioEn: zod.string().nullish(),
+  bioKh: zod.string().nullish(),
+  phone: zod.string().nullish(),
+  email: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Delete teacher
+ */
+export const DeleteTeacherParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const DeleteTeacherResponse = zod.object({
+  message: zod.string(),
+});
+
+/**
+ * @summary List all students
+ */
+export const listStudentsQueryLimitDefault = 50;
+export const listStudentsQueryOffsetDefault = 0;
+
+export const ListStudentsQueryParams = zod.object({
+  limit: zod.coerce.number().default(listStudentsQueryLimitDefault),
+  offset: zod.coerce.number().default(listStudentsQueryOffsetDefault),
+  grade: zod.coerce.string().optional(),
+});
+
+export const ListStudentsResponse = zod.object({
+  data: zod.array(
+    zod.object({
+      id: zod.number(),
+      studentId: zod.string(),
+      nameEn: zod.string(),
+      nameKh: zod.string(),
+      grade: zod.string(),
+      gender: zod.string(),
+      enrollmentYear: zod.number(),
+      phone: zod.string().nullish(),
+      parentPhone: zod.string().nullish(),
+      address: zod.string().nullish(),
+      createdAt: zod.string(),
+      updatedAt: zod.string(),
+    }),
+  ),
+  total: zod.number(),
+});
+
+/**
+ * @summary Create student
+ */
+export const CreateStudentBody = zod.object({
+  studentId: zod.string(),
+  nameEn: zod.string(),
+  nameKh: zod.string(),
+  grade: zod.string(),
+  gender: zod.string(),
+  enrollmentYear: zod.number(),
+  phone: zod.string().nullish(),
+  parentPhone: zod.string().nullish(),
+  address: zod.string().nullish(),
+});
+
+/**
+ * @summary Update student
+ */
+export const UpdateStudentParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const UpdateStudentBody = zod.object({
+  studentId: zod.string(),
+  nameEn: zod.string(),
+  nameKh: zod.string(),
+  grade: zod.string(),
+  gender: zod.string(),
+  enrollmentYear: zod.number(),
+  phone: zod.string().nullish(),
+  parentPhone: zod.string().nullish(),
+  address: zod.string().nullish(),
+});
+
+export const UpdateStudentResponse = zod.object({
+  id: zod.number(),
+  studentId: zod.string(),
+  nameEn: zod.string(),
+  nameKh: zod.string(),
+  grade: zod.string(),
+  gender: zod.string(),
+  enrollmentYear: zod.number(),
+  phone: zod.string().nullish(),
+  parentPhone: zod.string().nullish(),
+  address: zod.string().nullish(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Delete student
+ */
+export const DeleteStudentParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const DeleteStudentResponse = zod.object({
+  message: zod.string(),
+});
+
+/**
+ * @summary List contact messages
+ */
+export const listContactsQueryLimitDefault = 20;
+export const listContactsQueryOffsetDefault = 0;
+
+export const ListContactsQueryParams = zod.object({
+  limit: zod.coerce.number().default(listContactsQueryLimitDefault),
+  offset: zod.coerce.number().default(listContactsQueryOffsetDefault),
+});
+
+export const ListContactsResponse = zod.object({
+  data: zod.array(
+    zod.object({
+      id: zod.number(),
+      fullName: zod.string(),
+      phone: zod.string().nullish(),
+      email: zod.string().nullish(),
+      message: zod.string(),
+      isRead: zod.boolean(),
+      createdAt: zod.string(),
+    }),
+  ),
+  total: zod.number(),
+});
+
+/**
+ * @summary Mark contact message as read
+ */
+export const MarkContactReadParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const MarkContactReadResponse = zod.object({
+  id: zod.number(),
+  fullName: zod.string(),
+  phone: zod.string().nullish(),
+  email: zod.string().nullish(),
+  message: zod.string(),
+  isRead: zod.boolean(),
+  createdAt: zod.string(),
+});
+
+/**
+ * @summary Delete contact message
+ */
+export const DeleteContactParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const DeleteContactResponse = zod.object({
+  message: zod.string(),
 });

@@ -8,3 +8,196 @@
 export interface HealthStatus {
   status: string;
 }
+
+export interface ErrorResponse {
+  error: string;
+}
+
+export interface MessageResponse {
+  message: string;
+}
+
+export interface LoginRequest {
+  username: string;
+  password: string;
+}
+
+export interface AdminUser {
+  id: number;
+  username: string;
+  createdAt: string;
+}
+
+export interface LoginResponse {
+  token: string;
+  user: AdminUser;
+}
+
+export interface DashboardStats {
+  newsCount: number;
+  activitiesCount: number;
+  teachersCount: number;
+  studentsCount: number;
+  unreadContactsCount: number;
+}
+
+export interface NewsArticle {
+  id: number;
+  titleEn: string;
+  titleKh: string;
+  contentEn: string;
+  contentKh: string;
+  imageUrl?: string | null;
+  category: string;
+  isPublished: boolean;
+  publishedAt: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateNewsRequest {
+  titleEn: string;
+  titleKh: string;
+  contentEn: string;
+  contentKh: string;
+  imageUrl?: string | null;
+  category: string;
+  isPublished?: boolean;
+}
+
+export interface NewsListResponse {
+  data: NewsArticle[];
+  total: number;
+}
+
+export interface Activity {
+  id: number;
+  titleEn: string;
+  titleKh: string;
+  descriptionEn: string;
+  descriptionKh: string;
+  category: string;
+  imageUrl?: string | null;
+  eventDate: string;
+  likes: number;
+  commentsCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateActivityRequest {
+  titleEn: string;
+  titleKh: string;
+  descriptionEn: string;
+  descriptionKh: string;
+  category: string;
+  imageUrl?: string | null;
+  eventDate: string;
+  likes?: number;
+  commentsCount?: number;
+}
+
+export interface ActivityListResponse {
+  data: Activity[];
+  total: number;
+}
+
+export interface Teacher {
+  id: number;
+  nameEn: string;
+  nameKh: string;
+  subjectEn: string;
+  subjectKh: string;
+  photoUrl?: string | null;
+  bioEn?: string | null;
+  bioKh?: string | null;
+  phone?: string | null;
+  email?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateTeacherRequest {
+  nameEn: string;
+  nameKh: string;
+  subjectEn: string;
+  subjectKh: string;
+  photoUrl?: string | null;
+  bioEn?: string | null;
+  bioKh?: string | null;
+  phone?: string | null;
+  email?: string | null;
+}
+
+export interface TeacherListResponse {
+  data: Teacher[];
+  total: number;
+}
+
+export interface Student {
+  id: number;
+  studentId: string;
+  nameEn: string;
+  nameKh: string;
+  grade: string;
+  gender: string;
+  enrollmentYear: number;
+  phone?: string | null;
+  parentPhone?: string | null;
+  address?: string | null;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateStudentRequest {
+  studentId: string;
+  nameEn: string;
+  nameKh: string;
+  grade: string;
+  gender: string;
+  enrollmentYear: number;
+  phone?: string | null;
+  parentPhone?: string | null;
+  address?: string | null;
+}
+
+export interface StudentListResponse {
+  data: Student[];
+  total: number;
+}
+
+export interface ContactMessage {
+  id: number;
+  fullName: string;
+  phone?: string | null;
+  email?: string | null;
+  message: string;
+  isRead: boolean;
+  createdAt: string;
+}
+
+export interface ContactListResponse {
+  data: ContactMessage[];
+  total: number;
+}
+
+export type ListNewsParams = {
+  limit?: number;
+  offset?: number;
+};
+
+export type ListActivitiesParams = {
+  limit?: number;
+  offset?: number;
+};
+
+export type ListStudentsParams = {
+  limit?: number;
+  offset?: number;
+  grade?: string;
+};
+
+export type ListContactsParams = {
+  limit?: number;
+  offset?: number;
+};
