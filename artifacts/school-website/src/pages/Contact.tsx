@@ -132,7 +132,7 @@ export default function Contact() {
           <div className="absolute inset-0 flex items-center justify-center flex-col text-gray-500">
             <MapPin size={48} className="mb-4 opacity-50" />
             <p className="font-semibold text-lg">{t("Interactive Map Placeholder", "ផែនទី")}</p>
-            <p className="text-sm">{t("Sdav Santiphear High School Location", "ទីតាំង វិទ្យាល័យ ស្ដៅសន្តិភាព")}</p>
+            <p className="text-sm">{t("Sdao Sontepheap High School Location", "ទីតាំង វិទ្យាល័យ ស្ដៅសន្តិភាព")}</p>
           </div>
         </div>
       </div>

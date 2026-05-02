@@ -29,7 +29,7 @@ export default function About() {
             <div className="space-y-4 text-gray-600 leading-relaxed text-lg">
               <p>
                 {t(
-                  "Established in 1995, Sdav Santiphear High School has been a beacon of educational excellence in Battambang Province. Born from a vision of community leaders who believed in the power of education to transform lives, our school has grown from a humble beginning with just 3 classrooms to a comprehensive educational institution.",
+                  "Established in 1995, Sdao Sontepheap High School has been a beacon of educational excellence in Battambang Province. Born from a vision of community leaders who believed in the power of education to transform lives, our school has grown from a humble beginning with just 3 classrooms to a comprehensive educational institution.",
                   "ត្រូវបានបង្កើតឡើងក្នុងឆ្នាំ ១៩៩៥ វិទ្យាល័យស្ដៅសន្តិភាព គឺជាបង្គោលភ្លើងនៃឧត្តមភាពអប់រំនៅក្នុងខេត្តបាត់ដំបង។ កើតចេញពីចក្ខុវិស័យរបស់មេដឹកនាំសហគមន៍ដែលជឿជាក់លើថាមពលនៃការអប់រំក្នុងការផ្លាស់ប្តូរជីវិត សាលារបស់យើងបានរីកចម្រើនពីការចាប់ផ្តើមដ៏រាបទាបដែលមានត្រឹមតែ ៣ បន្ទប់រហូតដល់ស្ថាប័នអប់រំដ៏ទូលំទូលាយមួយ។"
                 )}
               </p>
@@ -42,8 +42,8 @@ export default function About() {
             </div>
           </div>
           <div className="grid grid-cols-2 gap-4">
-            <img src="/science-lab.png" alt="School History 1" className="w-full h-64 object-cover rounded-sm shadow-md" />
-            <img src="/activity1.png" alt="School History 2" className="w-full h-64 object-cover rounded-sm shadow-md translate-y-8" />
+            <img src="/campus-hero.png" alt="School Campus" className="w-full h-64 object-cover rounded-sm shadow-md" />
+            <img src="/campus-gate.png" alt="School Gate" className="w-full h-64 object-cover rounded-sm shadow-md translate-y-8" />
           </div>
         </div>
 

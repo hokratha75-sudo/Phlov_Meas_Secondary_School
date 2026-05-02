@@ -38,11 +38,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
           <div className="flex items-center space-x-2">
             <Mail size={14} />
-            <span>info@sdavsantiphear.edu.kh</span>
+            <span>sdaosontepheap@gmail.com</span>
           </div>
         </div>
         <div className="flex items-center space-x-4 ml-auto">
-          <a href="#" className="hover:text-secondary transition-colors" aria-label="Facebook">
+          <a href="https://www.facebook.com/highschool2k15" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="Facebook">
             <Facebook size={16} />
           </a>
           <div className="h-4 w-px bg-white/30"></div>
@@ -79,7 +79,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 វិទ្យាល័យ ស្ដៅសន្តិភាព
               </span>
               <span className="text-muted-foreground text-xs md:text-sm font-semibold uppercase tracking-wider">
-                Sdav Santiphear High School
+                Sdao Sontepheap High School
               </span>
             </div>
           </Link>
@@ -150,7 +150,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   វិទ្យាល័យ ស្ដៅសន្តិភាព
                 </span>
                 <span className="text-white/80 text-sm font-semibold uppercase tracking-wider">
-                  Sdav Santiphear High School
+                  Sdao Sontepheap High School
                 </span>
               </div>
             </div>
@@ -197,7 +197,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="text-secondary shrink-0" size={18} />
-                <span>info@sdavsantiphear.edu.kh</span>
+                <span>sdaosontepheap@gmail.com</span>
               </li>
             </ul>
           </div>
@@ -205,7 +205,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         
         <div className="container mx-auto px-4 md:px-8 border-t border-white/10 pt-6 text-center md:flex md:justify-between md:text-left">
           <p className="text-white/50 text-sm">
-            &copy; {new Date().getFullYear()} {t("Sdav Santiphear High School. All Rights Reserved.", "វិទ្យាល័យ ស្ដៅសន្តិភាព. រក្សាសិទ្ធិគ្រប់យ៉ាង.")}
+            &copy; {new Date().getFullYear()} {t("Sdao Sontepheap High School. All Rights Reserved.", "វិទ្យាល័យ ស្ដៅសន្តិភាព. រក្សាសិទ្ធិគ្រប់យ៉ាង.")}
           </p>
           <div className="text-white/50 text-sm mt-2 md:mt-0 flex gap-4 justify-center">
             <Link href="/privacy" className="hover:text-white transition-colors">{t("Privacy Policy", "គោលការណ៍ឯកជនភាព")}</Link>

@@ -12,7 +12,7 @@ export default function Home() {
       <section className="relative w-full h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
           <img 
-            src="/hero.png" 
+            src="/campus-hero.png" 
             alt="School Campus" 
             className="w-full h-full object-cover"
           />
@@ -27,7 +27,7 @@ export default function Home() {
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 font-khmer leading-tight drop-shadow-lg">
             {t("Welcome to", "សូមស្វាគមន៍មកកាន់")} <br />
             <span className="text-white">
-              {t("Sdav Santiphear High School", "វិទ្យាល័យ ស្ដៅសន្តិភាព")}
+              {t("Sdao Sontepheap High School", "វិទ្យាល័យ ស្ដៅសន្តិភាព")}
             </span>
           </h1>
           <p className="text-lg md:text-xl mb-10 max-w-3xl mx-auto text-white/90 drop-shadow-md">
@@ -94,7 +94,7 @@ export default function Home() {
               </h2>
               <p className="text-gray-600 leading-relaxed text-lg">
                 {t(
-                  "Sdav Santiphear High School is committed to providing a holistic education that prepares students for the challenges of tomorrow. Our comprehensive approach combines rigorous academics with strong moral values.",
+                  "Sdao Sontepheap High School is committed to providing a holistic education that prepares students for the challenges of tomorrow. Our comprehensive approach combines rigorous academics with strong moral values.",
                   "វិទ្យាល័យស្ដៅសន្តិភាព ប្តេជ្ញាផ្តល់ការអប់រំដ៏ទូលំទូលាយដែលរៀបចំសិស្សសម្រាប់បញ្ហាប្រឈមនៃថ្ងៃស្អែក។ វិធីសាស្រ្តរបស់យើងរួមបញ្ចូលគ្នានូវការសិក្សាយ៉ាងម៉ត់ចត់ជាមួយនឹងគុណតម្លៃសីលធម៌ដ៏រឹងមាំ។"
                 )}
               </p>
@@ -118,7 +118,7 @@ export default function Home() {
             </div>
             <div className="lg:w-1/2 w-full grid grid-cols-2 gap-4">
               <div className="space-y-4 mt-8">
-                <img src="/hero.png" alt="Students" className="w-full h-48 md:h-64 object-cover" />
+                <img src="/campus-hero.png" alt="Students" className="w-full h-48 md:h-64 object-cover" />
                 <div className="bg-primary p-6 text-white">
                   <h4 className="font-bold text-2xl mb-1">98%</h4>
                   <p className="text-sm opacity-80">{t("Graduation Rate", "អត្រាបញ្ចប់ការសិក្សា")}</p>
@@ -129,7 +129,7 @@ export default function Home() {
                   <h4 className="font-bold text-2xl mb-1">25+</h4>
                   <p className="text-sm opacity-80">{t("Years of Excellence", "ឆ្នាំនៃឧត្តមភាព")}</p>
                 </div>
-                <img src="/hero.png" alt="Campus" className="w-full h-48 md:h-64 object-cover" />
+                <img src="/campus-gate.png" alt="Campus Gate" className="w-full h-48 md:h-64 object-cover" />
               </div>
             </div>
           </div>
@@ -156,7 +156,7 @@ export default function Home() {
                 {[1, 2].map((i) => (
                   <div key={i} className="group border rounded-sm overflow-hidden hover:shadow-lg transition-all duration-300">
                     <div className="aspect-[16/9] bg-gray-200 overflow-hidden relative">
-                      <img src="/hero.png" alt="News" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
+                      <img src="/campus-hero.png" alt="News" className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500" />
                       <div className="absolute top-4 left-4 bg-primary text-white text-xs font-bold px-3 py-1">
                         {t("Academics", "ការសិក្សា")}
                       </div>
