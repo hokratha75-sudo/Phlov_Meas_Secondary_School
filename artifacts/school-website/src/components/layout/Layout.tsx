@@ -4,6 +4,7 @@ import { Phone, Mail, MapPin, Facebook, Menu, X, Youtube } from "lucide-react";
 import { SiTiktok } from "react-icons/si";
 import { useState, useEffect } from "react";
 import { cn } from "@/lib/utils";
+import schoolBanner from "@assets/image_1777794982386.png";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { lang, setLang, t } = useI18n();
@@ -21,6 +22,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   const navLinks = [
     { href: "/", en: "Home", kh: "ទំព័រដើម" },
+    { href: "/results", en: "General Results", kh: "លទ្ធផលសិក្សាទូទៅ" },
+    { href: "/standards", en: "Bac II Standards", kh: "ស្តង់ដារបាក់ឌុប" },
+    { href: "/admin-work", en: "Administrative Work", kh: "កិច្ចការរដ្ឋបាល" },
+    { href: "/reports", en: "School Reports", kh: "របាយការណ៍សាលា" },
     { href: "/about", en: "About", kh: "អំពីយើង" },
     { href: "/academics", en: "Academics", kh: "ការសិក្សា" },
     { href: "/activities", en: "Activities", kh: "សកម្មភាព" },
@@ -74,32 +79,39 @@ export function Layout({ children }: { children: React.ReactNode }) {
       {/* Sticky Navbar */}
       <header 
         className={cn(
-          "sticky top-0 z-40 w-full transition-all duration-300 border-b",
-          isScrolled ? "bg-white/95 backdrop-blur-md shadow-sm py-2" : "bg-white py-4"
+          "sticky top-0 z-40 w-full transition-all duration-300 border-b border-white/10 overflow-hidden",
+          isScrolled ? "shadow-sm py-1" : "py-0"
         )}
       >
-        <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
-          <Link href="/" className="flex items-center gap-3">
-            <img src="/school-logo.png" alt="School Logo" className="h-12 w-12 md:h-16 md:w-16 object-cover rounded-full" />
-            <div className="flex flex-col">
-              <span className="text-primary font-bold text-lg md:text-xl font-khmer leading-tight">
-                អនុវិទ្យាល័យត្រែង
+        <div className="absolute inset-0">
+          <img src={schoolBanner} alt="School Banner" className="w-full h-full object-cover" />
+          <div className="absolute inset-0 bg-primary/70" />
+        </div>
+        <div className="relative container mx-auto px-4 md:px-8 flex items-center justify-between min-h-[110px]">
+          <Link href="/" className="flex items-center gap-4">
+            <img src="/school-logo.png" alt="School Logo" className="h-16 w-16 md:h-20 md:w-20 object-cover rounded-full border-4 border-white shadow-lg bg-white" />
+            <div className="flex flex-col text-white drop-shadow-sm">
+              <span className="text-secondary font-bold text-sm md:text-base uppercase tracking-wide">
+                {t("Treng Secondary School", "វិទ្យាល័យត្រែង")}
               </span>
-              <span className="text-muted-foreground text-xs md:text-sm font-semibold uppercase tracking-wider">
-                Treng Secondary School
+              <span className="font-bold text-2xl md:text-4xl font-khmer leading-tight">
+                {t("Treng Secondary School", "វិទ្យាល័យត្រែង")}
+              </span>
+              <span className="text-white/90 text-sm md:text-lg font-semibold font-khmer">
+                {t("A place of excellence", "ឧត្តមភាពក្នុងការអប់រំ")}
               </span>
             </div>
           </Link>
 
           {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center space-x-8">
+          <nav className="hidden md:flex items-center space-x-5 lg:space-x-7">
             {navLinks.map((link) => (
               <Link 
                 key={link.href} 
                 href={link.href}
                 className={cn(
-                  "font-semibold text-[15px] transition-colors relative py-2 hover:text-secondary",
-                  location === link.href ? "text-secondary" : "text-primary"
+                  "font-semibold text-[14px] lg:text-[15px] transition-colors relative py-2 hover:text-secondary text-white drop-shadow-sm",
+                  location === link.href ? "text-secondary" : "text-white"
                 )}
               >
                 {t(link.en, link.kh)}
@@ -112,7 +124,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
           {/* Mobile Menu Toggle */}
           <button 
-            className="md:hidden text-primary p-2"
+            className="md:hidden text-white p-2"
             onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
           >
             {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
@@ -121,7 +133,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
         {/* Mobile Nav */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-white shadow-lg border-b animate-in slide-in-from-top-2">
+          <div className="md:hidden absolute top-full left-0 w-full bg-primary/95 backdrop-blur-md shadow-lg border-b border-white/10 animate-in slide-in-from-top-2">
             <nav className="flex flex-col p-4">
               {navLinks.map((link) => (
                 <Link 
@@ -129,8 +141,8 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
-                    "font-semibold py-3 border-b border-gray-100 transition-colors",
-                    location === link.href ? "text-secondary" : "text-primary"
+                    "font-semibold py-3 border-b border-white/10 transition-colors text-white",
+                    location === link.href ? "text-secondary" : "text-white"
                   )}
                 >
                   {t(link.en, link.kh)}
