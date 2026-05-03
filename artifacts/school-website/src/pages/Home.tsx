@@ -2,7 +2,7 @@ import { useI18n } from "@/lib/i18n";
 import { ArrowRight, BookOpen, Users, Trophy, GraduationCap, Calendar, MapPin } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
-import { useListNews, useListActivities } from "@workspace/api-client-react";
+import { useListNews, useListActivities, useGetSiteSettings } from "@workspace/api-client-react";
 import heroImage from "@assets/image_1777793193658.png";
 
 const STATIC_NEWS = [
@@ -34,10 +34,32 @@ const STATIC_EVENTS = [
   { monthEn: "JAN", monthKh: "មករា", day: 7, titleEn: "National Children's Day", titleKh: "ទិវាជាតិកុមារ", locationEn: "School Grounds", locationKh: "ទីធ្លាសាលា" },
 ];
 
+function parseJson<T>(str: string | undefined, fallback: T): T {
+  if (!str) return fallback;
+  try { return JSON.parse(str) as T; } catch { return fallback; }
+}
+
 export default function Home() {
   const { t, lang } = useI18n();
   const { data: newsData, isLoading: newsLoading } = useListNews({ limit: 2, offset: 0 });
   const { data: activitiesData } = useListActivities({ limit: 3, offset: 0 });
+  const { data: settings } = useGetSiteSettings();
+
+  const hero = parseJson(settings?.["hero"], {
+    enrollmentBannerEn: "ENROLLMENT OPEN 2024-2025",
+    enrollmentBannerKh: "បើកទទួលចុះឈ្មោះចូលរៀនឆ្នាំ ២០២៤-២០២៥",
+    subtitleEn: "Empowering the next generation of Cambodian leaders through academic excellence, character development, and community engagement.",
+    subtitleKh: "ពង្រឹងសមត្ថភាពអ្នកដឹកនាំកម្ពុជាជំនាន់ក្រោយ តាមរយៈឧត្តមភាពសិក្សា ការអភិវឌ្ឍន៍អត្តចរិត និងការចូលរួមក្នុងសង្គម។",
+  });
+
+  const stats = parseJson(settings?.["stats"], {
+    studentsCount: "1,500+",
+    teachersCount: "120+",
+    programsCount: "15",
+    yearsExcellence: "25+",
+    graduationRate: "98%",
+    commitmentLabel: "100%",
+  });
 
   const newsItems = newsData?.data && newsData.data.length > 0 ? newsData.data : STATIC_NEWS;
   const events = activitiesData?.data && activitiesData.data.length > 0
@@ -71,17 +93,14 @@ export default function Home() {
         </div>
         <div className="container relative z-10 mx-auto px-4 md:px-8 text-center text-white mt-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
           <span className="inline-block py-1 px-3 rounded-full bg-secondary/90 text-sm font-bold tracking-widest mb-6 backdrop-blur-sm">
-            {t("ENROLLMENT OPEN 2024-2025", "បើកទទួលចុះឈ្មោះចូលរៀនឆ្នាំ ២០២៤-២០២៥")}
+            {lang === "kh" ? hero.enrollmentBannerKh : hero.enrollmentBannerEn}
           </span>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 font-khmer leading-tight drop-shadow-lg">
             {t("Welcome to", "សូមស្វាគមន៍មកកាន់")} <br />
             <span className="text-white">{t("Treng Secondary School", "អនុវិទ្យាល័យត្រែង")}</span>
           </h1>
           <p className="text-lg md:text-xl mb-10 max-w-3xl mx-auto text-white/90 drop-shadow-md">
-            {t(
-              "Empowering the next generation of Cambodian leaders through academic excellence, character development, and community engagement.",
-              "ពង្រឹងសមត្ថភាពអ្នកដឹកនាំកម្ពុជាជំនាន់ក្រោយ តាមរយៈឧត្តមភាពសិក្សា ការអភិវឌ្ឍន៍អត្តចរិត និងការចូលរួមក្នុងសង្គម។"
-            )}
+            {lang === "kh" ? hero.subtitleKh : hero.subtitleEn}
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-white font-bold h-14 px-8 text-lg w-full sm:w-auto rounded-none">
@@ -153,13 +172,13 @@ export default function Home() {
               <div className="space-y-4 mt-8">
                 <img src="/campus-hero.png" alt="Students" className="w-full h-48 md:h-64 object-cover" />
                 <div className="bg-primary p-6 text-white">
-                  <h4 className="font-bold text-2xl mb-1">98%</h4>
+                  <h4 className="font-bold text-2xl mb-1">{stats.graduationRate}</h4>
                   <p className="text-sm opacity-80">{t("Graduation Rate", "អត្រាបញ្ចប់ការសិក្សា")}</p>
                 </div>
               </div>
               <div className="space-y-4">
                 <div className="bg-secondary p-6 text-white">
-                  <h4 className="font-bold text-2xl mb-1">25+</h4>
+                  <h4 className="font-bold text-2xl mb-1">{stats.yearsExcellence}</h4>
                   <p className="text-sm opacity-80">{t("Years of Excellence", "ឆ្នាំនៃឧត្តមភាព")}</p>
                 </div>
                 <img src="/campus-gate.png" alt="Campus Gate" className="w-full h-48 md:h-64 object-cover" />
@@ -267,10 +286,10 @@ export default function Home() {
         <div className="container mx-auto px-4 md:px-8 relative z-10">
           <div className="grid grid-cols-2 md:grid-cols-4 gap-8 text-center divide-x divide-white/20">
             {[
-              { icon: <Users size={36} className="text-secondary" />, val: "1,500+", labelEn: "Students", labelKh: "សិស្សសរុប" },
-              { icon: <GraduationCap size={36} className="text-secondary" />, val: "120+", labelEn: "Teachers", labelKh: "គ្រូបង្រៀន" },
-              { icon: <BookOpen size={36} className="text-secondary" />, val: "15", labelEn: "Academic Programs", labelKh: "កម្មវិធីសិក្សា" },
-              { icon: <Trophy size={36} className="text-secondary" />, val: "100%", labelEn: "Commitment", labelKh: "ការប្តេជ្ញាចិត្ត" },
+              { icon: <Users size={36} className="text-secondary" />, val: stats.studentsCount, labelEn: "Students", labelKh: "សិស្សសរុប" },
+              { icon: <GraduationCap size={36} className="text-secondary" />, val: stats.teachersCount, labelEn: "Teachers", labelKh: "គ្រូបង្រៀន" },
+              { icon: <BookOpen size={36} className="text-secondary" />, val: stats.programsCount, labelEn: "Academic Programs", labelKh: "កម្មវិធីសិក្សា" },
+              { icon: <Trophy size={36} className="text-secondary" />, val: stats.commitmentLabel, labelEn: "Commitment", labelKh: "ការប្តេជ្ញាចិត្ត" },
             ].map((s, i) => (
               <div key={i} className="space-y-2">
                 <div className="flex justify-center mb-4">{s.icon}</div>

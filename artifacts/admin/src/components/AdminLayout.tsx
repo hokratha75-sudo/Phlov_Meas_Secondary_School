@@ -2,7 +2,7 @@ import { type ReactNode, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import {
-  LayoutDashboard, Newspaper, Activity, GraduationCap, Users, Mail, LogOut, Menu, X, School
+  LayoutDashboard, Newspaper, Activity, GraduationCap, Users, Mail, LogOut, Menu, X, School, Settings
 } from "lucide-react";
 
 const navItems = [
@@ -12,6 +12,7 @@ const navItems = [
   { href: "/teachers", icon: GraduationCap, label: "Teachers" },
   { href: "/students", icon: Users, label: "Students" },
   { href: "/contacts", icon: Mail, label: "Messages" },
+  { href: "/settings", icon: Settings, label: "Site Settings" },
 ];
 
 export default function AdminLayout({ children }: { children: ReactNode }) {

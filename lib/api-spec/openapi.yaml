@@ -24,8 +24,46 @@ tags:
     description: Contact messages
   - name: stats
     description: Dashboard statistics
+  - name: settings
+    description: Site settings management
 
 paths:
+  /settings:
+    get:
+      operationId: getSiteSettings
+      tags: [settings]
+      summary: Get all site settings
+      responses:
+        "200":
+          description: All settings as key-value map
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/SiteSettingsMap"
+    put:
+      operationId: updateSiteSetting
+      tags: [settings]
+      summary: Update a site setting (admin only)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/UpdateSettingRequest"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/UpdateSettingRequest"
+        "400":
+          description: Bad request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ErrorResponse"
+
   /healthz:
     get:
       operationId: healthCheck
@@ -900,3 +938,18 @@ components:
         total:
           type: integer
       required: [data, total]
+
+    SiteSettingsMap:
+      type: object
+      additionalProperties:
+        type: string
+      description: Map of setting key to JSON string value
+
+    UpdateSettingRequest:
+      type: object
+      properties:
+        key:
+          type: string
+        value:
+          type: string
+      required: [key, value]

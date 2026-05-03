@@ -8,6 +8,26 @@
 import * as zod from "zod";
 
 /**
+ * @summary Get all site settings
+ */
+export const GetSiteSettingsResponse = zod
+  .record(zod.string(), zod.string())
+  .describe("Map of setting key to JSON string value");
+
+/**
+ * @summary Update a site setting (admin only)
+ */
+export const UpdateSiteSettingBody = zod.object({
+  key: zod.string(),
+  value: zod.string(),
+});
+
+export const UpdateSiteSettingResponse = zod.object({
+  key: zod.string(),
+  value: zod.string(),
+});
+
+/**
  * @summary Health check
  */
 export const HealthCheckResponse = zod.object({

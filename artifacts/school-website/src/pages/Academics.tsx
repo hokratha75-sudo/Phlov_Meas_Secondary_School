@@ -1,32 +1,35 @@
 import { useI18n } from "@/lib/i18n";
-import { BookOpen, FlaskConical, Globe, Calculator, PenTool, Monitor } from "lucide-react";
+import { FlaskConical, Globe, Calculator, PenTool, Monitor, BookOpen } from "lucide-react";
 import { Button } from "@/components/ui/button";
+import { useGetSiteSettings } from "@workspace/api-client-react";
+
+function parseJson<T>(str: string | undefined, fallback: T): T {
+  if (!str) return fallback;
+  try { return JSON.parse(str) as T; } catch { return fallback; }
+}
+
+type ProgramEntry = { titleEn: string; titleKh: string; descEn: string; descKh: string };
+
+const DEFAULT_PROGRAMS: ProgramEntry[] = [
+  { titleEn: "Science Track", titleKh: "ថ្នាក់វិទ្យាសាស្ត្រពិត", descEn: "Intensive focus on Mathematics, Physics, Chemistry, and Biology.", descKh: "ផ្តោតសំខាន់លើគណិតវិទ្យា រូបវិទ្យា គីមីវិទ្យា និងជីវវិទ្យា។" },
+  { titleEn: "Social Science Track", titleKh: "ថ្នាក់វិទ្យាសាស្ត្រសង្គម", descEn: "Emphasizes History, Geography, Literature, and Moral Civics.", descKh: "សង្កត់ធ្ងន់លើប្រវត្តិវិទ្យា ភូមិវិទ្យា អក្សរសាស្ត្រ និងសីលធម៌ពលរដ្ឋ។" },
+  { titleEn: "Computer Science", titleKh: "វិទ្យាសាស្ត្រកុំព្យូទ័រ", descEn: "Modern IT skills, basic programming, and digital literacy.", descKh: "ជំនាញព័ត៌មានវិទ្យាទំនើប ការសរសេរកម្មវិធីមូលដ្ឋាន និងចំណេះដឹងឌីជីថល។" },
+  { titleEn: "Languages", titleKh: "ភាសាបរទេស", descEn: "English and French language programs with native speakers.", descKh: "កម្មវិធីភាសាអង់គ្លេស និងបារាំងជាមួយអ្នកនិយាយដើម។" },
+];
+
+const PROGRAM_ICONS = [
+  <FlaskConical size={32} className="text-secondary" />,
+  <Globe size={32} className="text-secondary" />,
+  <Monitor size={32} className="text-secondary" />,
+  <PenTool size={32} className="text-secondary" />,
+  <Calculator size={32} className="text-secondary" />,
+  <BookOpen size={32} className="text-secondary" />,
+];
 
 export default function Academics() {
-  const { t } = useI18n();
-
-  const programs = [
-    {
-      icon: <FlaskConical size={32} className="text-secondary" />,
-      title: t("Science Track", "ថ្នាក់វិទ្យាសាស្ត្រពិត"),
-      desc: t("Intensive focus on Mathematics, Physics, Chemistry, and Biology.", "ផ្តោតសំខាន់លើគណិតវិទ្យា រូបវិទ្យា គីមីវិទ្យា និងជីវវិទ្យា។")
-    },
-    {
-      icon: <Globe size={32} className="text-secondary" />,
-      title: t("Social Science Track", "ថ្នាក់វិទ្យាសាស្ត្រសង្គម"),
-      desc: t("Emphasizes History, Geography, Literature, and Moral Civics.", "សង្កត់ធ្ងន់លើប្រវត្តិវិទ្យា ភូមិវិទ្យា អក្សរសាស្ត្រ និងសីលធម៌ពលរដ្ឋ។")
-    },
-    {
-      icon: <Monitor size={32} className="text-secondary" />,
-      title: t("Computer Science", "វិទ្យាសាស្ត្រកុំព្យូទ័រ"),
-      desc: t("Modern IT skills, basic programming, and digital literacy.", "ជំនាញព័ត៌មានវិទ្យាទំនើប ការសរសេរកម្មវិធីមូលដ្ឋាន និងចំណេះដឹងឌីជីថល។")
-    },
-    {
-      icon: <PenTool size={32} className="text-secondary" />,
-      title: t("Languages", "ភាសាបរទេស"),
-      desc: t("English and French language programs with native speakers.", "កម្មវិធីភាសាអង់គ្លេស និងបារាំងជាមួយអ្នកនិយាយដើម។")
-    }
-  ];
+  const { t, lang } = useI18n();
+  const { data: settings } = useGetSiteSettings();
+  const programs = parseJson<ProgramEntry[]>(settings?.["academic_programs"], DEFAULT_PROGRAMS);
 
   return (
     <div className="w-full flex flex-col pb-20">
@@ -60,10 +63,14 @@ export default function Academics() {
           {programs.map((prog, i) => (
             <div key={i} className="border p-8 hover:shadow-lg transition-all duration-300 hover:border-secondary/50 group bg-white">
               <div className="w-16 h-16 bg-gray-50 flex items-center justify-center rounded-full mb-6 group-hover:scale-110 transition-transform">
-                {prog.icon}
+                {PROGRAM_ICONS[i % PROGRAM_ICONS.length]}
               </div>
-              <h3 className="text-xl font-bold text-primary mb-3 font-khmer">{prog.title}</h3>
-              <p className="text-gray-600">{prog.desc}</p>
+              <h3 className="text-xl font-bold text-primary mb-3 font-khmer">
+                {lang === "kh" ? prog.titleKh : prog.titleEn}
+              </h3>
+              <p className="text-gray-600">
+                {lang === "kh" ? prog.descKh : prog.descEn}
+              </p>
             </div>
           ))}
         </div>

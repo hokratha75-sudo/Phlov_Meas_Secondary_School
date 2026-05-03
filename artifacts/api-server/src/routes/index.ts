@@ -7,6 +7,7 @@ import activitiesRouter from "./activities";
 import teachersRouter from "./teachers";
 import studentsRouter from "./students";
 import contactsRouter from "./contacts";
+import settingsRouter from "./settings";
 
 const router: IRouter = Router();
 
@@ -18,5 +19,6 @@ router.use(activitiesRouter);
 router.use(teachersRouter);
 router.use(studentsRouter);
 router.use(contactsRouter);
+router.use(settingsRouter);
 
 export default router;

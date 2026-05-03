@@ -181,6 +181,18 @@ export interface ContactListResponse {
   total: number;
 }
 
+/**
+ * Map of setting key to JSON string value
+ */
+export interface SiteSettingsMap {
+  [key: string]: string;
+}
+
+export interface UpdateSettingRequest {
+  key: string;
+  value: string;
+}
+
 export type ListNewsParams = {
   limit?: number;
   offset?: number;
