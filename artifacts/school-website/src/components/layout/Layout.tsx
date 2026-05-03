@@ -83,10 +83,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <img src="/school-logo.png" alt="School Logo" className="h-12 w-12 md:h-16 md:w-16 object-cover rounded-full" />
             <div className="flex flex-col">
               <span className="text-primary font-bold text-lg md:text-xl font-khmer leading-tight">
-                វិទ្យាល័យ ស្ដៅសន្តិភាព
+                អនុវិទ្យាល័យត្រែង
               </span>
               <span className="text-muted-foreground text-xs md:text-sm font-semibold uppercase tracking-wider">
-                Sdao Sontepheap High School
+                Treng Junior High School
               </span>
             </div>
           </Link>
@@ -154,10 +154,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <img src="/school-logo.png" alt="School Logo" className="h-14 w-14 object-cover rounded-full" />
               <div className="flex flex-col">
                 <span className="font-bold text-xl font-khmer text-white leading-tight">
-                  វិទ្យាល័យ ស្ដៅសន្តិភាព
+                  អនុវិទ្យាល័យត្រែង
                 </span>
                 <span className="text-white/80 text-sm font-semibold uppercase tracking-wider">
-                  Sdao Sontepheap High School
+                  Treng Junior High School
                 </span>
               </div>
             </div>
@@ -212,7 +212,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         
         <div className="container mx-auto px-4 md:px-8 border-t border-white/10 pt-6 text-center md:flex md:justify-between md:text-left">
           <p className="text-white/50 text-sm">
-            &copy; {new Date().getFullYear()} {t("Sdao Sontepheap High School. All Rights Reserved.", "វិទ្យាល័យ ស្ដៅសន្តិភាព. រក្សាសិទ្ធិគ្រប់យ៉ាង.")}
+            &copy; {new Date().getFullYear()} {t("Treng Junior High School. All Rights Reserved.", "អនុវិទ្យាល័យត្រែង. រក្សាសិទ្ធិគ្រប់យ៉ាង.")}
           </p>
           <div className="text-white/50 text-sm mt-2 md:mt-0 flex gap-4 justify-center">
             <Link href="/privacy" className="hover:text-white transition-colors">{t("Privacy Policy", "គោលការណ៍ឯកជនភាព")}</Link>

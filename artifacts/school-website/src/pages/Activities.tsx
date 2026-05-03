@@ -55,8 +55,8 @@ const STATIC_ACTIVITIES = [
   {
     id: 2,
     titleEn: "Teacher's Day Celebration", titleKh: "ខួបទិវាគ្រូ",
-    descriptionEn: "Students organized a heartfelt ceremony honoring all teachers at Sdao Sontepheap High School. Students performed traditional dances, gave flowers, and shared gratitude speeches.",
-    descriptionKh: "សិស្សានុសិស្សបានរៀបចំពិធីដ៏ស្មោះស្ងួតមួយ ដើម្បីអំណរគុណគ្រូបង្រៀនទាំងអស់នៅវិទ្យាល័យស្ដៅសន្តិភាព។",
+    descriptionEn: "Students organized a heartfelt ceremony honoring all teachers at Treng Junior High School. Students performed traditional dances, gave flowers, and shared gratitude speeches.",
+    descriptionKh: "សិស្សានុសិស្សបានរៀបចំពិធីដ៏ស្មោះស្ងួតមួយ ដើម្បីអំណរគុណគ្រូបង្រៀនទាំងអស់នៅអនុវិទ្យាល័យត្រែង។",
     eventDate: "October 5, 2023",
     category: "national", imageUrl: "/campus-gate.png",
     likes: 178, commentsCount: 24,

@@ -157,7 +157,7 @@ export default function Contact() {
           </div>
           <div className="w-full h-[450px] border shadow-sm overflow-hidden">
             <iframe
-              title="Sdao Sontepheap High School Location"
+              title="Treng Junior High School Location"
               src="https://maps.google.com/maps?q=Sdao+Sontepheap+High+School+Battambang+Cambodia&output=embed&z=15"
               width="100%"
               height="100%"
