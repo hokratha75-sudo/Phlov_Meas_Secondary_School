@@ -1,9 +1,9 @@
 import { useI18n } from "@/lib/i18n";
-import { ArrowRight, BookOpen, Users, Trophy, GraduationCap, Calendar, MapPin } from "lucide-react";
+import { ArrowRight, BookOpen, Users, Trophy, GraduationCap, Calendar, MapPin, ClipboardList, BookMarked, PieChart, Mail } from "lucide-react";
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useListNews, useListActivities, useGetSiteSettings } from "@workspace/api-client-react";
-import heroImage from "@assets/image_1777793193658.png";
+import heroImage from "@assets/image_1777799036984.png";
 
 const STATIC_NEWS = [
   {
@@ -82,53 +82,78 @@ export default function Home() {
     } catch { return dateStr; }
   };
 
+  const quickInfo = [
+    { icon: ClipboardList, titleEn: "Admissions", titleKh: "ការចុះឈ្មោះ", descEn: "Enrollment steps and required documents", descKh: "ជំហានចុះឈ្មោះ និងឯកសារចាំបាច់" },
+    { icon: BookMarked, titleEn: "Academics", titleKh: "ការសិក្សា", descEn: "Subjects, class tracks and exam support", descKh: "មុខវិជ្ជា ថ្នាក់ និងជំនួយប្រឡង" },
+    { icon: PieChart, titleEn: "Results", titleKh: "លទ្ធផល", descEn: "Bac II and annual performance summaries", descKh: "លទ្ធផល Bac II និងសេចក្តីសង្ខេបប្រចាំឆ្នាំ" },
+    { icon: Mail, titleEn: "Contact", titleKh: "ទំនាក់ទំនង", descEn: "Phone, email and school office updates", descKh: "លេខទូរស័ព្ទ អ៊ីមែល និងព័ត៌មានការិយាល័យ" },
+  ];
+
   return (
     <div className="w-full flex flex-col">
-      {/* Hero Section */}
-      <section className="relative w-full h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
-        <div className="absolute inset-0 z-0">
-          <img src={heroImage} alt="School Campus" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-primary/70 mix-blend-multiply"></div>
-          <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent"></div>
-        </div>
-        <div className="container relative z-10 mx-auto px-4 md:px-8 text-center text-white mt-12 animate-in fade-in slide-in-from-bottom-8 duration-1000">
-          <span className="inline-block py-1 px-3 rounded-full bg-secondary/90 text-sm font-bold tracking-widest mb-6 backdrop-blur-sm">
-            {lang === "kh" ? hero.enrollmentBannerKh : hero.enrollmentBannerEn}
-          </span>
-          <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 font-khmer leading-tight drop-shadow-lg">
-            {t("Welcome to", "សូមស្វាគមន៍មកកាន់")} <br />
-            <span className="text-white">{t("Treng Secondary School", "អនុវិទ្យាល័យត្រែង")}</span>
-          </h1>
-          <p className="text-lg md:text-xl mb-10 max-w-3xl mx-auto text-white/90 drop-shadow-md">
-            {lang === "kh" ? hero.subtitleKh : hero.subtitleEn}
-          </p>
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
-            <Button size="lg" className="bg-secondary hover:bg-secondary/90 text-white font-bold h-14 px-8 text-lg w-full sm:w-auto rounded-none">
-              {t("Discover Our Programs", "ស្វែងយល់ពីកម្មវិធីរបស់យើង")}
-            </Button>
-            <Button size="lg" variant="outline" className="bg-white/10 hover:bg-white/20 text-white border-white/30 backdrop-blur-sm font-bold h-14 px-8 text-lg w-full sm:w-auto rounded-none">
-              {t("Contact Admissions", "ទំនាក់ទំនងចុះឈ្មោះ")}
-            </Button>
+      <section className="bg-white pt-6 md:pt-10">
+        <div className="container mx-auto px-4 md:px-8">
+          <div className="grid grid-cols-1 lg:grid-cols-[1.7fr_1fr] gap-6">
+            <div className="relative overflow-hidden rounded-2xl shadow-xl min-h-[420px]">
+              <img src={heroImage} alt="School banner" className="absolute inset-0 w-full h-full object-cover" />
+              <div className="absolute inset-0 bg-gradient-to-r from-[#0b2a66]/85 via-[#0b2a66]/55 to-transparent" />
+              <div className="relative z-10 p-6 md:p-10 flex flex-col justify-end h-full text-white">
+                <span className="inline-flex w-fit items-center rounded-full bg-red-600 px-3 py-1 text-xs font-bold mb-4">
+                  {lang === "kh" ? "ព័ត៌មានថ្មី" : "Latest Update"}
+                </span>
+                <h1 className="text-3xl md:text-5xl font-black leading-tight font-khmer max-w-2xl drop-shadow-lg">
+                  {lang === "kh" ? hero.subtitleKh : hero.subtitleEn}
+                </h1>
+                <p className="mt-4 max-w-2xl text-white/90 text-sm md:text-base">
+                  {lang === "kh" ? hero.enrollmentBannerKh : hero.enrollmentBannerEn}
+                </p>
+                <div className="mt-6 flex flex-wrap gap-3">
+                  <Button className="bg-secondary text-white hover:bg-secondary/90 rounded-full px-6">
+                    {t("Learn More", "មើលបន្ថែម")}
+                  </Button>
+                  <Button variant="outline" className="border-white/40 bg-white/10 text-white hover:bg-white/20 rounded-full px-6">
+                    {t("Apply Now", "ចុះឈ្មោះឥឡូវ")}
+                  </Button>
+                </div>
+              </div>
+            </div>
+            <div className="space-y-4">
+              <h2 className="text-xl font-bold text-primary font-khmer border-b pb-3">
+                {t("Quick Information", "ព័ត៌មានរហ័ស")}
+              </h2>
+              <div className="grid grid-cols-2 gap-4">
+                {quickInfo.map(item => {
+                  const Icon = item.icon;
+                  return (
+                    <div key={item.titleEn} className="bg-white border rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
+                      <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#1e3a6e] mb-4">
+                        <Icon size={20} />
+                      </div>
+                      <p className="font-bold text-gray-800 font-khmer">{lang === "kh" ? item.titleKh : item.titleEn}</p>
+                      <p className="text-xs text-gray-500 mt-1">{lang === "kh" ? item.descKh : item.descEn}</p>
+                    </div>
+                  );
+                })}
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      {/* Info Strip */}
-      <section className="bg-white border-b border-gray-200 shadow-sm relative z-20 -mt-8 mx-4 md:mx-8 xl:mx-auto max-w-6xl">
-        <div className="grid grid-cols-1 md:grid-cols-3 divide-y md:divide-y-0 md:divide-x divide-gray-200">
-          {[
-            { icon: <BookOpen className="text-primary" size={24} />, bg: "bg-primary/10", titleEn: "Academic Excellence", titleKh: "ឧត្តមភាពសិក្សា", descEn: "Rigorous curriculum for future success", descKh: "កម្មវិធីសិក្សាច្បាស់លាស់សម្រាប់ភាពជោគជ័យ" },
-            { icon: <Users className="text-secondary" size={24} />, bg: "bg-secondary/10", titleEn: "Expert Teachers", titleKh: "គ្រូបង្រៀនជំនាញ", descEn: "Dedicated and highly qualified staff", descKh: "មានការលះបង់ និងមានលក្ខណៈសម្បត្តិគ្រប់គ្រាន់" },
-            { icon: <Trophy className="text-primary" size={24} />, bg: "bg-primary/10", titleEn: "Student Life", titleKh: "ជីវិតសិស្ស", descEn: "Clubs, sports and community events", descKh: "ក្លឹប កីឡា និងព្រឹត្តិការណ៍សហគមន៍" },
-          ].map((item, i) => (
-            <div key={i} className="flex items-center gap-4 p-6 hover:bg-gray-50 transition-colors">
-              <div className={`w-12 h-12 ${item.bg} rounded-full flex items-center justify-center shrink-0`}>{item.icon}</div>
-              <div>
-                <h3 className="font-bold text-gray-900">{lang === "kh" ? item.titleKh : item.titleEn}</h3>
-                <p className="text-sm text-gray-500">{lang === "kh" ? item.descKh : item.descEn}</p>
+      <section className="py-8 bg-gray-50">
+        <div className="container mx-auto px-4 md:px-8">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+            {[
+              { titleEn: "Academic Excellence", titleKh: "ឧត្តមភាពសិក្សា", descEn: "Strong learning programs and disciplined support", descKh: "កម្មវិធីសិក្សាមាំមួន និងការគាំទ្រមានវិន័យ" },
+              { titleEn: "Student Support", titleKh: "ការគាំទ្រសិស្ស", descEn: "Guidance, mentoring and school activities", descKh: "ការណែនាំ ការបង្រៀន និងសកម្មភាពសាលា" },
+              { titleEn: "Cambodia Context", titleKh: "បរិបទកម្ពុជា", descEn: "Bac II readiness, civic values and community life", descKh: "ការត្រៀម Bac II តម្លៃពលរដ្ឋ និងជីវិតសហគមន៍" },
+            ].map((item, i) => (
+              <div key={i} className="bg-white rounded-2xl border shadow-sm p-6">
+                <p className="font-bold text-primary">{lang === "kh" ? item.titleKh : item.titleEn}</p>
+                <p className="text-sm text-gray-600 mt-2">{lang === "kh" ? item.descKh : item.descEn}</p>
               </div>
-            </div>
-          ))}
+            ))}
+          </div>
         </div>
       </section>
 
