@@ -58,6 +58,15 @@ function useSaveSetting(key: string, token: string | null) {
   return { save, saving, saved };
 }
 
+function imageFileToDataUrl(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result ?? ""));
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
+
 function parseJson<T>(str: string | undefined, fallback: T): T {
   if (!str) return fallback;
   try { return JSON.parse(str) as T; } catch { return fallback; }
@@ -76,6 +85,7 @@ export default function SettingsPage() {
   const clubsSave = useSaveSetting("clubs", token);
   const programsSave = useSaveSetting("academic_programs", token);
   const contactSave = useSaveSetting("contact_info", token);
+  const heroImageSave = useSaveSetting("hero_image", token);
 
   const [hero, setHero] = useState({ enrollmentBannerEn: "", enrollmentBannerKh: "", subtitleEn: "", subtitleKh: "" });
   const [stats, setStats] = useState({ studentsCount: "", teachersCount: "", programsCount: "", yearsExcellence: "", graduationRate: "", commitmentLabel: "" });
@@ -86,6 +96,7 @@ export default function SettingsPage() {
   const [clubs, setClubs] = useState<ClubEntry[]>([]);
   const [programs, setPrograms] = useState<ProgramEntry[]>([]);
   const [contact, setContact] = useState({ phone: "", email: "", addressEn: "", addressKh: "", facebookUrl: "" });
+  const [uploadingKey, setUploadingKey] = useState<string | null>(null);
 
   useEffect(() => {
     if (!settings) return;
@@ -103,6 +114,18 @@ export default function SettingsPage() {
   if (isLoading) return <div className="text-center text-gray-400 py-12">Loading settings...</div>;
 
   const CLUB_COLORS = ["bg-blue-50 text-blue-700", "bg-pink-50 text-pink-700", "bg-amber-50 text-amber-700", "bg-purple-50 text-purple-700", "bg-green-50 text-green-700", "bg-teal-50 text-teal-700", "bg-red-50 text-red-700", "bg-orange-50 text-orange-700"];
+  const handleImageUpload = async (key: string, file?: File | null) => {
+    if (!file) return;
+    setUploadingKey(key);
+    try {
+      const value = await imageFileToDataUrl(file);
+      if (key === "hero_image") {
+        heroImageSave.save(value);
+      }
+    } finally {
+      setUploadingKey(null);
+    }
+  };
 
   return (
     <div>
@@ -118,6 +141,13 @@ export default function SettingsPage() {
           <Field label="Enrollment Banner (Khmer)" value={hero.enrollmentBannerKh} onChange={v => setHero(h => ({ ...h, enrollmentBannerKh: v }))} />
           <Field label="Subtitle (English)" value={hero.subtitleEn} onChange={v => setHero(h => ({ ...h, subtitleEn: v }))} multiline />
           <Field label="Subtitle (Khmer)" value={hero.subtitleKh} onChange={v => setHero(h => ({ ...h, subtitleKh: v }))} multiline />
+          <div className="md:col-span-2">
+            <label className="block text-xs font-semibold text-gray-500 mb-1">Hero Image</label>
+            <div className="flex items-center gap-3">
+              <input type="file" accept="image/*" onChange={e => void handleImageUpload("hero_image", e.target.files?.[0] ?? null)} className="text-sm" />
+              {uploadingKey === "hero_image" && <span className="text-xs text-gray-400">Uploading...</span>}
+            </div>
+          </div>
         </div>
         <div className="flex justify-end">
           <SaveButton onSave={() => heroSave.save(JSON.stringify(hero))} saving={heroSave.saving} saved={heroSave.saved} />

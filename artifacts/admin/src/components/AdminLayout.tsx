@@ -1,9 +1,11 @@
-import { type ReactNode, useState } from "react";
+import { type ReactNode, useEffect, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import {
-  LayoutDashboard, Newspaper, Activity, GraduationCap, Users, Mail, LogOut, Menu, X, School, Settings, FileText, ClipboardList, Award, BookOpen
+  LayoutDashboard, Newspaper, Activity, GraduationCap, Users, Mail, LogOut, Menu, School, Settings, FileText, ClipboardList, Award, BookOpen, Languages
 } from "lucide-react";
+
+type Lang = "en" | "km";
 
 const navItems = [
   { href: "/", icon: LayoutDashboard, label: "Dashboard" },
@@ -23,6 +25,18 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
   const { user, logout } = useAuth();
   const [location] = useLocation();
   const [open, setOpen] = useState(false);
+  const [lang, setLang] = useState<Lang>(() => (localStorage.getItem("admin-lang") as Lang) || "en");
+
+  useEffect(() => {
+    localStorage.setItem("admin-lang", lang);
+  }, [lang]);
+
+  const t = {
+    dashboard: lang === "km" ? "ផ្ទាំងគ្រប់គ្រង" : "Dashboard",
+    viewWebsite: lang === "km" ? "មើលគេហទំព័រ" : "View Website",
+    signOut: lang === "km" ? "ចាកចេញ" : "Sign Out",
+    admin: lang === "km" ? "អ្នកគ្រប់គ្រង" : "Administrator",
+  };
 
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
@@ -68,7 +82,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             </div>
             <div className="min-w-0">
               <p className="text-sm font-semibold truncate">{user?.username}</p>
-              <p className="text-white/50 text-xs">Administrator</p>
+              <p className="text-white/50 text-xs">{t.admin}</p>
             </div>
           </div>
           <button
@@ -76,7 +90,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             className="w-full flex items-center gap-3 px-4 py-2 rounded-lg text-white/70 hover:bg-white/10 hover:text-white text-sm transition-colors"
           >
             <LogOut size={16} />
-            Sign Out
+            {t.signOut}
           </button>
         </div>
       </aside>
@@ -92,11 +106,18 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           </button>
           <div className="flex items-center gap-3 min-w-0">
             <h1 className="font-bold text-gray-800 text-lg capitalize truncate">
-              {navItems.find(n => n.href === "/" ? location === "/" : location.startsWith(n.href))?.label ?? "Admin"}
+              {navItems.find(n => n.href === "/" ? location === "/" : location.startsWith(n.href))?.label ?? t.dashboard}
             </h1>
           </div>
           <div className="ml-auto flex items-center gap-2 text-sm text-gray-500 shrink-0">
-            <a href="/" target="_blank" className="text-[#1e3a6e] font-semibold hover:underline">← View Website</a>
+            <button
+              onClick={() => setLang(lang === "en" ? "km" : "en")}
+              className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-gray-700 hover:bg-gray-50"
+            >
+              <Languages size={14} />
+              {lang === "en" ? "KH" : "EN"}
+            </button>
+            <a href="/" target="_blank" className="text-[#1e3a6e] font-semibold hover:underline">{t.viewWebsite}</a>
           </div>
         </header>
         <main className="flex-1 overflow-y-auto p-4 lg:p-6">
