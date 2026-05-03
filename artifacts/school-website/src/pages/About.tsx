@@ -29,7 +29,7 @@ export default function About() {
             <div className="space-y-4 text-gray-600 leading-relaxed text-lg">
               <p>
                 {t(
-                  "Treng Junior High School has been a beacon of educational excellence in the community. Born from a vision of community leaders who believed in the power of education to transform lives, our school has grown into a comprehensive educational institution.",
+                  "Treng Secondary School has been a beacon of educational excellence in the community. Born from a vision of community leaders who believed in the power of education to transform lives, our school has grown into a comprehensive educational institution.",
                   "អនុវិទ្យាល័យត្រែង គឺជាបង្គោលភ្លើងនៃឧត្តមភាពអប់រំនៅក្នុងសហគមន៍។ កើតចេញពីចក្ខុវិស័យរបស់មេដឹកនាំសហគមន៍ដែលជឿជាក់លើថាមពលនៃការអប់រំក្នុងការផ្លាស់ប្តូរជីវិត សាលារបស់យើងបានរីកចម្រើនដល់ស្ថាប័នអប់រំដ៏ទូលំទូលាយមួយ។"
                 )}
               </p>

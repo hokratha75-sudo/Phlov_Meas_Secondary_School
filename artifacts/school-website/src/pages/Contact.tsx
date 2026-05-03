@@ -48,7 +48,7 @@ export default function Contact() {
                 <div>
                   <h4 className="font-bold text-gray-900 text-lg mb-1">{t("Our Location", "ទីតាំងរបស់យើង")}</h4>
                   <p className="text-gray-600">
-                    {t("Sdau Commune, Rotanak Mondol District, Battambang, Cambodia", "ឃុំស្ដៅ ស្រុករតនៈមណ្ឌល ខេត្តបាត់ដំបង ប្រទេសកម្ពុជា")}
+                    {t("Treng District, Stung Treng Province, Cambodia", "ស្រុកត្រែង ខេត្តស្ទឹងត្រែង ប្រទេសកម្ពុជា")}
                   </p>
                 </div>
               </div>
@@ -59,7 +59,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="font-bold text-gray-900 text-lg mb-1">{t("Phone Number", "លេខទូរស័ព្ទ")}</h4>
-                  <p className="text-gray-600">096 944 7122</p>
+                  <p className="text-gray-600">012 345 678</p>
                 </div>
               </div>
               
@@ -69,7 +69,7 @@ export default function Contact() {
                 </div>
                 <div>
                   <h4 className="font-bold text-gray-900 text-lg mb-1">{t("Email Address", "អ៊ីមែល")}</h4>
-                  <p className="text-gray-600">vmc.sdaosantepheap@gmail.com</p>
+                  <p className="text-gray-600">trengsecondaryschool@gmail.com</p>
                 </div>
               </div>
 
@@ -91,15 +91,15 @@ export default function Contact() {
             <div>
               <h4 className="font-bold text-gray-900 text-lg mb-4">{t("Follow Us", "តាមដានពួកយើង")}</h4>
               <div className="flex items-center gap-3">
-                <a href="https://www.facebook.com/highschool2k15" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"
                   className="w-11 h-11 rounded-full bg-[#1877F2] text-white flex items-center justify-center hover:opacity-90 transition-opacity">
                   <SiFacebook size={20} />
                 </a>
-                <a href="https://www.youtube.com/@SdaoSantepheap" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"
                   className="w-11 h-11 rounded-full bg-[#FF0000] text-white flex items-center justify-center hover:opacity-90 transition-opacity">
                   <Youtube size={20} />
                 </a>
-                <a href="https://www.tiktok.com/@user3802703881381" target="_blank" rel="noopener noreferrer"
+                <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer"
                   className="w-11 h-11 rounded-full bg-black text-white flex items-center justify-center hover:opacity-90 transition-opacity">
                   <SiTiktok size={18} />
                 </a>
@@ -152,13 +152,13 @@ export default function Contact() {
           <div className="flex items-center gap-3 mb-4">
             <MapPin className="text-secondary shrink-0" size={20} />
             <p className="font-semibold text-gray-700">
-              {t("Sdau Commune, Rotanak Mondol District, Battambang, Cambodia", "ឃុំស្ដៅ ស្រុករតនៈមណ្ឌល ខេត្តបាត់ដំបង ប្រទេសកម្ពុជា")}
+              {t("Treng District, Stung Treng Province, Cambodia", "ស្រុកត្រែង ខេត្តស្ទឹងត្រែង ប្រទេសកម្ពុជា")}
             </p>
           </div>
           <div className="w-full h-[450px] border shadow-sm overflow-hidden">
             <iframe
-              title="Treng Junior High School Location"
-              src="https://maps.google.com/maps?q=Sdao+Sontepheap+High+School+Battambang+Cambodia&output=embed&z=15"
+              title="Treng Secondary School Location"
+              src="https://maps.google.com/maps?q=Stung+Treng+Cambodia&output=embed&z=13"
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -169,7 +169,7 @@ export default function Contact() {
           </div>
           <div className="mt-3 flex justify-end">
             <a
-              href="https://maps.google.com/maps?q=Sdao+Sontepheap+High+School+Battambang+Cambodia"
+              href="https://maps.google.com/maps?q=Stung+Treng+Cambodia"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-secondary font-semibold hover:underline flex items-center gap-1"

@@ -55,7 +55,7 @@ const STATIC_ACTIVITIES = [
   {
     id: 2,
     titleEn: "Teacher's Day Celebration", titleKh: "ខួបទិវាគ្រូ",
-    descriptionEn: "Students organized a heartfelt ceremony honoring all teachers at Treng Junior High School. Students performed traditional dances, gave flowers, and shared gratitude speeches.",
+    descriptionEn: "Students organized a heartfelt ceremony honoring all teachers at Treng Secondary School. Students performed traditional dances, gave flowers, and shared gratitude speeches.",
     descriptionKh: "សិស្សានុសិស្សបានរៀបចំពិធីដ៏ស្មោះស្ងួតមួយ ដើម្បីអំណរគុណគ្រូបង្រៀនទាំងអស់នៅអនុវិទ្យាល័យត្រែង។",
     eventDate: "October 5, 2023",
     category: "national", imageUrl: "/campus-gate.png",
@@ -230,7 +230,7 @@ export default function Activities() {
                         <span>{activity.commentsCount} {t("comments", "មតិ")}</span>
                       </div>
                       <a
-                        href="https://www.facebook.com/highschool2k15"
+                        href="https://www.facebook.com"
                         target="_blank"
                         rel="noopener noreferrer"
                         className="ml-auto flex items-center gap-1.5 text-[#1877F2] font-semibold hover:underline"
@@ -281,7 +281,7 @@ export default function Activities() {
           </div>
 
           <div className="text-center mt-8">
-            <a href="https://www.facebook.com/highschool2k15" target="_blank" rel="noopener noreferrer"
+            <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"
               className="inline-flex items-center gap-2 bg-[#1877F2] text-white font-bold px-8 py-3 hover:bg-[#1565C0] transition-colors">
               <SiFacebook size={20} />
               {t("See More Photos on Facebook", "មើលរូបថតបន្ថែមនៅ Facebook")}

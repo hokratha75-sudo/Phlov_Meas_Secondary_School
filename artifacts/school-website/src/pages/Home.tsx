@@ -75,7 +75,7 @@ export default function Home() {
           </span>
           <h1 className="text-4xl md:text-6xl lg:text-7xl font-bold mb-6 font-khmer leading-tight drop-shadow-lg">
             {t("Welcome to", "សូមស្វាគមន៍មកកាន់")} <br />
-            <span className="text-white">{t("Treng Junior High School", "អនុវិទ្យាល័យត្រែង")}</span>
+            <span className="text-white">{t("Treng Secondary School", "អនុវិទ្យាល័យត្រែង")}</span>
           </h1>
           <p className="text-lg md:text-xl mb-10 max-w-3xl mx-auto text-white/90 drop-shadow-md">
             {t(
@@ -127,7 +127,7 @@ export default function Home() {
               </h2>
               <p className="text-gray-600 leading-relaxed text-lg">
                 {t(
-                  "Treng Junior High School is committed to providing a holistic education that prepares students for the challenges of tomorrow.",
+                  "Treng Secondary School is committed to providing a holistic education that prepares students for the challenges of tomorrow.",
                   "អនុវិទ្យាល័យត្រែង ប្តេជ្ញាផ្តល់ការអប់រំដ៏ទូលំទូលាយដែលរៀបចំសិស្សសម្រាប់បញ្ហាប្រឈមនៃថ្ងៃស្អែក។"
                 )}
               </p>

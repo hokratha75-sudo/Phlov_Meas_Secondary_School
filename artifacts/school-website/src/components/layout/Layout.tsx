@@ -35,21 +35,21 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="hidden md:flex items-center space-x-6">
           <div className="flex items-center space-x-2">
             <Phone size={14} />
-            <span>096 944 7122</span>
+            <span>012 345 678</span>
           </div>
           <div className="flex items-center space-x-2">
             <Mail size={14} />
-            <span>vmc.sdaosantepheap@gmail.com</span>
+            <span>trengsecondaryschool@gmail.com</span>
           </div>
         </div>
         <div className="flex items-center space-x-4 ml-auto">
-          <a href="https://www.facebook.com/highschool2k15" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="Facebook">
+          <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="Facebook">
             <Facebook size={16} />
           </a>
-          <a href="https://www.youtube.com/@SdaoSantepheap" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="YouTube">
+          <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="YouTube">
             <Youtube size={16} />
           </a>
-          <a href="https://www.tiktok.com/@user3802703881381" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="TikTok">
+          <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="TikTok">
             <SiTiktok size={14} />
           </a>
           <div className="h-4 w-px bg-white/30"></div>
@@ -86,7 +86,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 អនុវិទ្យាល័យត្រែង
               </span>
               <span className="text-muted-foreground text-xs md:text-sm font-semibold uppercase tracking-wider">
-                Treng Junior High School
+                Treng Secondary School
               </span>
             </div>
           </Link>
@@ -157,7 +157,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   អនុវិទ្យាល័យត្រែង
                 </span>
                 <span className="text-white/80 text-sm font-semibold uppercase tracking-wider">
-                  Treng Junior High School
+                  Treng Secondary School
                 </span>
               </div>
             </div>
@@ -193,18 +193,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 <MapPin className="text-secondary mt-1 shrink-0" size={18} />
                 <span>
                   {t(
-                    "Sdau Commune, Rotanak Mondol District, Battambang, Cambodia",
-                    "ឃុំស្ដៅ ស្រុករតនៈមណ្ឌល ខេត្តបាត់ដំបង ប្រទេសកម្ពុជា"
+                    "Treng District, Stung Treng Province, Cambodia",
+                    "ស្រុកត្រែង ខេត្តស្ទឹងត្រែង ប្រទេសកម្ពុជា"
                   )}
                 </span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="text-secondary shrink-0" size={18} />
-                <span>096 944 7122</span>
+                <span>012 345 678</span>
               </li>
               <li className="flex items-center gap-3">
                 <Mail className="text-secondary shrink-0" size={18} />
-                <span>vmc.sdaosantepheap@gmail.com</span>
+                <span>trengsecondaryschool@gmail.com</span>
               </li>
             </ul>
           </div>
@@ -212,7 +212,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
         
         <div className="container mx-auto px-4 md:px-8 border-t border-white/10 pt-6 text-center md:flex md:justify-between md:text-left">
           <p className="text-white/50 text-sm">
-            &copy; {new Date().getFullYear()} {t("Treng Junior High School. All Rights Reserved.", "អនុវិទ្យាល័យត្រែង. រក្សាសិទ្ធិគ្រប់យ៉ាង.")}
+            &copy; {new Date().getFullYear()} {t("Treng Secondary School. All Rights Reserved.", "អនុវិទ្យាល័យត្រែង. រក្សាសិទ្ធិគ្រប់យ៉ាង.")}
           </p>
           <div className="text-white/50 text-sm mt-2 md:mt-0 flex gap-4 justify-center">
             <Link href="/privacy" className="hover:text-white transition-colors">{t("Privacy Policy", "គោលការណ៍ឯកជនភាព")}</Link>
