@@ -11,6 +11,10 @@ import TeachersPage from "@/pages/Teachers";
 import StudentsPage from "@/pages/Students";
 import ContactsPage from "@/pages/Contacts";
 import SettingsPage from "@/pages/Settings";
+import ResultsPage from "@/pages/Results";
+import StandardsPage from "@/pages/Standards";
+import AdminWorkPage from "@/pages/AdminWork";
+import ReportsPage from "@/pages/Reports";
 
 const queryClient = new QueryClient({
   defaultOptions: { queries: { retry: 1, staleTime: 30_000 } }
@@ -38,6 +42,10 @@ function ProtectedApp() {
         <Route path="/teachers" component={TeachersPage} />
         <Route path="/students" component={StudentsPage} />
         <Route path="/contacts" component={ContactsPage} />
+        <Route path="/results" component={ResultsPage} />
+        <Route path="/standards" component={StandardsPage} />
+        <Route path="/admin-work" component={AdminWorkPage} />
+        <Route path="/reports" component={ReportsPage} />
         <Route path="/settings" component={SettingsPage} />
       </Switch>
     </AdminLayout>

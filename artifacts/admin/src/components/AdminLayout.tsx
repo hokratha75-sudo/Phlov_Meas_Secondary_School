@@ -2,7 +2,7 @@ import { type ReactNode, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import {
-  LayoutDashboard, Newspaper, Activity, GraduationCap, Users, Mail, LogOut, Menu, X, School, Settings
+  LayoutDashboard, Newspaper, Activity, GraduationCap, Users, Mail, LogOut, Menu, X, School, Settings, FileText, ClipboardList, Award, BookOpen
 } from "lucide-react";
 
 const navItems = [
@@ -12,6 +12,10 @@ const navItems = [
   { href: "/teachers", icon: GraduationCap, label: "Teachers" },
   { href: "/students", icon: Users, label: "Students" },
   { href: "/contacts", icon: Mail, label: "Messages" },
+  { href: "/results", icon: Award, label: "Results" },
+  { href: "/standards", icon: BookOpen, label: "Bac II Standards" },
+  { href: "/admin-work", icon: ClipboardList, label: "Admin Work" },
+  { href: "/reports", icon: FileText, label: "Reports" },
   { href: "/settings", icon: Settings, label: "Site Settings" },
 ];
 
