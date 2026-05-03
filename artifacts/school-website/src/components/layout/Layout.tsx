@@ -1,6 +1,6 @@
 import { Link, useLocation } from "wouter";
 import { useI18n } from "@/lib/i18n";
-import { Phone, Mail, MapPin, Facebook, Menu, X, Youtube } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Menu, X, Youtube, ChevronDown } from "lucide-react";
 import { SiTiktok } from "react-icons/si";
 import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
@@ -96,33 +96,83 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       <div className="sticky top-0 z-40 w-full bg-[#1a3a6b] shadow-sm border-b border-white/10">
-        <div className="container mx-auto px-4 md:px-8 flex items-center gap-3 md:gap-4 overflow-x-auto whitespace-nowrap no-scrollbar">
-          {navLinks.map((link) => (
-            <Link
-              key={link.href}
-              href={link.href}
-              className={cn(
-                "shrink-0 px-4 md:px-5 py-3 text-[12px] md:text-[13px] font-semibold font-khmer transition-colors border-b-2",
-                location === link.href
-                  ? "text-white border-secondary bg-white/15 shadow-[inset_0_-2px_0_0_rgba(255,255,255,0.12)]"
-                  : "text-white/85 border-transparent hover:text-white hover:border-secondary/60 hover:bg-white/5"
-              )}
-            >
-              {lang === "kh" ? link.kh : link.en}
-            </Link>
-          ))}
-          <div className="ml-auto flex items-center gap-2 shrink-0">
-            <button onClick={() => setLang("en")} className={cn("text-xs font-medium transition-colors hover:text-secondary", lang === "en" ? "text-secondary" : "text-white/80")}>EN</button>
-            <span className="text-white/30 text-xs">|</span>
-            <button onClick={() => setLang("kh")} className={cn("text-xs font-khmer font-medium transition-colors hover:text-secondary", lang === "kh" ? "text-secondary" : "text-white/80")}>ខ្មែរ</button>
-              <button
-                className="md:hidden text-white p-2 flex items-center gap-2"
-                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-              >
-              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
-            </button>
+        <div className="border-b border-white/10 bg-[#17325c]">
+          <div className="container mx-auto px-4 md:px-8 py-3 flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
+            <div className="flex flex-wrap items-center gap-x-6 gap-y-2 text-white/85 text-xs xl:text-sm">
+              <div className="flex items-center gap-2">
+                <Phone size={12} className="text-secondary shrink-0" />
+                <span>012 345 678</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Mail size={12} className="text-secondary shrink-0" />
+                <span>trengsecondaryschool@gmail.com</span>
+              </div>
+            </div>
+            <div className="flex items-center gap-3 text-white/85">
+              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary/20 hover:text-secondary transition-colors" aria-label="Facebook">
+                <Facebook size={14} />
+              </a>
+              <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary/20 hover:text-secondary transition-colors" aria-label="YouTube">
+                <Youtube size={14} />
+              </a>
+              <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" className="w-8 h-8 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary/20 hover:text-secondary transition-colors" aria-label="TikTok">
+                <SiTiktok size={12} />
+              </a>
+              <div className="h-5 w-px bg-white/15 mx-1" />
+              <button onClick={() => setLang("en")} className={cn("text-xs font-medium transition-colors hover:text-secondary", lang === "en" ? "text-secondary" : "text-white/80")}>EN</button>
+              <span className="text-white/30 text-xs">|</span>
+              <button onClick={() => setLang("kh")} className={cn("text-xs font-khmer font-medium transition-colors hover:text-secondary", lang === "kh" ? "text-secondary" : "text-white/80")}>ខ្មែរ</button>
+            </div>
           </div>
         </div>
+
+        <div className="container mx-auto px-4 md:px-8 py-3 flex items-center gap-4 lg:gap-6">
+          <Link href="/" className="shrink-0 flex items-center gap-3">
+            <img
+              src="/school-logo.png"
+              alt="School Logo"
+              className="h-14 w-14 md:h-16 md:w-16 object-cover rounded-full border-4 border-white shadow-lg bg-white"
+            />
+            <div className="min-w-0 hidden sm:block">
+              <p className="text-[10px] uppercase tracking-[0.22em] text-secondary/90 font-bold truncate">
+                {t("Ministry of Education, Youth and Sport", "ក្រសួងអប់រំ យុវជន និងកីឡា")}
+              </p>
+              <p className="text-white font-extrabold text-lg leading-tight truncate font-khmer">
+                {t("Treng Secondary School", "វិទ្យាល័យត្រែង")}
+              </p>
+            </div>
+          </Link>
+
+          <button
+            className="md:hidden ml-auto text-white p-2 flex items-center gap-2"
+            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            aria-label="Toggle menu"
+          >
+            {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
+          </button>
+
+          <nav className="hidden md:flex items-center gap-0 ml-auto overflow-x-auto whitespace-nowrap no-scrollbar">
+            {navLinks.map((link) => {
+              const active = location === link.href;
+              return (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "relative px-5 lg:px-6 py-3 text-[13px] lg:text-[14px] font-semibold font-khmer transition-colors border-b-2",
+                    active
+                      ? "text-white border-secondary bg-white/10"
+                      : "text-white/85 border-transparent hover:text-white hover:border-secondary/60 hover:bg-white/5"
+                  )}
+                >
+                  {lang === "kh" ? link.kh : link.en}
+                  {link.href === "/" ? null : null}
+                </Link>
+              );
+            })}
+          </nav>
+        </div>
+
         {mobileMenuOpen && (
           <div className="md:hidden bg-[#0d2550] border-t border-white/10">
             <nav className="flex flex-col">
