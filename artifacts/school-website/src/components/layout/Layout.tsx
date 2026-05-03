@@ -43,7 +43,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
       <div className="relative w-full overflow-hidden border-b border-white/10">
         <div className="absolute inset-0">
           <img src={schoolBanner} alt="School Banner" className="w-full h-full object-cover object-center" />
-          <div className="absolute inset-0 bg-[#0d2550]/82" />
+          <div className="absolute inset-0 bg-[#0d2550]/92" />
         </div>
         <div className="relative px-4 md:px-8 py-4 md:py-5">
           <div className="flex items-center gap-4 md:gap-6">
@@ -61,28 +61,28 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <h1 className="text-xl md:text-4xl font-extrabold leading-tight text-white font-khmer">
                 {t("Treng Secondary School", "វិទ្យាល័យត្រែង")}
               </h1>
-              <p className="text-sm md:text-lg font-semibold text-white/90 font-khmer">
+              <p className="text-sm md:text-lg font-extrabold text-secondary font-khmer drop-shadow">
                 {t("Welcome to our school!", "សូមស្វាគមន៍!")}
               </p>
             </div>
           </div>
-          <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-white/85 text-xs xl:text-sm lg:justify-end">
-            <div className="flex items-center gap-1.5">
-              <Phone size={12} className="text-secondary" />
+          <div className="mt-3 flex flex-wrap items-center gap-x-6 gap-y-2 text-white/85 text-xs xl:text-sm lg:justify-end">
+            <div className="flex items-center gap-2">
+              <Phone size={12} className="text-secondary shrink-0" />
               <span>012 345 678</span>
             </div>
-            <div className="flex items-center gap-1.5">
-              <Mail size={12} className="text-secondary" />
+            <div className="flex items-center gap-2">
+              <Mail size={12} className="text-secondary shrink-0" />
               <span>trengsecondaryschool@gmail.com</span>
             </div>
             <div className="flex items-center gap-3 pl-0 lg:pl-3 lg:border-l border-white/15">
-              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="Facebook">
+              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary/20 hover:text-secondary transition-colors" aria-label="Facebook">
                 <Facebook size={14} />
               </a>
-              <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="YouTube">
+              <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary/20 hover:text-secondary transition-colors" aria-label="YouTube">
                 <Youtube size={14} />
               </a>
-              <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="TikTok">
+              <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" className="w-7 h-7 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary/20 hover:text-secondary transition-colors" aria-label="TikTok">
                 <SiTiktok size={12} />
               </a>
             </div>
@@ -96,15 +96,15 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       <div className="sticky top-0 z-40 w-full bg-[#1a3a6b] shadow-sm border-b border-white/10">
-        <div className="container mx-auto px-4 md:px-8 flex items-center gap-2 md:gap-3 overflow-x-auto whitespace-nowrap no-scrollbar">
+        <div className="container mx-auto px-4 md:px-8 flex items-center gap-3 md:gap-4 overflow-x-auto whitespace-nowrap no-scrollbar">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className={cn(
-                "shrink-0 px-3 md:px-4 py-3 text-[12px] md:text-[13px] font-semibold font-khmer transition-colors border-b-2",
+                "shrink-0 px-4 md:px-5 py-3 text-[12px] md:text-[13px] font-semibold font-khmer transition-colors border-b-2",
                 location === link.href
-                  ? "text-white border-secondary bg-white/10"
+                  ? "text-white border-secondary bg-white/15 shadow-[inset_0_-2px_0_0_rgba(255,255,255,0.12)]"
                   : "text-white/85 border-transparent hover:text-white hover:border-secondary/60 hover:bg-white/5"
               )}
             >
@@ -115,10 +115,10 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <button onClick={() => setLang("en")} className={cn("text-xs font-medium transition-colors hover:text-secondary", lang === "en" ? "text-secondary" : "text-white/80")}>EN</button>
             <span className="text-white/30 text-xs">|</span>
             <button onClick={() => setLang("kh")} className={cn("text-xs font-khmer font-medium transition-colors hover:text-secondary", lang === "kh" ? "text-secondary" : "text-white/80")}>ខ្មែរ</button>
-            <button
-              className="md:hidden text-white p-2 flex items-center gap-2"
-              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-            >
+              <button
+                className="md:hidden text-white p-2 flex items-center gap-2"
+                onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+              >
               {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
@@ -133,7 +133,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
                     "px-4 py-3 text-sm font-semibold font-khmer transition-colors border-b border-white/10",
-                    location === link.href ? "text-secondary bg-white/10" : "text-white/80 hover:text-white hover:bg-white/5"
+                    location === link.href ? "text-secondary bg-white/10 border-l-4 border-l-secondary" : "text-white/80 hover:text-white hover:bg-white/5"
                   )}
                 >
                   {lang === "kh" ? link.kh : link.en}
