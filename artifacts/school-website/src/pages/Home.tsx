@@ -3,7 +3,7 @@ import { ArrowRight, BookOpen, Users, Trophy, GraduationCap, Calendar, MapPin, C
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useListNews, useListActivities, useGetSiteSettings } from "@workspace/api-client-react";
-import heroImage from "@assets/image_1777799819029.png";
+import heroImage from "@assets/image_1777800214905.png";
 
 const STATIC_NEWS = [
   {
