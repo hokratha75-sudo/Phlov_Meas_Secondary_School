@@ -33,7 +33,7 @@ export default function Login() {
       <div className="bg-white rounded-xl shadow-2xl w-full max-w-md overflow-hidden">
         <div className="bg-[#1e3a6e] px-8 py-8 text-center">
           <img src="/school-logo.png" alt="Logo" className="h-20 w-20 rounded-full object-cover mx-auto mb-4 border-4 border-white/30" />
-          <h1 className="text-white font-bold text-xl leading-tight">វិទ្យាល័យ ស្ដៅសន្តិភាព</h1>
+          <h1 className="text-white font-bold text-xl leading-tight">អនុវិទ្យាល័យត្រែង</h1>
           <p className="text-white/70 text-sm mt-1">Admin Management System</p>
         </div>
         <div className="px-8 py-8">
@@ -75,7 +75,7 @@ export default function Login() {
             </button>
           </form>
           <p className="text-center text-xs text-gray-400 mt-6">
-            Sdao Sontepheap High School — Admin Portal
+            Treng Secondary School — Admin Portal
           </p>
         </div>
       </div>

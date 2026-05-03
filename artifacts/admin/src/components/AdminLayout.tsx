@@ -32,7 +32,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             <School size={20} className="text-white" />
           </div>
           <div className="min-w-0">
-            <p className="font-bold text-sm leading-tight truncate">ស្ដៅសន្តិភាព</p>
+            <p className="font-bold text-sm leading-tight truncate">អនុវិទ្យាល័យត្រែង</p>
             <p className="text-white/60 text-xs">Admin Panel</p>
           </div>
         </div>

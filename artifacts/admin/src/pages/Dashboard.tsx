@@ -20,7 +20,7 @@ export default function Dashboard() {
     <div>
       <div className="mb-6">
         <h2 className="text-2xl font-bold text-gray-800">Welcome back, Admin!</h2>
-        <p className="text-gray-500 text-sm mt-1">Sdao Sontepheap High School — Management Overview</p>
+        <p className="text-gray-500 text-sm mt-1">Treng Secondary School — Management Overview</p>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4 mb-8">
@@ -65,15 +65,15 @@ export default function Dashboard() {
           <div className="space-y-3 text-sm">
             <div className="flex justify-between py-2 border-b">
               <span className="text-gray-500">School</span>
-              <span className="font-semibold text-gray-800">Sdao Sontepheap High School</span>
+              <span className="font-semibold text-gray-800">Treng Secondary School</span>
             </div>
             <div className="flex justify-between py-2 border-b">
               <span className="text-gray-500">Location</span>
-              <span className="font-semibold text-gray-800">Battambang, Cambodia</span>
+              <span className="font-semibold text-gray-800">Treng District, Stung Treng</span>
             </div>
             <div className="flex justify-between py-2 border-b">
               <span className="text-gray-500">Contact</span>
-              <span className="font-semibold text-gray-800">096 944 7122</span>
+              <span className="font-semibold text-gray-800">012 345 678</span>
             </div>
             <div className="flex justify-between py-2">
               <span className="text-gray-500">Website</span>
