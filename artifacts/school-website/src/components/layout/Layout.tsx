@@ -24,23 +24,18 @@ export function Layout({ children }: { children: React.ReactNode }) {
     return () => observer.disconnect();
   }, []);
 
-  const primaryLinks = [
+  const navLinks = [
     { href: "/", en: "Home", kh: "ទំព័រដើម" },
     { href: "/results", en: "General Results", kh: "លទ្ធផលសិក្សាទូទៅ" },
     { href: "/standards", en: "Bac II Standards", kh: "ស្តង់ដារបាក់ឌុប" },
     { href: "/admin-work", en: "Administrative Work", kh: "កិច្ចការរដ្ឋបាល" },
     { href: "/reports", en: "School Reports", kh: "របាយការណ៍សាលា" },
-  ];
-
-  const secondaryLinks = [
     { href: "/about", en: "About", kh: "អំពីយើង" },
     { href: "/academics", en: "Academics", kh: "ការសិក្សា" },
     { href: "/activities", en: "Activities", kh: "សកម្មភាព" },
     { href: "/news", en: "News", kh: "ព័ត៌មាន" },
     { href: "/contact", en: "Contact", kh: "ទំនាក់ទំនង" },
   ];
-
-  const allLinks = [...primaryLinks, ...secondaryLinks];
 
   return (
     <div className={`min-h-screen flex flex-col ${lang === "kh" ? "font-khmer" : "font-sans"}`}>
@@ -100,84 +95,47 @@ export function Layout({ children }: { children: React.ReactNode }) {
         </div>
       </div>
 
-      {/* Sentinel — triggers sticky detection */}
-      <div id="nav-sentinel" />
-
-      {/* ── Sticky Nav Bar ── */}
-      <div
-        ref={navRef}
-        className={cn(
-          "sticky top-0 z-40 w-full transition-shadow duration-200",
-          navStuck ? "shadow-xl" : "shadow-sm"
-        )}
-      >
-        {/* Primary nav row */}
-        <div className="bg-[#1a3a6b] border-b border-white/10">
-          <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
-            {/* Desktop primary links */}
-            <nav className="hidden md:flex items-stretch">
-              {primaryLinks.map((link) => (
-                <Link
-                  key={link.href}
-                  href={link.href}
-                  className={cn(
-                    "relative flex items-center px-4 py-3 text-[13px] lg:text-[14px] font-semibold font-khmer transition-colors border-b-[3px]",
-                    location === link.href
-                      ? "text-white border-secondary bg-white/10"
-                      : "text-white/85 border-transparent hover:text-white hover:border-secondary/60 hover:bg-white/5"
-                  )}
-                >
-                  {lang === "kh" ? link.kh : link.en}
-                </Link>
-              ))}
-            </nav>
-
-            {/* Mobile toggle */}
+      <div className="sticky top-0 z-40 w-full bg-[#1a3a6b] shadow-sm border-b border-white/10">
+        <div className="container mx-auto px-4 md:px-8 flex items-center gap-2 md:gap-3 overflow-x-auto whitespace-nowrap no-scrollbar">
+          {navLinks.map((link) => (
+            <Link
+              key={link.href}
+              href={link.href}
+              className={cn(
+                "shrink-0 px-3 md:px-4 py-3 text-[12px] md:text-[13px] font-semibold font-khmer transition-colors border-b-2",
+                location === link.href
+                  ? "text-white border-secondary bg-white/10"
+                  : "text-white/85 border-transparent hover:text-white hover:border-secondary/60 hover:bg-white/5"
+              )}
+            >
+              {lang === "kh" ? link.kh : link.en}
+            </Link>
+          ))}
+          <div className="ml-auto flex items-center gap-2 shrink-0">
+            <button onClick={() => setLang("en")} className={cn("text-xs font-medium transition-colors hover:text-secondary", lang === "en" ? "text-secondary" : "text-white/80")}>EN</button>
+            <span className="text-white/30 text-xs">|</span>
+            <button onClick={() => setLang("kh")} className={cn("text-xs font-khmer font-medium transition-colors hover:text-secondary", lang === "kh" ? "text-secondary" : "text-white/80")}>ខ្មែរ</button>
             <button
-              className="md:hidden text-white p-3 flex items-center gap-2"
+              className="md:hidden text-white p-2 flex items-center gap-2"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
             >
-              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
-              <span className="text-sm font-khmer">{t("Menu", "ម៉ឺនុយ")}</span>
+              {mobileMenuOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
           </div>
         </div>
-
-        {/* Secondary nav row */}
-        <div className="hidden md:block bg-[#0d2550] border-b border-white/10">
-          <div className="container mx-auto px-4 md:px-8 flex items-stretch justify-end">
-            {secondaryLinks.map((link) => (
-              <Link
-                key={link.href}
-                href={link.href}
-                className={cn(
-                  "relative flex items-center px-4 py-2.5 text-[12px] lg:text-[13px] font-semibold transition-colors border-b-[3px]",
-                  location === link.href
-                    ? "text-secondary border-secondary bg-white/5"
-                    : "text-white/70 border-transparent hover:text-white hover:border-secondary/50 hover:bg-white/5"
-                )}
-              >
-                {lang === "kh" ? link.kh : link.en}
-              </Link>
-            ))}
-          </div>
-        </div>
-
-        {/* Mobile dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden bg-[#0d2550] border-b border-white/10 animate-in slide-in-from-top-2">
-            <nav className="flex flex-col divide-y divide-white/10">
-              {allLinks.map((link) => (
+          <div className="md:hidden bg-[#0d2550] border-t border-white/10">
+            <nav className="flex flex-col">
+              {navLinks.map((link) => (
                 <Link
                   key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
-                    "px-6 py-3.5 text-sm font-semibold font-khmer transition-colors flex items-center gap-2",
+                    "px-4 py-3 text-sm font-semibold font-khmer transition-colors border-b border-white/10",
                     location === link.href ? "text-secondary bg-white/10" : "text-white/80 hover:text-white hover:bg-white/5"
                   )}
                 >
-                  <span className={cn("w-1.5 h-1.5 rounded-full", location === link.href ? "bg-secondary" : "bg-white/30")} />
                   {lang === "kh" ? link.kh : link.en}
                 </Link>
               ))}
@@ -233,7 +191,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
               {t("Quick Links", "តំណភ្ជាប់រហ័ស")}
             </h3>
             <ul className="space-y-2.5">
-              {allLinks.slice(1).map((link) => (
+              {navLinks.slice(1).map((link) => (
                 <li key={link.href}>
                   <Link href={link.href} className="text-white/65 hover:text-secondary transition-colors flex items-center gap-2 text-sm">
                     <span className="text-secondary text-[10px]">▶</span>
