@@ -90,10 +90,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           <button className="lg:hidden text-gray-600 hover:text-gray-900" onClick={() => setOpen(true)}>
             <Menu size={22} />
           </button>
-          <h1 className="font-bold text-gray-800 text-lg capitalize">
-            {navItems.find(n => n.href === "/" ? location === "/" : location.startsWith(n.href))?.label ?? "Admin"}
-          </h1>
-          <div className="ml-auto flex items-center gap-2 text-sm text-gray-500">
+          <div className="flex items-center gap-3 min-w-0">
+            <h1 className="font-bold text-gray-800 text-lg capitalize truncate">
+              {navItems.find(n => n.href === "/" ? location === "/" : location.startsWith(n.href))?.label ?? "Admin"}
+            </h1>
+          </div>
+          <div className="ml-auto flex items-center gap-2 text-sm text-gray-500 shrink-0">
             <a href="/" target="_blank" className="text-[#1e3a6e] font-semibold hover:underline">← View Website</a>
           </div>
         </header>
