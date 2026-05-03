@@ -1,4 +1,4 @@
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import {
@@ -8,17 +8,17 @@ import {
 type Lang = "en" | "km";
 
 const navItems = [
-  { href: "/", icon: LayoutDashboard, label: "Dashboard" },
-  { href: "/news", icon: Newspaper, label: "News" },
-  { href: "/activities", icon: Activity, label: "Activities" },
-  { href: "/teachers", icon: GraduationCap, label: "Teachers" },
-  { href: "/students", icon: Users, label: "Students" },
-  { href: "/contacts", icon: Mail, label: "Messages" },
-  { href: "/results", icon: Award, label: "Results" },
-  { href: "/standards", icon: BookOpen, label: "Bac II Standards" },
-  { href: "/admin-work", icon: ClipboardList, label: "Admin Work" },
-  { href: "/reports", icon: FileText, label: "Reports" },
-  { href: "/settings", icon: Settings, label: "Site Settings" },
+  { href: "/", icon: LayoutDashboard, en: "Dashboard", km: "ផ្ទាំងគ្រប់គ្រង" },
+  { href: "/news", icon: Newspaper, en: "News", km: "ព័ត៌មាន" },
+  { href: "/activities", icon: Activity, en: "Activities", km: "សកម្មភាព" },
+  { href: "/teachers", icon: GraduationCap, en: "Teachers", km: "គ្រូបង្រៀន" },
+  { href: "/students", icon: Users, en: "Students", km: "សិស្សានុសិស្ស" },
+  { href: "/contacts", icon: Mail, en: "Messages", km: "សារទំនាក់ទំនង" },
+  { href: "/results", icon: Award, en: "Results", km: "លទ្ធផល" },
+  { href: "/standards", icon: BookOpen, en: "Bac II Standards", km: "ស្តង់ដារ Bac II" },
+  { href: "/admin-work", icon: ClipboardList, en: "Admin Work", km: "ការងាររដ្ឋបាល" },
+  { href: "/reports", icon: FileText, en: "Reports", km: "របាយការណ៍" },
+  { href: "/settings", icon: Settings, en: "Site Settings", km: "ការកំណត់គេហទំព័រ" },
 ];
 
 export default function AdminLayout({ children }: { children: ReactNode }) {
@@ -36,7 +36,10 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     viewWebsite: lang === "km" ? "មើលគេហទំព័រ" : "View Website",
     signOut: lang === "km" ? "ចាកចេញ" : "Sign Out",
     admin: lang === "km" ? "អ្នកគ្រប់គ្រង" : "Administrator",
+    language: lang === "km" ? "ភាសា" : "Language",
   };
+
+  const localizedNav = useMemo(() => navItems.map(item => ({ ...item, label: lang === "km" ? item.km : item.en })), [lang]);
 
   return (
     <div className="flex h-screen bg-gray-100 overflow-hidden">
@@ -57,7 +60,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         </div>
 
         <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
-          {navItems.map(({ href, icon: Icon, label }) => {
+          {localizedNav.map(({ href, icon: Icon, label }) => {
             const active = href === "/" ? location === "/" : location.startsWith(href);
             return (
               <Link key={href} href={href}>
@@ -106,7 +109,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           </button>
           <div className="flex items-center gap-3 min-w-0">
             <h1 className="font-bold text-gray-800 text-lg capitalize truncate">
-              {navItems.find(n => n.href === "/" ? location === "/" : location.startsWith(n.href))?.label ?? t.dashboard}
+              {localizedNav.find(n => n.href === "/" ? location === "/" : location.startsWith(n.href))?.label ?? t.dashboard}
             </h1>
           </div>
           <div className="ml-auto flex items-center gap-2 text-sm text-gray-500 shrink-0">
@@ -115,7 +118,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border text-gray-700 hover:bg-gray-50"
             >
               <Languages size={14} />
-              {lang === "en" ? "KH" : "EN"}
+              {t.language}: {lang === "en" ? "EN" : "ខ្មែរ"}
             </button>
             <a href="/" target="_blank" className="text-[#1e3a6e] font-semibold hover:underline">{t.viewWebsite}</a>
           </div>
