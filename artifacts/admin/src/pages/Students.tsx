@@ -96,7 +96,7 @@ export default function StudentsPage() {
   const { token } = useAuth();
   const headers = { Authorization: `Bearer ${token}` };
   const [search, setSearch] = useState("");
-  const { data, refetch } = useListStudents({ request: { headers } });
+  const { data, refetch } = useListStudents(undefined, { request: { headers } });
   const { mutate: create } = useCreateStudent({ request: { headers } });
   const { mutate: update } = useUpdateStudent({ request: { headers } });
   const { mutate: remove } = useDeleteStudent({ request: { headers } });

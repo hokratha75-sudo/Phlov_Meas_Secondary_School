@@ -85,7 +85,7 @@ function NewsModal({ item, onClose, onSave }: {
 export default function NewsPage() {
   const { token } = useAuth();
   const headers = { Authorization: `Bearer ${token}` };
-  const { data, refetch } = useListNews({ request: { headers } });
+  const { data, refetch } = useListNews(undefined, { request: { headers } });
   const { mutate: create } = useCreateNews({ request: { headers } });
   const { mutate: update } = useUpdateNews({ request: { headers } });
   const { mutate: remove } = useDeleteNews({ request: { headers } });

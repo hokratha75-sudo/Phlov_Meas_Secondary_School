@@ -9,7 +9,6 @@ router.get("/students", async (req, res) => {
   const limit = Number(req.query["limit"]) || 50;
   const offset = Number(req.query["offset"]) || 0;
   const grade = req.query["grade"] as string | undefined;
-  const query = db.select().from(students);
   const [items, [total]] = await Promise.all([
     grade
       ? db.select().from(students).where(eq(students.grade, grade)).orderBy(desc(students.createdAt)).limit(limit).offset(offset)

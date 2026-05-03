@@ -5,7 +5,7 @@ import { Mail, MailOpen, Trash2 } from "lucide-react";
 export default function ContactsPage() {
   const { token } = useAuth();
   const headers = { Authorization: `Bearer ${token}` };
-  const { data, refetch } = useListContacts({ request: { headers } });
+  const { data, refetch } = useListContacts(undefined, { request: { headers } });
   const { mutate: markRead } = useMarkContactRead({ request: { headers } });
   const { mutate: remove } = useDeleteContact({ request: { headers } });
 

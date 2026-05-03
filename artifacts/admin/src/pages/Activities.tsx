@@ -88,7 +88,7 @@ function ActivityModal({ item, onClose, onSave }: {
 export default function ActivitiesPage() {
   const { token } = useAuth();
   const headers = { Authorization: `Bearer ${token}` };
-  const { data, refetch } = useListActivities({ request: { headers } });
+  const { data, refetch } = useListActivities(undefined, { request: { headers } });
   const { mutate: create } = useCreateActivity({ request: { headers } });
   const { mutate: update } = useUpdateActivity({ request: { headers } });
   const { mutate: remove } = useDeleteActivity({ request: { headers } });
