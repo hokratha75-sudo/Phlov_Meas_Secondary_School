@@ -1,31 +1,38 @@
 import { Link, useLocation } from "wouter";
 import { useI18n } from "@/lib/i18n";
-import { Phone, Mail, MapPin, Facebook, Menu, X, Youtube } from "lucide-react";
+import { Phone, Mail, MapPin, Facebook, Menu, X, Youtube, ChevronDown } from "lucide-react";
 import { SiTiktok } from "react-icons/si";
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { cn } from "@/lib/utils";
 import schoolBanner from "@assets/image_1777794982386.png";
 
 export function Layout({ children }: { children: React.ReactNode }) {
   const { lang, setLang, t } = useI18n();
-  const [isScrolled, setIsScrolled] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  const [navStuck, setNavStuck] = useState(false);
   const [location] = useLocation();
+  const navRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    const handleScroll = () => {
-      setIsScrolled(window.scrollY > 20);
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
+    const sentinel = document.getElementById("nav-sentinel");
+    if (!sentinel) return;
+    const observer = new IntersectionObserver(
+      ([entry]) => setNavStuck(!entry.isIntersecting),
+      { threshold: 0 }
+    );
+    observer.observe(sentinel);
+    return () => observer.disconnect();
   }, []);
 
-  const navLinks = [
+  const primaryLinks = [
     { href: "/", en: "Home", kh: "ទំព័រដើម" },
     { href: "/results", en: "General Results", kh: "លទ្ធផលសិក្សាទូទៅ" },
     { href: "/standards", en: "Bac II Standards", kh: "ស្តង់ដារបាក់ឌុប" },
     { href: "/admin-work", en: "Administrative Work", kh: "កិច្ចការរដ្ឋបាល" },
     { href: "/reports", en: "School Reports", kh: "របាយការណ៍សាលា" },
+  ];
+
+  const secondaryLinks = [
     { href: "/about", en: "About", kh: "អំពីយើង" },
     { href: "/academics", en: "Academics", kh: "ការសិក្សា" },
     { href: "/activities", en: "Activities", kh: "សកម្មភាព" },
@@ -33,142 +40,168 @@ export function Layout({ children }: { children: React.ReactNode }) {
     { href: "/contact", en: "Contact", kh: "ទំនាក់ទំនង" },
   ];
 
+  const allLinks = [...primaryLinks, ...secondaryLinks];
+
   return (
-    <div className={`min-h-screen flex flex-col ${lang === 'kh' ? 'font-khmer' : 'font-sans'}`}>
-      {/* Top Info Bar */}
-      <div className="bg-primary text-white text-sm py-2 px-4 md:px-8 flex justify-between items-center z-50 relative">
-        <div className="hidden md:flex items-center space-x-6">
-          <div className="flex items-center space-x-2">
-            <Phone size={14} />
+    <div className={`min-h-screen flex flex-col ${lang === "kh" ? "font-khmer" : "font-sans"}`}>
+
+      {/* ── Top Info Bar ── */}
+      <div className="bg-[#0d2550] text-white text-xs py-1.5 px-4 md:px-8 flex justify-between items-center z-50 relative border-b border-white/10">
+        <div className="hidden md:flex items-center space-x-5">
+          <div className="flex items-center space-x-1.5">
+            <Phone size={12} className="text-secondary" />
             <span>012 345 678</span>
           </div>
-          <div className="flex items-center space-x-2">
-            <Mail size={14} />
+          <div className="flex items-center space-x-1.5">
+            <Mail size={12} className="text-secondary" />
             <span>trengsecondaryschool@gmail.com</span>
           </div>
         </div>
-        <div className="flex items-center space-x-4 ml-auto">
+        <div className="flex items-center space-x-3 ml-auto">
           <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="Facebook">
-            <Facebook size={16} />
+            <Facebook size={14} />
           </a>
           <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="YouTube">
-            <Youtube size={16} />
+            <Youtube size={14} />
           </a>
           <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="TikTok">
-            <SiTiktok size={14} />
+            <SiTiktok size={12} />
           </a>
-          <div className="h-4 w-px bg-white/30"></div>
-          <div className="flex items-center space-x-2">
-            <button 
-              onClick={() => setLang('en')} 
-              className={cn("hover:text-secondary font-medium transition-colors", lang === 'en' ? 'text-secondary' : '')}
-            >
-              EN
-            </button>
-            <span className="text-white/50">|</span>
-            <button 
-              onClick={() => setLang('kh')} 
-              className={cn("hover:text-secondary font-khmer font-medium transition-colors", lang === 'kh' ? 'text-secondary' : '')}
-            >
-              ខ្មែរ
-            </button>
+          <div className="h-3 w-px bg-white/30 mx-1"></div>
+          <button onClick={() => setLang("en")} className={cn("text-xs font-medium transition-colors hover:text-secondary", lang === "en" ? "text-secondary" : "")}>EN</button>
+          <span className="text-white/30 text-xs">|</span>
+          <button onClick={() => setLang("kh")} className={cn("text-xs font-khmer font-medium transition-colors hover:text-secondary", lang === "kh" ? "text-secondary" : "")}>ខ្មែរ</button>
+        </div>
+      </div>
+
+      {/* ── Banner Header (NOT sticky) ── */}
+      <div className="relative w-full overflow-hidden" style={{ minHeight: "140px" }}>
+        <img src={schoolBanner} alt="School Banner" className="absolute inset-0 w-full h-full object-cover object-center" />
+        <div className="absolute inset-0 bg-primary/75" />
+        <div className="relative flex items-center gap-5 px-6 md:px-12 py-5">
+          <Link href="/">
+            <img
+              src="/school-logo.png"
+              alt="School Logo"
+              className="h-24 w-24 md:h-28 md:w-28 object-cover rounded-full border-4 border-white shadow-xl shrink-0 bg-white"
+            />
+          </Link>
+          <div className="flex flex-col text-white">
+            <span className="text-secondary font-bold text-sm tracking-widest uppercase font-sans mb-0.5">
+              {t("Ministry of Education, Youth and Sport", "ក្រសួងអប់រំ យុវជន និងកីឡា")}
+            </span>
+            <span className="font-extrabold text-3xl md:text-5xl font-khmer leading-tight drop-shadow-lg">
+              {t("Treng Secondary School", "វិទ្យាល័យត្រែង")}
+            </span>
+            <span className="text-white/90 text-base md:text-xl font-semibold font-khmer mt-1 drop-shadow">
+              {t("Welcome to our school!", "សូមស្វាគមន៍!")}
+            </span>
           </div>
         </div>
       </div>
 
-      {/* Sticky Navbar */}
-      <header 
+      {/* Sentinel — triggers sticky detection */}
+      <div id="nav-sentinel" />
+
+      {/* ── Sticky Nav Bar ── */}
+      <div
+        ref={navRef}
         className={cn(
-          "sticky top-0 z-40 w-full transition-all duration-300 border-b border-white/10 overflow-hidden",
-          isScrolled ? "shadow-sm py-1" : "py-0"
+          "sticky top-0 z-40 w-full transition-shadow duration-200",
+          navStuck ? "shadow-xl" : "shadow-sm"
         )}
       >
-        <div className="absolute inset-0">
-          <img src={schoolBanner} alt="School Banner" className="w-full h-full object-cover" />
-          <div className="absolute inset-0 bg-primary/70" />
-        </div>
-        <div className="relative container mx-auto px-4 md:px-8 flex items-center justify-between min-h-[110px]">
-          <Link href="/" className="flex items-center gap-4">
-            <img src="/school-logo.png" alt="School Logo" className="h-16 w-16 md:h-20 md:w-20 object-cover rounded-full border-4 border-white shadow-lg bg-white" />
-            <div className="flex flex-col text-white drop-shadow-sm">
-              <span className="text-secondary font-bold text-sm md:text-base uppercase tracking-wide">
-                {t("Treng Secondary School", "វិទ្យាល័យត្រែង")}
-              </span>
-              <span className="font-bold text-2xl md:text-4xl font-khmer leading-tight">
-                {t("Treng Secondary School", "វិទ្យាល័យត្រែង")}
-              </span>
-              <span className="text-white/90 text-sm md:text-lg font-semibold font-khmer">
-                {t("A place of excellence", "ឧត្តមភាពក្នុងការអប់រំ")}
-              </span>
-            </div>
-          </Link>
+        {/* Primary nav row */}
+        <div className="bg-[#1a3a6b] border-b border-white/10">
+          <div className="container mx-auto px-4 md:px-8 flex items-center justify-between">
+            {/* Desktop primary links */}
+            <nav className="hidden md:flex items-stretch">
+              {primaryLinks.map((link) => (
+                <Link
+                  key={link.href}
+                  href={link.href}
+                  className={cn(
+                    "relative flex items-center px-4 py-3 text-[13px] lg:text-[14px] font-semibold font-khmer transition-colors border-b-[3px]",
+                    location === link.href
+                      ? "text-white border-secondary bg-white/10"
+                      : "text-white/85 border-transparent hover:text-white hover:border-secondary/60 hover:bg-white/5"
+                  )}
+                >
+                  {lang === "kh" ? link.kh : link.en}
+                </Link>
+              ))}
+            </nav>
 
-          {/* Desktop Nav */}
-          <nav className="hidden md:flex items-center space-x-5 lg:space-x-7">
-            {navLinks.map((link) => (
-              <Link 
-                key={link.href} 
+            {/* Mobile toggle */}
+            <button
+              className="md:hidden text-white p-3 flex items-center gap-2"
+              onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
+            >
+              {mobileMenuOpen ? <X size={22} /> : <Menu size={22} />}
+              <span className="text-sm font-khmer">{t("Menu", "ម៉ឺនុយ")}</span>
+            </button>
+          </div>
+        </div>
+
+        {/* Secondary nav row */}
+        <div className="hidden md:block bg-[#0d2550] border-b border-white/10">
+          <div className="container mx-auto px-4 md:px-8 flex items-stretch justify-end">
+            {secondaryLinks.map((link) => (
+              <Link
+                key={link.href}
                 href={link.href}
                 className={cn(
-                  "font-semibold text-[14px] lg:text-[15px] transition-colors relative py-2 hover:text-secondary text-white drop-shadow-sm",
-                  location === link.href ? "text-secondary" : "text-white"
+                  "relative flex items-center px-4 py-2.5 text-[12px] lg:text-[13px] font-semibold transition-colors border-b-[3px]",
+                  location === link.href
+                    ? "text-secondary border-secondary bg-white/5"
+                    : "text-white/70 border-transparent hover:text-white hover:border-secondary/50 hover:bg-white/5"
                 )}
               >
-                {t(link.en, link.kh)}
-                {location === link.href && (
-                  <span className="absolute bottom-0 left-0 w-full h-0.5 bg-secondary rounded-full" />
-                )}
+                {lang === "kh" ? link.kh : link.en}
               </Link>
             ))}
-          </nav>
-
-          {/* Mobile Menu Toggle */}
-          <button 
-            className="md:hidden text-white p-2"
-            onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
-          >
-            {mobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
-          </button>
+          </div>
         </div>
 
-        {/* Mobile Nav */}
+        {/* Mobile dropdown */}
         {mobileMenuOpen && (
-          <div className="md:hidden absolute top-full left-0 w-full bg-primary/95 backdrop-blur-md shadow-lg border-b border-white/10 animate-in slide-in-from-top-2">
-            <nav className="flex flex-col p-4">
-              {navLinks.map((link) => (
-                <Link 
-                  key={link.href} 
+          <div className="md:hidden bg-[#0d2550] border-b border-white/10 animate-in slide-in-from-top-2">
+            <nav className="flex flex-col divide-y divide-white/10">
+              {allLinks.map((link) => (
+                <Link
+                  key={link.href}
                   href={link.href}
                   onClick={() => setMobileMenuOpen(false)}
                   className={cn(
-                    "font-semibold py-3 border-b border-white/10 transition-colors text-white",
-                    location === link.href ? "text-secondary" : "text-white"
+                    "px-6 py-3.5 text-sm font-semibold font-khmer transition-colors flex items-center gap-2",
+                    location === link.href ? "text-secondary bg-white/10" : "text-white/80 hover:text-white hover:bg-white/5"
                   )}
                 >
-                  {t(link.en, link.kh)}
+                  <span className={cn("w-1.5 h-1.5 rounded-full", location === link.href ? "bg-secondary" : "bg-white/30")} />
+                  {lang === "kh" ? link.kh : link.en}
                 </Link>
               ))}
             </nav>
           </div>
         )}
-      </header>
+      </div>
 
-      {/* Main Content */}
+      {/* ── Main Content ── */}
       <main className="flex-1 flex flex-col w-full">
         {children}
       </main>
 
-      {/* Footer */}
-      <footer className="bg-primary text-white pt-16 pb-8 border-t-[6px] border-secondary">
+      {/* ── Footer ── */}
+      <footer className="bg-[#0d2550] text-white pt-16 pb-8 border-t-[6px] border-secondary">
         <div className="container mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-3 mb-6">
-              <img src="/school-logo.png" alt="School Logo" className="h-14 w-14 object-cover rounded-full" />
+              <img src="/school-logo.png" alt="School Logo" className="h-14 w-14 object-cover rounded-full border-2 border-secondary" />
               <div className="flex flex-col">
                 <span className="font-bold text-xl font-khmer text-white leading-tight">
-                  អនុវិទ្យាល័យត្រែង
+                  {t("Treng Secondary School", "វិទ្យាល័យត្រែង")}
                 </span>
-                <span className="text-white/80 text-sm font-semibold uppercase tracking-wider">
+                <span className="text-secondary text-xs font-semibold uppercase tracking-wider">
                   Treng Secondary School
                 </span>
               </div>
@@ -179,17 +212,32 @@ export function Layout({ children }: { children: React.ReactNode }) {
                 "ប្តេជ្ញាផ្តល់ការអប់រំប្រកបដោយគុណភាព លើកកម្ពស់ឧត្តមភាពសិក្សា និងអភិវឌ្ឍអ្នកដឹកនាំនាពេលអនាគតរបស់កម្ពុជាតាមរយៈសុចរិតភាពនិងចំណេះដឹង។"
               )}
             </p>
+            <div className="flex items-center gap-3">
+              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary transition-colors">
+                <Facebook size={16} />
+              </a>
+              <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary transition-colors">
+                <Youtube size={16} />
+              </a>
+              <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer"
+                className="w-9 h-9 rounded-full bg-white/10 flex items-center justify-center hover:bg-secondary transition-colors">
+                <SiTiktok size={14} />
+              </a>
+            </div>
           </div>
-          
+
           <div>
-            <h3 className="text-lg font-bold mb-6 text-white border-b border-white/20 pb-2 inline-block">
+            <h3 className="text-sm font-bold mb-5 text-secondary uppercase tracking-widest border-b border-white/20 pb-2">
               {t("Quick Links", "តំណភ្ជាប់រហ័ស")}
             </h3>
-            <ul className="space-y-3">
-              {navLinks.slice(1).map((link) => (
+            <ul className="space-y-2.5">
+              {allLinks.slice(1).map((link) => (
                 <li key={link.href}>
-                  <Link href={link.href} className="text-white/70 hover:text-secondary transition-colors flex items-center gap-2">
-                    <span className="text-secondary text-xs">▶</span> {t(link.en, link.kh)}
+                  <Link href={link.href} className="text-white/65 hover:text-secondary transition-colors flex items-center gap-2 text-sm">
+                    <span className="text-secondary text-[10px]">▶</span>
+                    {lang === "kh" ? link.kh : link.en}
                   </Link>
                 </li>
               ))}
@@ -197,36 +245,31 @@ export function Layout({ children }: { children: React.ReactNode }) {
           </div>
 
           <div>
-            <h3 className="text-lg font-bold mb-6 text-white border-b border-white/20 pb-2 inline-block">
+            <h3 className="text-sm font-bold mb-5 text-secondary uppercase tracking-widest border-b border-white/20 pb-2">
               {t("Contact Us", "ទំនាក់ទំនង")}
             </h3>
-            <ul className="space-y-4 text-white/70">
+            <ul className="space-y-4 text-white/70 text-sm">
               <li className="flex items-start gap-3">
-                <MapPin className="text-secondary mt-1 shrink-0" size={18} />
-                <span>
-                  {t(
-                    "Treng District, Stung Treng Province, Cambodia",
-                    "ស្រុកត្រែង ខេត្តស្ទឹងត្រែង ប្រទេសកម្ពុជា"
-                  )}
-                </span>
+                <MapPin className="text-secondary mt-0.5 shrink-0" size={16} />
+                <span>{t("Treng District, Stung Treng Province, Cambodia", "ស្រុកត្រែង ខេត្តស្ទឹងត្រែង ប្រទេសកម្ពុជា")}</span>
               </li>
               <li className="flex items-center gap-3">
-                <Phone className="text-secondary shrink-0" size={18} />
+                <Phone className="text-secondary shrink-0" size={16} />
                 <span>012 345 678</span>
               </li>
               <li className="flex items-center gap-3">
-                <Mail className="text-secondary shrink-0" size={18} />
+                <Mail className="text-secondary shrink-0" size={16} />
                 <span>trengsecondaryschool@gmail.com</span>
               </li>
             </ul>
           </div>
         </div>
-        
-        <div className="container mx-auto px-4 md:px-8 border-t border-white/10 pt-6 text-center md:flex md:justify-between md:text-left">
-          <p className="text-white/50 text-sm">
-            &copy; {new Date().getFullYear()} {t("Treng Secondary School. All Rights Reserved.", "អនុវិទ្យាល័យត្រែង. រក្សាសិទ្ធិគ្រប់យ៉ាង.")}
+
+        <div className="container mx-auto px-4 md:px-8 border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
+          <p className="text-white/40 text-xs">
+            &copy; {new Date().getFullYear()} {t("Treng Secondary School. All Rights Reserved.", "វិទ្យាល័យត្រែង. រក្សាសិទ្ធិគ្រប់យ៉ាង.")}
           </p>
-          <div className="text-white/50 text-sm mt-2 md:mt-0 flex gap-4 justify-center">
+          <div className="text-white/40 text-xs flex gap-4">
             <Link href="/privacy" className="hover:text-white transition-colors">{t("Privacy Policy", "គោលការណ៍ឯកជនភាព")}</Link>
             <Link href="/terms" className="hover:text-white transition-colors">{t("Terms of Service", "លក្ខខណ្ឌប្រើប្រាស់")}</Link>
           </div>

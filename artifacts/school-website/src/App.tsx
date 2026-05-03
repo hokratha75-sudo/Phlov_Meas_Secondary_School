@@ -10,6 +10,10 @@ import Academics from "@/pages/Academics";
 import Activities from "@/pages/Activities";
 import News from "@/pages/News";
 import Contact from "@/pages/Contact";
+import Results from "@/pages/Results";
+import Standards from "@/pages/Standards";
+import AdminWork from "@/pages/AdminWork";
+import Reports from "@/pages/Reports";
 import NotFound from "@/pages/not-found";
 
 const queryClient = new QueryClient();
@@ -23,6 +27,10 @@ function Router() {
       <Route path="/activities" component={Activities} />
       <Route path="/news" component={News} />
       <Route path="/contact" component={Contact} />
+      <Route path="/results" component={Results} />
+      <Route path="/standards" component={Standards} />
+      <Route path="/admin-work" component={AdminWork} />
+      <Route path="/reports" component={Reports} />
       <Route component={NotFound} />
     </Switch>
   );
