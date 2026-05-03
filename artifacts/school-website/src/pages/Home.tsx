@@ -3,6 +3,7 @@ import { ArrowRight, BookOpen, Users, Trophy, GraduationCap, Calendar, MapPin } 
 import { Link } from "wouter";
 import { Button } from "@/components/ui/button";
 import { useListNews, useListActivities } from "@workspace/api-client-react";
+import heroImage from "@assets/image_1777793193658.png";
 
 const STATIC_NEWS = [
   {
@@ -64,7 +65,7 @@ export default function Home() {
       {/* Hero Section */}
       <section className="relative w-full h-[60vh] min-h-[500px] flex items-center justify-center overflow-hidden">
         <div className="absolute inset-0 z-0">
-          <img src="/campus-hero.png" alt="School Campus" className="w-full h-full object-cover" />
+          <img src={heroImage} alt="School Campus" className="w-full h-full object-cover" />
           <div className="absolute inset-0 bg-primary/70 mix-blend-multiply"></div>
           <div className="absolute inset-0 bg-gradient-to-t from-primary/90 to-transparent"></div>
         </div>
