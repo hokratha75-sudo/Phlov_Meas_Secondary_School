@@ -63,38 +63,38 @@ export function Layout({ children }: { children: React.ReactNode }) {
               <p className="text-[10px] md:text-xs font-bold tracking-[0.24em] uppercase text-secondary/90 font-sans truncate">
                 {t("Ministry of Education, Youth and Sport", "ក្រសួងអប់រំ យុវជន និងកីឡា")}
               </p>
-              <h1 className="text-xl md:text-4xl font-extrabold leading-tight text-white font-khmer truncate">
+              <h1 className="text-xl md:text-4xl font-extrabold leading-tight text-white font-khmer">
                 {t("Treng Secondary School", "វិទ្យាល័យត្រែង")}
               </h1>
-              <p className="text-sm md:text-lg font-semibold text-white/90 font-khmer truncate">
+              <p className="text-sm md:text-lg font-semibold text-white/90 font-khmer">
                 {t("Welcome to our school!", "សូមស្វាគមន៍!")}
               </p>
             </div>
-            <div className="hidden lg:flex items-center gap-5 text-white/85 text-xs xl:text-sm shrink-0">
-              <div className="flex items-center gap-1.5">
-                <Phone size={12} className="text-secondary" />
-                <span>012 345 678</span>
-              </div>
-              <div className="flex items-center gap-1.5">
-                <Mail size={12} className="text-secondary" />
-                <span>trengsecondaryschool@gmail.com</span>
-              </div>
-              <div className="flex items-center gap-3 pl-3 border-l border-white/15">
-                <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="Facebook">
-                  <Facebook size={14} />
-                </a>
-                <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="YouTube">
-                  <Youtube size={14} />
-                </a>
-                <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="TikTok">
-                  <SiTiktok size={12} />
-                </a>
-              </div>
-              <div className="flex items-center gap-2 pl-3 border-l border-white/15">
-                <button onClick={() => setLang("en")} className={cn("text-xs font-medium transition-colors hover:text-secondary", lang === "en" ? "text-secondary" : "")}>EN</button>
-                <span className="text-white/30 text-xs">|</span>
-                <button onClick={() => setLang("kh")} className={cn("text-xs font-khmer font-medium transition-colors hover:text-secondary", lang === "kh" ? "text-secondary" : "")}>ខ្មែរ</button>
-              </div>
+          </div>
+          <div className="mt-3 flex flex-wrap items-center gap-x-5 gap-y-2 text-white/85 text-xs xl:text-sm lg:justify-end">
+            <div className="flex items-center gap-1.5">
+              <Phone size={12} className="text-secondary" />
+              <span>012 345 678</span>
+            </div>
+            <div className="flex items-center gap-1.5">
+              <Mail size={12} className="text-secondary" />
+              <span>trengsecondaryschool@gmail.com</span>
+            </div>
+            <div className="flex items-center gap-3 pl-0 lg:pl-3 lg:border-l border-white/15">
+              <a href="https://www.facebook.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="Facebook">
+                <Facebook size={14} />
+              </a>
+              <a href="https://www.youtube.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="YouTube">
+                <Youtube size={14} />
+              </a>
+              <a href="https://www.tiktok.com" target="_blank" rel="noopener noreferrer" className="hover:text-secondary transition-colors" aria-label="TikTok">
+                <SiTiktok size={12} />
+              </a>
+            </div>
+            <div className="flex items-center gap-2 pl-0 lg:pl-3 lg:border-l border-white/15">
+              <button onClick={() => setLang("en")} className={cn("text-xs font-medium transition-colors hover:text-secondary", lang === "en" ? "text-secondary" : "")}>EN</button>
+              <span className="text-white/30 text-xs">|</span>
+              <button onClick={() => setLang("kh")} className={cn("text-xs font-khmer font-medium transition-colors hover:text-secondary", lang === "kh" ? "text-secondary" : "")}>ខ្មែរ</button>
             </div>
           </div>
         </div>
