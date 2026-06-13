@@ -1,0 +1,7 @@
+{
+    "workbench.editor.autoLockGroups": {
+        "workbench.editor.chatSession": true
+    },
+    "mimo-copilot.maxTokens": 1000,
+    "mimo.preferredModel": "mimo-v2-pro"
+}

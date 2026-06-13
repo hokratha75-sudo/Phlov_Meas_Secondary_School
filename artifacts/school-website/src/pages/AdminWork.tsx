@@ -58,7 +58,7 @@ export default function AdminWork() {
         </div>
 
         {/* Office Hours */}
-        <div className="bg-gray-50 border rounded-sm p-8 max-w-2xl mx-auto text-center">
+        <div className="bg-gray-50 border rounded-sm p-8 max-w-2xl mx-auto text-center mb-10">
           <h3 className="text-xl font-bold text-[#0d2550] mb-4 font-khmer">
             {t("Office Hours", "ម៉ោងធ្វើការ")}
           </h3>
@@ -70,6 +70,30 @@ export default function AdminWork() {
           <p className="mt-4 text-gray-500 text-sm">
             {t("For urgent matters, contact us at", "សម្រាប់ការជាក់ស្ដែង ទាក់ទងយើងតាម")} <strong>012 345 678</strong>
           </p>
+        </div>
+
+        {/* Admin Access Section */}
+        <div className="bg-primary rounded-sm p-8 max-w-2xl mx-auto text-center shadow-xl">
+          <div className="w-16 h-16 bg-white/10 rounded-full flex items-center justify-center mx-auto mb-4">
+            <Building2 size={32} className="text-secondary" />
+          </div>
+          <h3 className="text-xl font-bold text-white mb-2 font-khmer">
+            {t("Admin Portal Access", "ការចូលប្រើប្រាស់ផ្នែករដ្ឋបាល")}
+          </h3>
+          <p className="text-white/70 text-sm mb-6 leading-relaxed">
+            {t(
+              "This section is restricted to school administrators and staff only. Authorized personnel can log in to manage school data, news, and student records.",
+              "ផ្នែកនេះគឺសម្រាប់តែបុគ្គលិករដ្ឋបាល និងថ្នាក់ដឹកនាំសាលាប៉ុណ្ណោះ។ បុគ្គលិកដែលមានសិទ្ធិអាចចូលប្រើប្រាស់ដើម្បីគ្រប់គ្រងទិន្នន័យសាលា។"
+            )}
+          </p>
+          <a 
+            href="http://localhost:3001" 
+            target="_blank" 
+            rel="noopener noreferrer"
+            className="inline-flex items-center gap-2 bg-secondary text-[#0d2550] px-8 py-3 rounded-md font-bold hover:bg-secondary/90 transition-all transform hover:scale-105 active:scale-95 shadow-lg"
+          >
+            {t("Log In to Dashboard", "ចូលទៅកាន់ប្រព័ន្ធគ្រប់គ្រង")}
+          </a>
         </div>
       </div>
     </div>

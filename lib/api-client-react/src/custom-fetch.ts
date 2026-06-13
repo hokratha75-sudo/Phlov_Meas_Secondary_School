@@ -17,6 +17,11 @@ const DEFAULT_JSON_ACCEPT = "application/json, application/problem+json";
 
 let _baseUrl: string | null = null;
 let _authTokenGetter: AuthTokenGetter | null = null;
+let _customFetchFn: ((input: RequestInfo | URL, init?: RequestInit) => Promise<Response>) | null = null;
+
+export function setCustomFetchFn(fn: ((input: RequestInfo | URL, init?: RequestInit) => Promise<Response>) | null) {
+  _customFetchFn = fn;
+}
 
 /**
  * Set a base URL that is prepended to every relative request URL
@@ -360,7 +365,8 @@ export async function customFetch<T = unknown>(
 
   const requestInfo = { method, url: resolveUrl(input) };
 
-  const response = await fetch(input, { ...init, method, headers });
+  const fetchFn = _customFetchFn || fetch;
+  const response = await fetchFn(input, { ...init, method, headers });
 
   if (!response.ok) {
     const errorData = await parseErrorBody(response, method);

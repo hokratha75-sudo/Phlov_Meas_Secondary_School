@@ -10,4 +10,5 @@ export type ListStudentsParams = {
   limit?: number;
   offset?: number;
   grade?: string;
+  classId?: number;
 };

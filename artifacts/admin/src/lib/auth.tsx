@@ -1,52 +1,85 @@
-import { createContext, useContext, useState, useEffect, type ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect } from 'react';
+import api from './axiosConfig';
 
-interface AuthUser { id: number; username: string; createdAt: string; }
-interface AuthCtx {
-  user: AuthUser | null;
-  token: string | null;
-  login: (token: string, user: AuthUser) => void;
-  logout: () => void;
-  isLoading: boolean;
+interface User {
+  id: number;
+  username: string;
+  role: 'admin' | 'teacher';
+  createdAt?: string;
+  nameKh?: string;
+  nameEn?: string;
 }
 
-const AuthContext = createContext<AuthCtx | null>(null);
+interface AuthContextType {
+  user: User | null;
+  isLoading: boolean;
+  login: (username: string, password?: string, providedToken?: string, providedUser?: User) => Promise<void>;
+  logout: () => Promise<void>;
+  token: string | null;
+}
 
-export function AuthProvider({ children }: { children: ReactNode }) {
-  const [user, setUser] = useState<AuthUser | null>(null);
+const AuthContext = createContext<AuthContextType | undefined>(undefined);
+
+export function AuthProvider({ children }: { children: React.ReactNode }) {
+  const [user, setUser] = useState<User | null>(null);
   const [token, setToken] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Load user from localStorage on mount
   useEffect(() => {
-    const stored = localStorage.getItem("admin_token");
-    const storedUser = localStorage.getItem("admin_user");
-    if (stored && storedUser) {
-      setToken(stored);
+    const storedUser = localStorage.getItem('admin_user');
+    const storedToken = localStorage.getItem('token');
+    if (storedUser && storedToken) {
       setUser(JSON.parse(storedUser));
+      setToken(storedToken);
     }
     setIsLoading(false);
   }, []);
 
-  const login = (tok: string, u: AuthUser) => {
-    setToken(tok); setUser(u);
-    localStorage.setItem("admin_token", tok);
-    localStorage.setItem("admin_user", JSON.stringify(u));
+  const login = async (usernameOrToken: string, password?: string, providedToken?: string, providedUser?: User) => {
+    if (providedToken && providedUser) {
+      // Direct login support (used in Login.tsx directly receiving token)
+      localStorage.setItem('admin_user', JSON.stringify(providedUser));
+      localStorage.setItem('token', providedToken);
+      setUser(providedUser);
+      setToken(providedToken);
+      return;
+    }
+
+    const response = await api.post('/auth/login', { username: usernameOrToken, password });
+    const { user: userData, accessToken } = response.data;
+    
+    localStorage.setItem('admin_user', JSON.stringify(userData));
+    localStorage.setItem('token', accessToken);
+    
+    setUser(userData);
+    setToken(accessToken);
   };
 
-  const logout = () => {
-    setToken(null); setUser(null);
-    localStorage.removeItem("admin_token");
-    localStorage.removeItem("admin_user");
+  const logout = async () => {
+    try {
+      await api.post('/auth/logout');
+    } catch (error) {
+      console.error('Logout error:', error);
+    } finally {
+      localStorage.removeItem('admin_user');
+      localStorage.removeItem('token');
+      setUser(null);
+      setToken(null);
+    }
   };
 
-  return <AuthContext.Provider value={{ user, token, login, logout, isLoading }}>{children}</AuthContext.Provider>;
+  return (
+    <AuthContext.Provider value={{ user, isLoading, login, logout, token }}>
+      {children}
+    </AuthContext.Provider>
+  );
 }
 
 export function useAuth() {
-  const ctx = useContext(AuthContext);
-  if (!ctx) throw new Error("useAuth must be used within AuthProvider");
-  return ctx;
-}
-
-export function getAuthHeaders(token: string | null): Record<string, string> {
-  return token ? { Authorization: `Bearer ${token}` } : {};
+  const context = useContext(AuthContext);
+  if (!context) {
+    throw new Error('useAuth must be used within AuthProvider');
+  }
+  return context;
 }

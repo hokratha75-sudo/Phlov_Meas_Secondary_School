@@ -11,9 +11,13 @@ export interface CreateStudentRequest {
   nameEn: string;
   nameKh: string;
   grade: string;
+  classId?: number | null;
   gender: string;
   enrollmentYear: number;
   phone?: string | null;
   parentPhone?: string | null;
   address?: string | null;
+  photoUrl?: string | null;
+  biography?: string | null;
+  familyStatus?: string | null;
 }

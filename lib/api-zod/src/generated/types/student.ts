@@ -5,6 +5,8 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
+import type { Classroom } from "./classroom";
+import type { DisciplineLog } from "./disciplineLog";
 
 export interface Student {
   id: number;
@@ -12,11 +14,20 @@ export interface Student {
   nameEn: string;
   nameKh: string;
   grade: string;
+  classId?: number | null;
   gender: string;
   enrollmentYear: number;
   phone?: string | null;
   parentPhone?: string | null;
   address?: string | null;
+  photoUrl?: string | null;
+  biography?: string | null;
+  familyStatus?: string | null;
+  classroom?: Classroom | null;
+  disciplineLogs?: DisciplineLog[];
+  telegramChatId?: number | null;
+  telegramLinkCode?: string | null;
+  telegramLinkedAt?: Date | null;
   createdAt: string;
   updatedAt: string;
 }

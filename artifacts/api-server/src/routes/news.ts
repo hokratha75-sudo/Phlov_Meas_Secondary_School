@@ -2,6 +2,7 @@ import { Router } from "express";
 import { db, news } from "@workspace/db";
 import { eq, count, desc } from "drizzle-orm";
 import { requireAuth } from "./auth";
+import { broadcastToAllChannels } from "../lib/telegram";
 
 const router = Router();
 
@@ -30,6 +31,40 @@ router.post("/news", requireAuth, async (req, res) => {
     imageUrl: body.imageUrl ?? null, category: body.category || "general",
     isPublished: body.isPublished ?? true,
   }).returning();
+
+  const sendToMain = body.sendToMain ?? false;
+  const sendToTeachers = body.sendToTeachers ?? false;
+  const sendToStudents = body.sendToStudents ?? false;
+  const sendToParents = body.sendToParents ?? false;
+  const pinToMain = body.pinToMain ?? false;
+
+  if (item && item.isPublished && (sendToMain || sendToTeachers || sendToStudents || sendToParents)) {
+    const message = `📢 <b>ប្រកាសថ្មី!</b>
+
+<b>${item.titleKh || item.titleEn}</b>
+
+${(item.contentKh || item.contentEn).substring(0, 300)}...
+
+🔗 អានបន្ថែម: https://phlovmeas.edu.kh/news/${item.id}`;
+    
+    // Fire and forget targeted sending
+    (async () => {
+      const { sendToMainChannel, sendToTeachersChannel, sendToStudentsChannel, sendToParentsChannel } = await import("../lib/telegram");
+      if (sendToMain) {
+        await sendToMainChannel(message, pinToMain);
+      }
+      if (sendToTeachers) {
+        await sendToTeachersChannel(message);
+      }
+      if (sendToStudents) {
+        await sendToStudentsChannel(message);
+      }
+      if (sendToParents) {
+        await sendToParentsChannel(message);
+      }
+    })().catch(err => console.error("Telegram targeted error:", err));
+  }
+
   res.status(201).json({ ...item!, publishedAt: item!.publishedAt.toISOString(), createdAt: item!.createdAt.toISOString(), updatedAt: item!.updatedAt.toISOString() });
 });
 

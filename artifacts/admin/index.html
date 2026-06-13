@@ -1,13 +1,45 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="km">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1" />
-    <title>School Admin Panel</title>
+    
+    <!-- PWA / App Meta Tags -->
+    <meta id="theme-color-meta" name="theme-color" content="#1e3a6e" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="ផ្លូវមាស" />
+    <meta name="application-name" content="ផ្លូវមាស" />
+    
+    <!-- SEO -->
+    <meta name="description" content="ប្រព័ន្ធគ្រប់គ្រងសាលាវិទ្យាល័យ ផ្លូវមាស — School Management System for Phlov Meas Secondary School" />
+    
+    <!-- Icons -->
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/pwa-icon-192.png" />
+    <link rel="apple-touch-icon" sizes="192x192" href="/pwa-icon-192.png" />
+    <link rel="apple-touch-icon" sizes="512x512" href="/pwa-icon-512.png" />
+    
+    <title>វិទ្យាល័យ ផ្លូវមាស | Phlov Meas Secondary School</title>
+    
+    <!-- Fonts -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Moul&family=Siemreap&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <!-- Splash screen colors for iOS -->
+    <meta name="msapplication-TileColor" content="#1e3a6e" />
+    <meta name="msapplication-TileImage" content="/pwa-icon-192.png" />
+    
+    <script>
+      (function() {
+        try {
+          var preset = localStorage.getItem('app-theme-preset');
+          if (preset) document.documentElement.setAttribute('data-theme', preset);
+        } catch (e) {}
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

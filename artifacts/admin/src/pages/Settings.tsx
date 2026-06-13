@@ -1,18 +1,20 @@
 import { useState, useEffect } from "react";
-import { useGetSiteSettings, useUpdateSiteSetting } from "@workspace/api-client-react";
+import { useQueryClient } from "@tanstack/react-query";
+import { useGetSiteSettings, useUpdateSiteSetting, getGetSiteSettingsQueryKey } from "@workspace/api-client-react";
 import { useAuth } from "@/lib/auth";
-import { Save, ChevronDown, ChevronUp, Plus, Trash2, Check } from "lucide-react";
+import { Save, ChevronDown, ChevronUp, Plus, Trash2, Check, Smartphone, Download, Wifi } from "lucide-react";
+
+
 
 type LeadershipEntry = { nameEn: string; nameKh: string; titleEn: string; titleKh: string; descEn: string; descKh: string; photoUrl: string };
 type ClubEntry = { titleEn: string; titleKh: string; descEn: string; descKh: string; color: string };
-type ProgramEntry = { titleEn: string; titleKh: string; descEn: string; descKh: string };
 
 function Section({ title, children, defaultOpen = false }: { title: string; children: React.ReactNode; defaultOpen?: boolean }) {
   const [open, setOpen] = useState(defaultOpen);
   return (
-    <div className="bg-white border rounded-xl shadow-sm overflow-hidden mb-4">
-      <button onClick={() => setOpen(o => !o)} className="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors text-left">
-        <h3 className="font-bold text-gray-800">{title}</h3>
+    <div className="bg-white border rounded-xl shadow-sm overflow-hidden mb-4 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
+      <button onClick={() => setOpen(o => !o)} className="w-full flex items-center justify-between px-6 py-4 hover:bg-gray-50 transition-colors text-left dark:bg-gray-900/50">
+        <h3 className="text-primary">{title}</h3>
         {open ? <ChevronUp size={18} className="text-gray-400" /> : <ChevronDown size={18} className="text-gray-400" />}
       </button>
       {open && <div className="px-6 py-4 border-t space-y-4">{children}</div>}
@@ -36,13 +38,14 @@ function Field({ label, value, onChange, multiline = false, placeholder = "" }: 
 function SaveButton({ onSave, saving, saved }: { onSave: () => void; saving: boolean; saved: boolean }) {
   return (
     <button onClick={onSave} disabled={saving}
-      className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${saved ? "bg-green-600 text-white" : "bg-[#1e3a6e] text-white hover:bg-[#2d5a8e]"} disabled:opacity-50`}>
+      className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold transition-colors ${saved ? "bg-green-600 text-white" : "bg-primary text-white hover:opacity-90"} disabled:opacity-50`}>
       {saved ? <><Check size={14} /> Saved!</> : saving ? "Saving..." : <><Save size={14} /> Save</>}
     </button>
   );
 }
 
 function useSaveSetting(key: string, token: string | null) {
+  const queryClient = useQueryClient();
   const { mutate } = useUpdateSiteSetting({ request: { headers: { Authorization: `Bearer ${token}` } } });
   const [saving, setSaving] = useState(false);
   const [saved, setSaved] = useState(false);
@@ -50,7 +53,13 @@ function useSaveSetting(key: string, token: string | null) {
   const save = (value: string) => {
     setSaving(true);
     mutate({ data: { key, value } }, {
-      onSuccess: () => { setSaving(false); setSaved(true); setTimeout(() => setSaved(false), 2000); },
+      onSuccess: () => {
+        // Invalidate the settings cache so school website fetches fresh data
+        queryClient.invalidateQueries({ queryKey: getGetSiteSettingsQueryKey() });
+        setSaving(false);
+        setSaved(true);
+        setTimeout(() => setSaved(false), 2000);
+      },
       onError: () => setSaving(false),
     });
   };
@@ -72,6 +81,51 @@ function parseJson<T>(str: string | undefined, fallback: T): T {
   try { return JSON.parse(str) as T; } catch { return fallback; }
 }
 
+function PWAInstallButton() {
+  const [installPrompt, setInstallPrompt] = useState<any>(null);
+  const [installed, setInstalled] = useState(false);
+
+  useEffect(() => {
+    const isStandalone = window.matchMedia("(display-mode: standalone)").matches || (window.navigator as any).standalone === true;
+    if (isStandalone) { setInstalled(true); return; }
+
+    const handler = (e: Event) => { e.preventDefault(); setInstallPrompt(e); };
+    window.addEventListener("beforeinstallprompt", handler);
+    window.addEventListener("appinstalled", () => { setInstalled(true); setInstallPrompt(null); });
+    return () => window.removeEventListener("beforeinstallprompt", handler);
+  }, []);
+
+  if (installed) {
+    return (
+      <div className="flex items-center gap-2 bg-green-500/20 border border-green-400/30 px-4 py-2 rounded-xl text-xs font-bold text-green-300">
+        <Check size={14} /> កម្មវិធីបានដំឡើងរួចហើយ
+      </div>
+    );
+  }
+
+  if (!installPrompt) {
+    return (
+      <div className="flex items-center gap-2 bg-white/10 border border-white/20 px-4 py-2 rounded-xl text-xs font-medium text-blue-200 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
+        <Download size={14} /> ដំឡើងជា App (Chrome/Edge បើក)
+      </div>
+    );
+  }
+
+  return (
+    <button
+      onClick={async () => {
+        await installPrompt.prompt();
+        const { outcome } = await installPrompt.userChoice;
+        if (outcome === "accepted") { setInstalled(true); setInstallPrompt(null); }
+      }}
+      className="flex items-center gap-2 bg-white text-primary px-5 py-2 rounded-xl text-xs font-bold hover:bg-blue-50 transition-all active:scale-95 shadow-sm dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"
+    >
+      <Download size={14} />
+      ដំឡើងជា App ឥឡូវ
+    </button>
+  );
+}
+
 export default function SettingsPage() {
   const { token } = useAuth();
   const { data: settings, isLoading } = useGetSiteSettings({ request: { headers: { Authorization: `Bearer ${token}` } } });
@@ -83,7 +137,6 @@ export default function SettingsPage() {
   const historySave = useSaveSetting("about_history", token);
   const leadershipSave = useSaveSetting("leadership", token);
   const clubsSave = useSaveSetting("clubs", token);
-  const programsSave = useSaveSetting("academic_programs", token);
   const contactSave = useSaveSetting("contact_info", token);
   const heroImageSave = useSaveSetting("hero_image", token);
 
@@ -94,7 +147,6 @@ export default function SettingsPage() {
   const [history, setHistory] = useState({ paragraph1En: "", paragraph1Kh: "", paragraph2En: "", paragraph2Kh: "" });
   const [leadership, setLeadership] = useState<LeadershipEntry[]>([]);
   const [clubs, setClubs] = useState<ClubEntry[]>([]);
-  const [programs, setPrograms] = useState<ProgramEntry[]>([]);
   const [contact, setContact] = useState({ phone: "", email: "", addressEn: "", addressKh: "", facebookUrl: "" });
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
 
@@ -107,7 +159,6 @@ export default function SettingsPage() {
     if (settings["about_history"]) setHistory(parseJson(settings["about_history"], history));
     if (settings["leadership"]) setLeadership(parseJson(settings["leadership"], []));
     if (settings["clubs"]) setClubs(parseJson(settings["clubs"], []));
-    if (settings["academic_programs"]) setPrograms(parseJson(settings["academic_programs"], []));
     if (settings["contact_info"]) setContact(parseJson(settings["contact_info"], contact));
   }, [settings]);
 
@@ -130,12 +181,54 @@ export default function SettingsPage() {
   return (
     <div>
       <div className="mb-6">
-        <h2 className="text-xl font-bold text-gray-800">Site Settings</h2>
+        <h2 className="text-xl text-primary">Site Settings</h2>
         <p className="text-gray-500 text-sm">Edit all public website content from here</p>
+      </div>
+
+      <div className="bg-primary p-6 rounded-xl shadow-md text-white mb-6 flex items-center justify-between">
+        <div>
+          <h3 className="text-lg font-bold text-white">Grading & Academic Standards</h3>
+          <p className="text-blue-100 text-sm mt-1">Configure coefficients, max scores, and grading tracks for students.</p>
+        </div>
+        <a href="/settings/grading-standards" className="bg-white text-primary px-6 py-3 rounded-lg font-bold text-sm hover:bg-blue-50 transition-colors shadow-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
+          Configure Standards
+        </a>
+      </div>
+
+      {/* PWA / App Installation */}
+      <div className="bg-gradient-to-r from-primary to-primary/80 rounded-xl shadow-md text-white mb-4 p-6">
+        <div className="flex items-start gap-4">
+          <div className="w-12 h-12 bg-white/10 rounded-xl flex items-center justify-center border border-white/20 flex-shrink-0 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
+            <Smartphone size={24} className="text-blue-200" />
+          </div>
+          <div className="flex-1">
+            <h3 className="text-lg font-bold text-white">ដំឡើងកម្មវិធី (Install App)</h3>
+            <p className="text-blue-100 text-sm mt-1 leading-relaxed">
+              Website នេះអាចដំឡើងជា App ដូចជា Application ពិតប្រាកដ ដើម្បីប្រើប្រាស់ Off-line ឬ មិនចាំបាច់ Chrome Browser។
+            </p>
+            <div className="mt-4 flex flex-wrap gap-3">
+              <PWAInstallButton />
+              <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-xl border border-white/20 text-xs font-medium dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
+                <Wifi size={14} className="text-green-300" />
+                Works Offline after install
+              </div>
+            </div>
+            <div className="mt-4 p-3 bg-white/5 border border-white/10 rounded-lg dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
+              <p className="text-xs text-blue-200 font-medium mb-2">📱 របៀបដំឡើង iOS (iPhone/iPad):</p>
+              <ol className="text-xs text-blue-100/70 space-y-1 list-decimal list-inside">
+                <li>បើក Safari Browser ហើយបើក Website នេះ</li>
+                <li>ចុច <strong className="text-white">Share</strong> ប៊ូតុង (ប្រអប់ sharing)</li>
+                <li>ជ្រើសរើស <strong className="text-white">Add to Home Screen</strong></li>
+                <li>ចុច <strong className="text-white">Add</strong></li>
+              </ol>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Hero Section */}
       <Section title="Hero Section" defaultOpen={true}>
+
         <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
           <Field label="Enrollment Banner (English)" value={hero.enrollmentBannerEn} onChange={v => setHero(h => ({ ...h, enrollmentBannerEn: v }))} />
           <Field label="Enrollment Banner (Khmer)" value={hero.enrollmentBannerKh} onChange={v => setHero(h => ({ ...h, enrollmentBannerKh: v }))} />
@@ -240,7 +333,7 @@ export default function SettingsPage() {
             </div>
           ))}
           <button onClick={() => setLeadership(ls => [...ls, { nameEn: "", nameKh: "", titleEn: "", titleKh: "", descEn: "", descKh: "", photoUrl: "" }])}
-            className="flex items-center gap-2 text-sm text-[#1e3a6e] font-semibold border border-dashed border-[#1e3a6e]/40 rounded-lg px-4 py-2 w-full justify-center hover:bg-[#1e3a6e]/5 transition-colors">
+            className="flex items-center gap-2 text-sm text-primary font-semibold border border-dashed border-primary/40 rounded-lg px-4 py-2 w-full justify-center hover:bg-primary/5 transition-colors">
             <Plus size={14} /> Add Leader
           </button>
         </div>
@@ -275,40 +368,12 @@ export default function SettingsPage() {
             </div>
           ))}
           <button onClick={() => setClubs(cs => [...cs, { titleEn: "", titleKh: "", descEn: "", descKh: "", color: CLUB_COLORS[cs.length % CLUB_COLORS.length] ?? CLUB_COLORS[0]! }])}
-            className="flex items-center gap-2 text-sm text-[#1e3a6e] font-semibold border border-dashed border-[#1e3a6e]/40 rounded-lg px-4 py-2 w-full justify-center hover:bg-[#1e3a6e]/5 transition-colors">
+            className="flex items-center gap-2 text-sm text-primary font-semibold border border-dashed border-primary/40 rounded-lg px-4 py-2 w-full justify-center hover:bg-primary/5 transition-colors">
             <Plus size={14} /> Add Club
           </button>
         </div>
         <div className="flex justify-end">
           <SaveButton onSave={() => clubsSave.save(JSON.stringify(clubs))} saving={clubsSave.saving} saved={clubsSave.saved} />
-        </div>
-      </Section>
-
-      {/* Academic Programs */}
-      <Section title="Academic Programs (Academics Page)">
-        <div className="space-y-4">
-          {programs.map((prog, i) => (
-            <div key={i} className="border rounded-lg p-4 relative">
-              <button onClick={() => setPrograms(ps => ps.filter((_, j) => j !== i))}
-                className="absolute top-3 right-3 text-gray-300 hover:text-red-500 transition-colors">
-                <Trash2 size={14} />
-              </button>
-              <p className="text-xs font-bold text-gray-400 mb-3">Program #{i + 1}</p>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
-                <Field label="Title (English)" value={prog.titleEn} onChange={v => setPrograms(ps => ps.map((p, j) => j === i ? { ...p, titleEn: v } : p))} />
-                <Field label="Title (Khmer)" value={prog.titleKh} onChange={v => setPrograms(ps => ps.map((p, j) => j === i ? { ...p, titleKh: v } : p))} />
-                <Field label="Description (English)" value={prog.descEn} onChange={v => setPrograms(ps => ps.map((p, j) => j === i ? { ...p, descEn: v } : p))} multiline />
-                <Field label="Description (Khmer)" value={prog.descKh} onChange={v => setPrograms(ps => ps.map((p, j) => j === i ? { ...p, descKh: v } : p))} multiline />
-              </div>
-            </div>
-          ))}
-          <button onClick={() => setPrograms(ps => [...ps, { titleEn: "", titleKh: "", descEn: "", descKh: "" }])}
-            className="flex items-center gap-2 text-sm text-[#1e3a6e] font-semibold border border-dashed border-[#1e3a6e]/40 rounded-lg px-4 py-2 w-full justify-center hover:bg-[#1e3a6e]/5 transition-colors">
-            <Plus size={14} /> Add Program
-          </button>
-        </div>
-        <div className="flex justify-end">
-          <SaveButton onSave={() => programsSave.save(JSON.stringify(programs))} saving={programsSave.saving} saved={programsSave.saved} />
         </div>
       </Section>
     </div>

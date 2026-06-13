@@ -1,0 +1,22 @@
+# ============================================================================
+# Phlov Meas Secondary School - DBA Cron Jobs
+# ============================================================================
+# Install via: crontab crontab.txt
+
+# Database Monitoring (Every 5 minutes)
+*/5 * * * * /bin/bash /opt/phlov_meas/dba/monitoring/db-health.sh >> /var/log/pg_health.log 2>&1
+
+# Daily Vacuum (2:00 AM)
+0 2 * * * psql -U postgres -d phlov_meas -f /opt/phlov_meas/dba/maintenance/daily-vacuum.sql >> /var/log/pg_vacuum.log 2>&1
+
+# Daily Backups (3:00 AM)
+0 3 * * * /bin/bash /opt/phlov_meas/dba/backups/full-backup.sh >> /var/log/pg_backup.log 2>&1
+
+# Weekly Analyze (Sunday 4:00 AM)
+0 4 * * 0 psql -U postgres -d phlov_meas -f /opt/phlov_meas/dba/maintenance/weekly-analyze.sql >> /var/log/pg_analyze.log 2>&1
+
+# Monthly Reindex (1st of month, 5:00 AM)
+0 5 1 * * psql -U postgres -d phlov_meas -f /opt/phlov_meas/dba/maintenance/monthly-reindex.sql >> /var/log/pg_reindex.log 2>&1
+
+# Quarterly Archive (1st of Jan, Apr, Jul, Oct, 1:00 AM)
+0 1 1 1,4,7,10 * psql -U postgres -d phlov_meas -f /opt/phlov_meas/dba/maintenance/quarterly-archive.sql >> /var/log/pg_archive.log 2>&1

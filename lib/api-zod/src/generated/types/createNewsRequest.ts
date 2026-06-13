@@ -14,4 +14,9 @@ export interface CreateNewsRequest {
   imageUrl?: string | null;
   category: string;
   isPublished?: boolean;
+  sendToMain?: boolean;
+  sendToTeachers?: boolean;
+  sendToStudents?: boolean;
+  sendToParents?: boolean;
+  pinToMain?: boolean;
 }

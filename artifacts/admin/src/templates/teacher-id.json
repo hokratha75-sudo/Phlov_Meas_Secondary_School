@@ -1,0 +1,225 @@
+{
+  "id": "phlov-meas-teacher-id-v1",
+  "name": "Phlov Meas — Teacher ID Card",
+  "version": "1.0",
+  "meta": {
+    "createdAt": "2025-08-01T00:00:00.000Z",
+    "updatedAt": "2025-08-01T00:00:00.000Z",
+    "author": "Phlov Meas School Admin"
+  },
+  "front": {
+    "background": "#1a3a2a",
+    "elements": [
+      {
+        "id": "logo",
+        "type": "image",
+        "x": 2, "y": 2.5, "width": 11, "height": 11,
+        "visible": true, "locked": false, "zIndex": 2,
+        "src": "", "dataKey": "template.logo",
+        "objectFit": "contain",
+        "borderRadius": 5, "borderColor": "#d4af37", "borderWidth": 1, "shadow": true
+      },
+      {
+        "id": "dept_text",
+        "type": "text",
+        "x": 14, "y": 2.5, "width": 38, "height": 5,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "{{template.department}}",
+        "dataKey": "template.department",
+        "fontFamily": "khmer",
+        "fontSize": 5.2, "fontWeight": 400, "color": "#ffffff",
+        "textAlign": "center", "lineHeight": 1.55, "letterSpacing": 0.01, "italic": false
+      },
+      {
+        "id": "school_name_kh",
+        "type": "text",
+        "x": 14, "y": 7, "width": 38, "height": 7,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "{{template.schoolNameKh}}",
+        "dataKey": "template.schoolNameKh",
+        "fontFamily": "moul",
+        "fontSize": 8.5, "fontWeight": 700, "color": "#ffffff",
+        "textAlign": "center", "lineHeight": 1.3, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "school_name_en",
+        "type": "text",
+        "x": 14, "y": 14, "width": 38, "height": 4,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "{{template.schoolNameEn}}",
+        "dataKey": "template.schoolNameEn",
+        "fontFamily": "sans",
+        "fontSize": 4.5, "fontWeight": 700, "color": "#ffffff",
+        "textAlign": "center", "lineHeight": 1.3, "letterSpacing": 0.04, "italic": false
+      },
+      {
+        "id": "ribbon_bg",
+        "type": "divider",
+        "x": 5, "y": 24, "width": 44, "height": 7,
+        "visible": true, "locked": true, "zIndex": 1,
+        "orientation": "horizontal", "color": "#d4af37", "thickness": 7, "style": "solid"
+      },
+      {
+        "id": "ribbon_title_kh",
+        "type": "text",
+        "x": 7, "y": 24.5, "width": 40, "height": 5,
+        "visible": true, "locked": false, "zIndex": 3,
+        "content": "ប័ណ្ណសម្គាល់គ្រូ",
+        "dataKey": null,
+        "fontFamily": "moul",
+        "fontSize": 9, "fontWeight": 700, "color": "#1a3a2a",
+        "textAlign": "center", "lineHeight": 1.2, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "ribbon_title_en",
+        "type": "text",
+        "x": 7, "y": 29, "width": 40, "height": 3,
+        "visible": true, "locked": false, "zIndex": 3,
+        "content": "TEACHER ID CARD",
+        "dataKey": null,
+        "fontFamily": "sans",
+        "fontSize": 3.8, "fontWeight": 700, "color": "#1a3a2a",
+        "textAlign": "center", "lineHeight": 1, "letterSpacing": 0.12, "italic": false
+      },
+      {
+        "id": "teacher_photo",
+        "type": "image",
+        "x": 17, "y": 34, "width": 20, "height": 25,
+        "visible": true, "locked": false, "zIndex": 2,
+        "src": "", "dataKey": "student.photo",
+        "objectFit": "cover",
+        "borderRadius": 6, "borderColor": "#d4af37", "borderWidth": 1.5, "shadow": true
+      },
+      {
+        "id": "label_id",
+        "type": "text",
+        "x": 1, "y": 61, "width": 13, "height": 7,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "លេខសម្គាល់\nID No.",
+        "dataKey": null,
+        "fontFamily": "khmer",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#374151",
+        "textAlign": "right", "lineHeight": 1.55, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "value_id",
+        "type": "text",
+        "x": 15, "y": 61, "width": 25, "height": 5,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "{{student.id}}",
+        "dataKey": "student.id",
+        "fontFamily": "sans",
+        "fontSize": 6, "fontWeight": 700, "color": "#d4af37",
+        "textAlign": "left", "lineHeight": 1.55, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "label_name",
+        "type": "text",
+        "x": 1, "y": 68, "width": 13, "height": 7,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "ឈ្មោះគ្រូ\nTeacher Name",
+        "dataKey": null,
+        "fontFamily": "khmer",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#374151",
+        "textAlign": "right", "lineHeight": 1.55, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "value_name",
+        "type": "text",
+        "x": 15, "y": 68, "width": 25, "height": 5,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "{{student.nameKh}}",
+        "dataKey": "student.nameKh",
+        "fontFamily": "moul",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#1a3a2a",
+        "textAlign": "left", "lineHeight": 1.5, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "label_subject",
+        "type": "text",
+        "x": 1, "y": 75, "width": 13, "height": 6,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "មុខវិជ្ជា\nSubject",
+        "dataKey": null,
+        "fontFamily": "khmer",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#374151",
+        "textAlign": "right", "lineHeight": 1.55, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "value_subject",
+        "type": "text",
+        "x": 15, "y": 75, "width": 25, "height": 5,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "{{student.grade}}",
+        "dataKey": "student.grade",
+        "fontFamily": "sans",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#374151",
+        "textAlign": "left", "lineHeight": 1.55, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "qr_code",
+        "type": "qrcode",
+        "x": 40, "y": 60, "width": 13, "height": 13,
+        "visible": true, "locked": false, "zIndex": 2,
+        "dataKey": "student.id",
+        "fgColor": "#1a3a2a", "bgColor": "#ffffff"
+      }
+    ]
+  },
+  "back": {
+    "background": "#ffffff",
+    "elements": [
+      {
+        "id": "label_dept",
+        "type": "text",
+        "x": 2, "y": 5, "width": 50, "height": 5,
+        "visible": true, "locked": false, "zIndex": 1,
+        "content": "{{template.department}}",
+        "dataKey": "template.department",
+        "fontFamily": "khmer",
+        "fontSize": 6, "fontWeight": 700, "color": "#1a3a2a",
+        "textAlign": "center", "lineHeight": 1.5, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "divider_top",
+        "type": "divider",
+        "x": 2, "y": 11, "width": 50, "height": 0.5,
+        "visible": true, "locked": false, "zIndex": 1,
+        "orientation": "horizontal", "color": "#d4af37", "thickness": 0.5, "style": "solid"
+      },
+      {
+        "id": "terms_title",
+        "type": "text",
+        "x": 2, "y": 13, "width": 50, "height": 5,
+        "visible": true, "locked": false, "zIndex": 1,
+        "content": "លក្ខខណ្ឌប្រើប្រាស់ · Terms & Conditions",
+        "dataKey": null,
+        "fontFamily": "khmer",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#1a3a2a",
+        "textAlign": "left", "lineHeight": 1.4, "letterSpacing": 0.01, "italic": false
+      },
+      {
+        "id": "terms_body",
+        "type": "text",
+        "x": 4, "y": 20, "width": 46, "height": 18,
+        "visible": true, "locked": false, "zIndex": 1,
+        "content": "• ប័ណ្ណនេះជាកម្មសិទ្ធិរបស់សាលា\n• មិនអាចផ្ទេរទៅអ្នកដទៃបាន\n• If found, please return to school office.",
+        "dataKey": null,
+        "fontFamily": "khmer",
+        "fontSize": 5, "fontWeight": 500, "color": "#374151",
+        "textAlign": "left", "lineHeight": 1.7, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "website_bar",
+        "type": "text",
+        "x": 0, "y": 78, "width": 54, "height": 8,
+        "visible": true, "locked": true, "zIndex": 5,
+        "content": "www.phlovmeas.edu.kh",
+        "dataKey": null,
+        "fontFamily": "sans",
+        "fontSize": 4.5, "fontWeight": 500, "color": "#ffffff",
+        "textAlign": "center", "lineHeight": 1, "letterSpacing": 0.03, "italic": false
+      }
+    ]
+  }
+}

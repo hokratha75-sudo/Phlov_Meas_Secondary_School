@@ -2,69 +2,55 @@ import { defineConfig } from "vite";
 import react from "@vitejs/plugin-react";
 import tailwindcss from "@tailwindcss/vite";
 import path from "path";
-import runtimeErrorOverlay from "@replit/vite-plugin-runtime-error-modal";
+import { fileURLToPath } from "url";
 
-const rawPort = process.env.PORT;
+// ---------------------------------------------------------------------------
+// Port — default 3000 for local dev.
+// On Replit the PORT env var was required; here we fall back gracefully.
+// ---------------------------------------------------------------------------
+const port = Number(process.env.PORT ?? process.env.VITE_PORT ?? "3000");
 
-if (!rawPort) {
-  throw new Error(
-    "PORT environment variable is required but was not provided.",
-  );
-}
-
-const port = Number(rawPort);
-
-if (Number.isNaN(port) || port <= 0) {
-  throw new Error(`Invalid PORT value: "${rawPort}"`);
-}
-
-const basePath = process.env.BASE_PATH;
-
-if (!basePath) {
-  throw new Error(
-    "BASE_PATH environment variable is required but was not provided.",
-  );
-}
+// BASE_PATH — default "/" for local dev (no sub-path hosting).
+const basePath = process.env.BASE_PATH ?? "/";
 
 export default defineConfig({
   base: basePath,
   plugins: [
     react(),
     tailwindcss(),
-    runtimeErrorOverlay(),
-    ...(process.env.NODE_ENV !== "production" &&
-    process.env.REPL_ID !== undefined
-      ? [
-          await import("@replit/vite-plugin-cartographer").then((m) =>
-            m.cartographer({
-              root: path.resolve(import.meta.dirname, ".."),
-            }),
-          ),
-          await import("@replit/vite-plugin-dev-banner").then((m) =>
-            m.devBanner(),
-          ),
-        ]
-      : []),
+    // Replit-specific plugins (runtime error modal, cartographer, dev banner)
+    // are intentionally omitted here; they are no-ops outside Replit and
+    // caused install failures on Windows.
   ],
   resolve: {
     alias: {
-      "@": path.resolve(import.meta.dirname, "src"),
-      "@assets": path.resolve(import.meta.dirname, "..", "..", "attached_assets"),
+      "@": path.resolve(path.dirname(fileURLToPath(import.meta.url)), "src"),
+      "@assets": path.resolve(path.dirname(fileURLToPath(import.meta.url)), "..", "..", "attached_assets"),
     },
     dedupe: ["react", "react-dom"],
   },
-  root: path.resolve(import.meta.dirname),
+  root: path.resolve(path.dirname(fileURLToPath(import.meta.url))),
   build: {
-    outDir: path.resolve(import.meta.dirname, "dist/public"),
+    outDir: path.resolve(path.dirname(fileURLToPath(import.meta.url)), "dist/public"),
     emptyOutDir: true,
   },
   server: {
     port,
-    strictPort: true,
+    strictPort: false,
     host: "0.0.0.0",
     allowedHosts: true,
     fs: {
-      strict: true,
+      strict: false, // allow imports from outside root (attached_assets)
+    },
+    proxy: {
+      "/api": {
+        target: "http://127.0.0.1:8080",
+        changeOrigin: true,
+      },
+      "/uploads": {
+        target: "http://127.0.0.1:8080",
+        changeOrigin: true,
+      },
     },
   },
   preview: {

@@ -1,0 +1,28 @@
+{
+  "student": {
+    "id": "ST-2025-001",
+    "nameKh": "សុខ សាន្ត",
+    "nameEn": "Sok San",
+    "gender": "ប្រុស",
+    "dob": "15-05-2010",
+    "grade": "7A",
+    "birthPlace": "ភូមិត្រពាំងវែង ឃុំសង្កែ ស្រុកសង្កែ ខេត្តបាត់ដំបង",
+    "currentAddress": "ភូមិត្រពាំងវែង ឃុំសង្កែ ស្រុកសង្កែ ខេត្តបាត់ដំបង",
+    "fatherName": "សុខ សុវណ្ណ",
+    "motherName": "ម៉ាន់ ស្រីមុំ",
+    "parentPhone": "012 345 678",
+    "photo": "https://i.pravatar.cc/300?img=11"
+  },
+  "teacher": {
+    "id": "T-2025-001",
+    "nameKh": "ចាន់ មករា",
+    "nameEn": "Chan Makara",
+    "gender": "ប្រុស",
+    "dob": "12-08-1990",
+    "grade": "គណិតវិទ្យា",
+    "birthPlace": "ភូមិវត្តបូព៌ សង្កាត់សាលាកំរើក ក្រុងសៀមរាប ខេត្តសៀមរាប",
+    "currentAddress": "ភូមិវត្តបូព៌ សង្កាត់សាលាកំរើក ក្រុងសៀមរាប ខេត្តសៀមរាប",
+    "parentPhone": "098 765 432",
+    "photo": "https://i.pravatar.cc/300?img=12"
+  }
+}

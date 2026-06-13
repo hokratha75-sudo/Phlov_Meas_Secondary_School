@@ -13,14 +13,11 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
   const navLinks = [
     { href: "/", en: "Home", kh: "ទំព័រដើម" },
-    { href: "/results", en: "General Results", kh: "លទ្ធផលសិក្សាទូទៅ" },
-    { href: "/standards", en: "Bac II Standards", kh: "ស្តង់ដារបាក់ឌុប" },
-    { href: "/admin-work", en: "Administrative Work", kh: "កិច្ចការរដ្ឋបាល" },
-    { href: "/reports", en: "School Reports", kh: "របាយការណ៍សាលា" },
     { href: "/about", en: "About", kh: "អំពីយើង" },
-    { href: "/academics", en: "Academics", kh: "ការសិក្សា" },
     { href: "/activities", en: "Activities", kh: "សកម្មភាព" },
     { href: "/news", en: "News", kh: "ព័ត៌មាន" },
+    { href: "/results", en: "General Results", kh: "លទ្ធផលសិក្សាទូទៅ" },
+    { href: "/admin-work", en: "Administrative Work", kh: "កិច្ចការរដ្ឋបាល" },
     { href: "/contact", en: "Contact", kh: "ទំនាក់ទំនង" },
   ];
 
@@ -28,20 +25,20 @@ export function Layout({ children }: { children: React.ReactNode }) {
     <div className={`min-h-screen flex flex-col ${lang === "kh" ? "font-khmer" : "font-sans"}`}>
       <div className="relative w-full overflow-hidden border-b border-white/10">
         <div className="absolute inset-0">
-          <img src={schoolBanner} alt="School Banner" className="w-full h-full object-cover object-center" />
+          <img src="/campus-hero.png" alt="School Banner" className="w-full h-full object-cover object-center" />
           <div className="absolute inset-0 bg-[#0d2550]/92" />
         </div>
         <div className="relative px-4 md:px-8 py-4 md:py-5">
           <div className="flex items-center gap-4 md:gap-6">
             <Link href="/" className="shrink-0">
-              <img src="/school-logo.png" alt="School Logo" className="h-16 w-16 md:h-24 md:w-24 object-cover rounded-full border-4 border-white shadow-xl bg-white" />
+              <img src="/school-logo.png" alt="School Logo" className="h-12 w-12 md:h-16 md:w-16 object-contain rounded-full border-2 border-white shadow-xl bg-white p-1" />
             </Link>
             <div className="min-w-0 flex-1">
               <p className="text-[10px] md:text-xs font-bold tracking-[0.24em] uppercase text-secondary/90 font-sans truncate">
                 {t("Ministry of Education, Youth and Sport", "ក្រសួងអប់រំ យុវជន និងកីឡា")}
               </p>
               <h1 className="text-xl md:text-4xl font-extrabold leading-tight text-white font-khmer">
-                {t("Treng Secondary School", "វិទ្យាល័យត្រែង")}
+                {t("Phlov Meas Secondary School", "អនុវិទ្យាល័យ ផ្លូវមាស")}
               </h1>
               <p className="text-sm md:text-lg font-extrabold text-secondary font-khmer drop-shadow">
                 {t("Welcome to our school!", "សូមស្វាគមន៍!")}
@@ -78,13 +75,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
       </div>
 
       <div className="sticky top-0 z-40 w-full bg-[#1a3a6b] shadow-sm border-b border-white/10">
-        <div className="container mx-auto px-4 md:px-8 flex items-center gap-3 md:gap-4 overflow-x-auto whitespace-nowrap no-scrollbar">
+        <div className="container mx-auto px-4 md:px-8 flex items-center gap-4 md:gap-8 overflow-x-auto whitespace-nowrap no-scrollbar justify-center md:justify-start">
           {navLinks.map((link) => (
             <Link
               key={link.href}
               href={link.href}
               className={cn(
-                "shrink-0 px-4 md:px-5 py-3 text-[12px] md:text-[13px] font-semibold font-khmer transition-colors border-b-2",
+                "shrink-0 px-5 md:px-6 py-4 text-[14px] md:text-[16px] font-semibold font-khmer transition-colors border-b-[3px]",
                 location === link.href ? "text-white border-secondary bg-white/15" : "text-white/85 border-transparent hover:text-white hover:border-secondary/60 hover:bg-white/5"
               )}
             >
@@ -126,13 +123,13 @@ export function Layout({ children }: { children: React.ReactNode }) {
         <div className="container mx-auto px-4 md:px-8 grid grid-cols-1 md:grid-cols-4 gap-8 mb-12">
           <div className="col-span-1 md:col-span-2">
             <div className="flex items-center gap-3 mb-6">
-              <img src="/school-logo.png" alt="School Logo" className="h-14 w-14 object-cover rounded-full border-2 border-secondary" />
+              <img src="/school-logo.png" alt="School Logo" className="h-10 w-10 object-contain rounded-full border-2 border-secondary bg-white p-0.5" />
               <div className="flex flex-col">
                 <span className="font-bold text-xl font-khmer text-white leading-tight">
-                  {t("Treng Secondary School", "វិទ្យាល័យត្រែង")}
+                  {t("Phlov Meas Secondary School", "អនុវិទ្យាល័យ ផ្លូវមាស")}
                 </span>
                 <span className="text-secondary text-xs font-semibold uppercase tracking-wider">
-                  Treng Secondary School
+                  Phlov Meas Secondary School
                 </span>
               </div>
             </div>
@@ -181,7 +178,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
             <ul className="space-y-4 text-white/70 text-sm">
               <li className="flex items-start gap-3">
                 <MapPin className="text-secondary mt-0.5 shrink-0" size={16} />
-                <span>{t("Treng District, Stung Treng Province, Cambodia", "ស្រុកត្រែង ខេត្តស្ទឹងត្រែង ប្រទេសកម្ពុជា")}</span>
+                <span>{t("Phlov Meas Commune, Rotanak Mondol District, Battambang Province, Cambodia", "ឃុំផ្លូវមាស ស្រុករតនមណ្ឌល ខេត្តបាត់ដំបង ប្រទេសកម្ពុជា")}</span>
               </li>
               <li className="flex items-center gap-3">
                 <Phone className="text-secondary shrink-0" size={16} />
@@ -197,7 +194,7 @@ export function Layout({ children }: { children: React.ReactNode }) {
 
         <div className="container mx-auto px-4 md:px-8 border-t border-white/10 pt-6 flex flex-col md:flex-row items-center justify-between gap-3">
           <p className="text-white/40 text-xs">
-            &copy; {new Date().getFullYear()} {t("Treng Secondary School. All Rights Reserved.", "វិទ្យាល័យត្រែង. រក្សាសិទ្ធិគ្រប់យ៉ាង.")}
+            &copy; {new Date().getFullYear()} {t("Phlov Meas Secondary School. All Rights Reserved.", "អនុវិទ្យាល័យ ផ្លូវមាស. រក្សាសិទ្ធិគ្រប់យ៉ាង.")}
           </p>
           <div className="text-white/40 text-xs flex gap-4">
             <Link href="/privacy" className="hover:text-white transition-colors">{t("Privacy Policy", "គោលការណ៍ឯកជនភាព")}</Link>

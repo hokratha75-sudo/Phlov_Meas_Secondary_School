@@ -7,6 +7,12 @@
  */
 
 export interface DashboardStats {
+  totalStudents: number;
+  totalTeachers: number;
+  totalClasses: number;
+  totalSubjects: number;
+  newStudents: number;
+  droppedStudents: number;
   newsCount: number;
   activitiesCount: number;
   teachersCount: number;

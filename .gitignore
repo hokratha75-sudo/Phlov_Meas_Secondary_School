@@ -47,3 +47,29 @@ Thumbs.db
 # Replit
 .cache/
 .local/
+.agents/
+.config/
+
+# Environment variables — NEVER commit secrets
+.env
+.env.local
+.env.*.local
+
+# Logs
+logs/
+*.log
+
+# Build outputs
+build/
+.next/
+out/
+
+# Uploaded files
+uploads/
+temp/
+
+# Secrets
+*.pem
+*.key
+*.crt
+

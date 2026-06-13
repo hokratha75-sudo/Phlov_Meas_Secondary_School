@@ -1,0 +1,27 @@
+# Phlov Meas Secondary School - Cron Configuration
+
+This file contains the cron job configurations for the DBA tasks.
+To apply these, run `crontab -e` on the database server.
+
+```cron
+# -------------------------------------------------------------------------
+# DATABASE MAINTENANCE & OPTIMIZATION
+# -------------------------------------------------------------------------
+
+# Refresh Materialized Views (Daily at 2:00 AM)
+# This updates dashboard statistics for the next day's use
+0 2 * * * psql -U postgres -d phlov_meas -f /var/www/Phlov_Meas_Secondary_School/scripts/db-tuning/refresh-mv.sql >> /var/log/phlov_meas_mv_refresh.log 2>&1
+
+# -------------------------------------------------------------------------
+# BACKUP & RECOVERY (From Phase 1)
+# -------------------------------------------------------------------------
+
+# Full Backup (Daily at 3:00 AM)
+0 3 * * * /path/to/scripts/backup/full-backup.sh >> /var/log/phlov_meas_backup.log 2>&1
+
+# WAL Management & Cloud Sync (Every 4 hours)
+0 */4 * * * /path/to/scripts/backup/incremental-backup.sh >> /var/log/phlov_meas_wal.log 2>&1
+
+# Backup Verification (Every Sunday at 4:00 AM)
+0 4 * * 0 /path/to/scripts/backup/verify-backup.sh >> /var/log/phlov_meas_verify.log 2>&1
+```

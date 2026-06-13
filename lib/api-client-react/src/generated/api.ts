@@ -20,17 +20,34 @@ import type {
   Activity,
   ActivityListResponse,
   AdminUser,
+  BulkUpdateGradesRequest,
+  Classroom,
+  ClassroomListResponse,
   ContactListResponse,
   ContactMessage,
   CreateActivityRequest,
+  CreateClassroomRequest,
+  CreateDisciplineLogRequest,
+  CreateIdCardTemplateBody,
+  CreateLibraryLogRequest,
   CreateNewsRequest,
   CreateStudentRequest,
   CreateTeacherRequest,
   DashboardStats,
+  DeleteIdCardTemplateResponse,
+  DisciplineLog,
   ErrorResponse,
+  GetTelegramMessagesParams,
+  GetTelegramMessagesUnread200,
   HealthStatus,
+  IdCardTemplate,
+  LibraryLog,
+  LibraryLogListResponse,
   ListActivitiesParams,
   ListContactsParams,
+  ListGradesParams,
+  ListIdCardTemplatesResponse,
+  ListLibraryLogsParams,
   ListNewsParams,
   ListStudentsParams,
   LoginRequest,
@@ -40,10 +57,16 @@ import type {
   NewsListResponse,
   SiteSettingsMap,
   Student,
+  StudentGradeListResponse,
   StudentListResponse,
   Teacher,
   TeacherListResponse,
+  TelegramMessage,
+  TelegramMessageListResponse,
+  TelegramReplyRequest,
+  UpdateIdCardTemplateBody,
   UpdateSettingRequest,
+  UpdateTelegramMessageStatusRequest,
 } from "./api.schemas";
 
 import { customFetch } from "../custom-fetch";
@@ -1795,6 +1818,338 @@ export const useDeleteTeacher = <
 };
 
 /**
+ * @summary List all classrooms
+ */
+export const getListClassroomsUrl = () => {
+  return `/api/classrooms`;
+};
+
+export const listClassrooms = async (
+  options?: RequestInit,
+): Promise<ClassroomListResponse> => {
+  return customFetch<ClassroomListResponse>(getListClassroomsUrl(), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListClassroomsQueryKey = () => {
+  return [`/api/classrooms`] as const;
+};
+
+export const getListClassroomsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listClassrooms>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof listClassrooms>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListClassroomsQueryKey();
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listClassrooms>>> = ({
+    signal,
+  }) => listClassrooms({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listClassrooms>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListClassroomsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listClassrooms>>
+>;
+export type ListClassroomsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List all classrooms
+ */
+
+export function useListClassrooms<
+  TData = Awaited<ReturnType<typeof listClassrooms>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof listClassrooms>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListClassroomsQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create classroom
+ */
+export const getCreateClassroomUrl = () => {
+  return `/api/classrooms`;
+};
+
+export const createClassroom = async (
+  createClassroomRequest: CreateClassroomRequest,
+  options?: RequestInit,
+): Promise<Classroom> => {
+  return customFetch<Classroom>(getCreateClassroomUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createClassroomRequest),
+  });
+};
+
+export const getCreateClassroomMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createClassroom>>,
+    TError,
+    { data: BodyType<CreateClassroomRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createClassroom>>,
+  TError,
+  { data: BodyType<CreateClassroomRequest> },
+  TContext
+> => {
+  const mutationKey = ["createClassroom"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createClassroom>>,
+    { data: BodyType<CreateClassroomRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createClassroom(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateClassroomMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createClassroom>>
+>;
+export type CreateClassroomMutationBody = BodyType<CreateClassroomRequest>;
+export type CreateClassroomMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create classroom
+ */
+export const useCreateClassroom = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createClassroom>>,
+    TError,
+    { data: BodyType<CreateClassroomRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createClassroom>>,
+  TError,
+  { data: BodyType<CreateClassroomRequest> },
+  TContext
+> => {
+  return useMutation(getCreateClassroomMutationOptions(options));
+};
+
+/**
+ * @summary Update classroom
+ */
+export const getUpdateClassroomUrl = (id: number) => {
+  return `/api/classrooms/${id}`;
+};
+
+export const updateClassroom = async (
+  id: number,
+  createClassroomRequest: CreateClassroomRequest,
+  options?: RequestInit,
+): Promise<Classroom> => {
+  return customFetch<Classroom>(getUpdateClassroomUrl(id), {
+    ...options,
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createClassroomRequest),
+  });
+};
+
+export const getUpdateClassroomMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateClassroom>>,
+    TError,
+    { id: number; data: BodyType<CreateClassroomRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateClassroom>>,
+  TError,
+  { id: number; data: BodyType<CreateClassroomRequest> },
+  TContext
+> => {
+  const mutationKey = ["updateClassroom"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateClassroom>>,
+    { id: number; data: BodyType<CreateClassroomRequest> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return updateClassroom(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateClassroomMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateClassroom>>
+>;
+export type UpdateClassroomMutationBody = BodyType<CreateClassroomRequest>;
+export type UpdateClassroomMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update classroom
+ */
+export const useUpdateClassroom = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateClassroom>>,
+    TError,
+    { id: number; data: BodyType<CreateClassroomRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateClassroom>>,
+  TError,
+  { id: number; data: BodyType<CreateClassroomRequest> },
+  TContext
+> => {
+  return useMutation(getUpdateClassroomMutationOptions(options));
+};
+
+/**
+ * @summary Delete classroom
+ */
+export const getDeleteClassroomUrl = (id: number) => {
+  return `/api/classrooms/${id}`;
+};
+
+export const deleteClassroom = async (
+  id: number,
+  options?: RequestInit,
+): Promise<MessageResponse> => {
+  return customFetch<MessageResponse>(getDeleteClassroomUrl(id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeleteClassroomMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteClassroom>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteClassroom>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  const mutationKey = ["deleteClassroom"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteClassroom>>,
+    { id: number }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return deleteClassroom(id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteClassroomMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteClassroom>>
+>;
+
+export type DeleteClassroomMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Delete classroom
+ */
+export const useDeleteClassroom = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteClassroom>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteClassroom>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  return useMutation(getDeleteClassroomMutationOptions(options));
+};
+
+/**
  * @summary List all students
  */
 export const getListStudentsUrl = (params?: ListStudentsParams) => {
@@ -2405,4 +2760,1662 @@ export const useDeleteContact = <
   TContext
 > => {
   return useMutation(getDeleteContactMutationOptions(options));
+};
+
+/**
+ * @summary Create discipline log
+ */
+export const getCreateDisciplineLogUrl = () => {
+  return `/api/discipline-logs`;
+};
+
+export const createDisciplineLog = async (
+  createDisciplineLogRequest: CreateDisciplineLogRequest,
+  options?: RequestInit,
+): Promise<DisciplineLog> => {
+  return customFetch<DisciplineLog>(getCreateDisciplineLogUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createDisciplineLogRequest),
+  });
+};
+
+export const getCreateDisciplineLogMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createDisciplineLog>>,
+    TError,
+    { data: BodyType<CreateDisciplineLogRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createDisciplineLog>>,
+  TError,
+  { data: BodyType<CreateDisciplineLogRequest> },
+  TContext
+> => {
+  const mutationKey = ["createDisciplineLog"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createDisciplineLog>>,
+    { data: BodyType<CreateDisciplineLogRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createDisciplineLog(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateDisciplineLogMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createDisciplineLog>>
+>;
+export type CreateDisciplineLogMutationBody =
+  BodyType<CreateDisciplineLogRequest>;
+export type CreateDisciplineLogMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create discipline log
+ */
+export const useCreateDisciplineLog = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createDisciplineLog>>,
+    TError,
+    { data: BodyType<CreateDisciplineLogRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createDisciplineLog>>,
+  TError,
+  { data: BodyType<CreateDisciplineLogRequest> },
+  TContext
+> => {
+  return useMutation(getCreateDisciplineLogMutationOptions(options));
+};
+
+/**
+ * @summary Update discipline log
+ */
+export const getUpdateDisciplineLogUrl = (id: number) => {
+  return `/api/discipline-logs/${id}`;
+};
+
+export const updateDisciplineLog = async (
+  id: number,
+  createDisciplineLogRequest: CreateDisciplineLogRequest,
+  options?: RequestInit,
+): Promise<DisciplineLog> => {
+  return customFetch<DisciplineLog>(getUpdateDisciplineLogUrl(id), {
+    ...options,
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createDisciplineLogRequest),
+  });
+};
+
+export const getUpdateDisciplineLogMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateDisciplineLog>>,
+    TError,
+    { id: number; data: BodyType<CreateDisciplineLogRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateDisciplineLog>>,
+  TError,
+  { id: number; data: BodyType<CreateDisciplineLogRequest> },
+  TContext
+> => {
+  const mutationKey = ["updateDisciplineLog"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateDisciplineLog>>,
+    { id: number; data: BodyType<CreateDisciplineLogRequest> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return updateDisciplineLog(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateDisciplineLogMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateDisciplineLog>>
+>;
+export type UpdateDisciplineLogMutationBody =
+  BodyType<CreateDisciplineLogRequest>;
+export type UpdateDisciplineLogMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update discipline log
+ */
+export const useUpdateDisciplineLog = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateDisciplineLog>>,
+    TError,
+    { id: number; data: BodyType<CreateDisciplineLogRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateDisciplineLog>>,
+  TError,
+  { id: number; data: BodyType<CreateDisciplineLogRequest> },
+  TContext
+> => {
+  return useMutation(getUpdateDisciplineLogMutationOptions(options));
+};
+
+/**
+ * @summary Delete discipline log
+ */
+export const getDeleteDisciplineLogUrl = (id: number) => {
+  return `/api/discipline-logs/${id}`;
+};
+
+export const deleteDisciplineLog = async (
+  id: number,
+  options?: RequestInit,
+): Promise<MessageResponse> => {
+  return customFetch<MessageResponse>(getDeleteDisciplineLogUrl(id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeleteDisciplineLogMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteDisciplineLog>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteDisciplineLog>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  const mutationKey = ["deleteDisciplineLog"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteDisciplineLog>>,
+    { id: number }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return deleteDisciplineLog(id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteDisciplineLogMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteDisciplineLog>>
+>;
+
+export type DeleteDisciplineLogMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Delete discipline log
+ */
+export const useDeleteDisciplineLog = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteDisciplineLog>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteDisciplineLog>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  return useMutation(getDeleteDisciplineLogMutationOptions(options));
+};
+
+/**
+ * @summary List library borrow/return logs
+ */
+export const getListLibraryLogsUrl = (params?: ListLibraryLogsParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/library/logs?${stringifiedParams}`
+    : `/api/library/logs`;
+};
+
+export const listLibraryLogs = async (
+  params?: ListLibraryLogsParams,
+  options?: RequestInit,
+): Promise<LibraryLogListResponse> => {
+  return customFetch<LibraryLogListResponse>(getListLibraryLogsUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListLibraryLogsQueryKey = (params?: ListLibraryLogsParams) => {
+  return [`/api/library/logs`, ...(params ? [params] : [])] as const;
+};
+
+export const getListLibraryLogsQueryOptions = <
+  TData = Awaited<ReturnType<typeof listLibraryLogs>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: ListLibraryLogsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listLibraryLogs>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListLibraryLogsQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listLibraryLogs>>> = ({
+    signal,
+  }) => listLibraryLogs(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listLibraryLogs>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListLibraryLogsQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listLibraryLogs>>
+>;
+export type ListLibraryLogsQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List library borrow/return logs
+ */
+
+export function useListLibraryLogs<
+  TData = Awaited<ReturnType<typeof listLibraryLogs>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: ListLibraryLogsParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listLibraryLogs>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListLibraryLogsQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create a library borrow log
+ */
+export const getCreateLibraryLogUrl = () => {
+  return `/api/library/logs`;
+};
+
+export const createLibraryLog = async (
+  createLibraryLogRequest: CreateLibraryLogRequest,
+  options?: RequestInit,
+): Promise<LibraryLog> => {
+  return customFetch<LibraryLog>(getCreateLibraryLogUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createLibraryLogRequest),
+  });
+};
+
+export const getCreateLibraryLogMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createLibraryLog>>,
+    TError,
+    { data: BodyType<CreateLibraryLogRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof createLibraryLog>>,
+  TError,
+  { data: BodyType<CreateLibraryLogRequest> },
+  TContext
+> => {
+  const mutationKey = ["createLibraryLog"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof createLibraryLog>>,
+    { data: BodyType<CreateLibraryLogRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return createLibraryLog(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type CreateLibraryLogMutationResult = NonNullable<
+  Awaited<ReturnType<typeof createLibraryLog>>
+>;
+export type CreateLibraryLogMutationBody = BodyType<CreateLibraryLogRequest>;
+export type CreateLibraryLogMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create a library borrow log
+ */
+export const useCreateLibraryLog = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof createLibraryLog>>,
+    TError,
+    { data: BodyType<CreateLibraryLogRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof createLibraryLog>>,
+  TError,
+  { data: BodyType<CreateLibraryLogRequest> },
+  TContext
+> => {
+  return useMutation(getCreateLibraryLogMutationOptions(options));
+};
+
+/**
+ * @summary Update library log
+ */
+export const getUpdateLibraryLogUrl = (id: number) => {
+  return `/api/library/logs/${id}`;
+};
+
+export const updateLibraryLog = async (
+  id: number,
+  createLibraryLogRequest: CreateLibraryLogRequest,
+  options?: RequestInit,
+): Promise<LibraryLog> => {
+  return customFetch<LibraryLog>(getUpdateLibraryLogUrl(id), {
+    ...options,
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createLibraryLogRequest),
+  });
+};
+
+export const getUpdateLibraryLogMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateLibraryLog>>,
+    TError,
+    { id: number; data: BodyType<CreateLibraryLogRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof updateLibraryLog>>,
+  TError,
+  { id: number; data: BodyType<CreateLibraryLogRequest> },
+  TContext
+> => {
+  const mutationKey = ["updateLibraryLog"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof updateLibraryLog>>,
+    { id: number; data: BodyType<CreateLibraryLogRequest> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return updateLibraryLog(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type UpdateLibraryLogMutationResult = NonNullable<
+  Awaited<ReturnType<typeof updateLibraryLog>>
+>;
+export type UpdateLibraryLogMutationBody = BodyType<CreateLibraryLogRequest>;
+export type UpdateLibraryLogMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update library log
+ */
+export const useUpdateLibraryLog = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof updateLibraryLog>>,
+    TError,
+    { id: number; data: BodyType<CreateLibraryLogRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof updateLibraryLog>>,
+  TError,
+  { id: number; data: BodyType<CreateLibraryLogRequest> },
+  TContext
+> => {
+  return useMutation(getUpdateLibraryLogMutationOptions(options));
+};
+
+/**
+ * @summary Delete library log
+ */
+export const getDeleteLibraryLogUrl = (id: number) => {
+  return `/api/library/logs/${id}`;
+};
+
+export const deleteLibraryLog = async (
+  id: number,
+  options?: RequestInit,
+): Promise<MessageResponse> => {
+  return customFetch<MessageResponse>(getDeleteLibraryLogUrl(id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeleteLibraryLogMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteLibraryLog>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteLibraryLog>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  const mutationKey = ["deleteLibraryLog"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteLibraryLog>>,
+    { id: number }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return deleteLibraryLog(id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteLibraryLogMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteLibraryLog>>
+>;
+
+export type DeleteLibraryLogMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Delete library log
+ */
+export const useDeleteLibraryLog = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteLibraryLog>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteLibraryLog>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  return useMutation(getDeleteLibraryLogMutationOptions(options));
+};
+
+/**
+ * @summary List student grades by classroom, year, and period
+ */
+export const getListGradesUrl = (params?: ListGradesParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/grades?${stringifiedParams}`
+    : `/api/grades`;
+};
+
+export const listGrades = async (
+  params?: ListGradesParams,
+  options?: RequestInit,
+): Promise<StudentGradeListResponse> => {
+  return customFetch<StudentGradeListResponse>(getListGradesUrl(params), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getListGradesQueryKey = (params?: ListGradesParams) => {
+  return [`/api/grades`, ...(params ? [params] : [])] as const;
+};
+
+export const getListGradesQueryOptions = <
+  TData = Awaited<ReturnType<typeof listGrades>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: ListGradesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listGrades>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getListGradesQueryKey(params);
+
+  const queryFn: QueryFunction<Awaited<ReturnType<typeof listGrades>>> = ({
+    signal,
+  }) => listGrades(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof listGrades>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type ListGradesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof listGrades>>
+>;
+export type ListGradesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List student grades by classroom, year, and period
+ */
+
+export function useListGrades<
+  TData = Awaited<ReturnType<typeof listGrades>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: ListGradesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listGrades>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListGradesQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Bulk create or update grades
+ */
+export const getBulkUpdateGradesUrl = () => {
+  return `/api/grades`;
+};
+
+export const bulkUpdateGrades = async (
+  bulkUpdateGradesRequest: BulkUpdateGradesRequest,
+  options?: RequestInit,
+): Promise<MessageResponse> => {
+  return customFetch<MessageResponse>(getBulkUpdateGradesUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(bulkUpdateGradesRequest),
+  });
+};
+
+export const getBulkUpdateGradesMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof bulkUpdateGrades>>,
+    TError,
+    { data: BodyType<BulkUpdateGradesRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof bulkUpdateGrades>>,
+  TError,
+  { data: BodyType<BulkUpdateGradesRequest> },
+  TContext
+> => {
+  const mutationKey = ["bulkUpdateGrades"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof bulkUpdateGrades>>,
+    { data: BodyType<BulkUpdateGradesRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return bulkUpdateGrades(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type BulkUpdateGradesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof bulkUpdateGrades>>
+>;
+export type BulkUpdateGradesMutationBody = BodyType<BulkUpdateGradesRequest>;
+export type BulkUpdateGradesMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Bulk create or update grades
+ */
+export const useBulkUpdateGrades = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof bulkUpdateGrades>>,
+    TError,
+    { data: BodyType<BulkUpdateGradesRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof bulkUpdateGrades>>,
+  TError,
+  { data: BodyType<BulkUpdateGradesRequest> },
+  TContext
+> => {
+  return useMutation(getBulkUpdateGradesMutationOptions(options));
+};
+
+/**
+ * @summary List all ID card templates
+ */
+export const getGetApiIdCardTemplatesUrl = () => {
+  return `/api/api/id-card-templates`;
+};
+
+export const getApiIdCardTemplates = async (
+  options?: RequestInit,
+): Promise<ListIdCardTemplatesResponse> => {
+  return customFetch<ListIdCardTemplatesResponse>(
+    getGetApiIdCardTemplatesUrl(),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getGetApiIdCardTemplatesQueryKey = () => {
+  return [`/api/api/id-card-templates`] as const;
+};
+
+export const getGetApiIdCardTemplatesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getApiIdCardTemplates>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getApiIdCardTemplates>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey = queryOptions?.queryKey ?? getGetApiIdCardTemplatesQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getApiIdCardTemplates>>
+  > = ({ signal }) => getApiIdCardTemplates({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getApiIdCardTemplates>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetApiIdCardTemplatesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getApiIdCardTemplates>>
+>;
+export type GetApiIdCardTemplatesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary List all ID card templates
+ */
+
+export function useGetApiIdCardTemplates<
+  TData = Awaited<ReturnType<typeof getApiIdCardTemplates>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getApiIdCardTemplates>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetApiIdCardTemplatesQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Create ID card template
+ */
+export const getPostApiIdCardTemplatesUrl = () => {
+  return `/api/api/id-card-templates`;
+};
+
+export const postApiIdCardTemplates = async (
+  createIdCardTemplateBody: CreateIdCardTemplateBody,
+  options?: RequestInit,
+): Promise<IdCardTemplate> => {
+  return customFetch<IdCardTemplate>(getPostApiIdCardTemplatesUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(createIdCardTemplateBody),
+  });
+};
+
+export const getPostApiIdCardTemplatesMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiIdCardTemplates>>,
+    TError,
+    { data: BodyType<CreateIdCardTemplateBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postApiIdCardTemplates>>,
+  TError,
+  { data: BodyType<CreateIdCardTemplateBody> },
+  TContext
+> => {
+  const mutationKey = ["postApiIdCardTemplates"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postApiIdCardTemplates>>,
+    { data: BodyType<CreateIdCardTemplateBody> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postApiIdCardTemplates(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostApiIdCardTemplatesMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postApiIdCardTemplates>>
+>;
+export type PostApiIdCardTemplatesMutationBody =
+  BodyType<CreateIdCardTemplateBody>;
+export type PostApiIdCardTemplatesMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Create ID card template
+ */
+export const usePostApiIdCardTemplates = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postApiIdCardTemplates>>,
+    TError,
+    { data: BodyType<CreateIdCardTemplateBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof postApiIdCardTemplates>>,
+  TError,
+  { data: BodyType<CreateIdCardTemplateBody> },
+  TContext
+> => {
+  return useMutation(getPostApiIdCardTemplatesMutationOptions(options));
+};
+
+/**
+ * @summary Update ID card template
+ */
+export const getPutApiIdCardTemplatesIdUrl = (id: number) => {
+  return `/api/api/id-card-templates/${id}`;
+};
+
+export const putApiIdCardTemplatesId = async (
+  id: number,
+  updateIdCardTemplateBody: UpdateIdCardTemplateBody,
+  options?: RequestInit,
+): Promise<IdCardTemplate> => {
+  return customFetch<IdCardTemplate>(getPutApiIdCardTemplatesIdUrl(id), {
+    ...options,
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(updateIdCardTemplateBody),
+  });
+};
+
+export const getPutApiIdCardTemplatesIdMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof putApiIdCardTemplatesId>>,
+    TError,
+    { id: number; data: BodyType<UpdateIdCardTemplateBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof putApiIdCardTemplatesId>>,
+  TError,
+  { id: number; data: BodyType<UpdateIdCardTemplateBody> },
+  TContext
+> => {
+  const mutationKey = ["putApiIdCardTemplatesId"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof putApiIdCardTemplatesId>>,
+    { id: number; data: BodyType<UpdateIdCardTemplateBody> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return putApiIdCardTemplatesId(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PutApiIdCardTemplatesIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof putApiIdCardTemplatesId>>
+>;
+export type PutApiIdCardTemplatesIdMutationBody =
+  BodyType<UpdateIdCardTemplateBody>;
+export type PutApiIdCardTemplatesIdMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update ID card template
+ */
+export const usePutApiIdCardTemplatesId = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof putApiIdCardTemplatesId>>,
+    TError,
+    { id: number; data: BodyType<UpdateIdCardTemplateBody> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof putApiIdCardTemplatesId>>,
+  TError,
+  { id: number; data: BodyType<UpdateIdCardTemplateBody> },
+  TContext
+> => {
+  return useMutation(getPutApiIdCardTemplatesIdMutationOptions(options));
+};
+
+/**
+ * @summary Delete ID card template
+ */
+export const getDeleteApiIdCardTemplatesIdUrl = (id: number) => {
+  return `/api/api/id-card-templates/${id}`;
+};
+
+export const deleteApiIdCardTemplatesId = async (
+  id: number,
+  options?: RequestInit,
+): Promise<DeleteIdCardTemplateResponse> => {
+  return customFetch<DeleteIdCardTemplateResponse>(
+    getDeleteApiIdCardTemplatesIdUrl(id),
+    {
+      ...options,
+      method: "DELETE",
+    },
+  );
+};
+
+export const getDeleteApiIdCardTemplatesIdMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteApiIdCardTemplatesId>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteApiIdCardTemplatesId>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  const mutationKey = ["deleteApiIdCardTemplatesId"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteApiIdCardTemplatesId>>,
+    { id: number }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return deleteApiIdCardTemplatesId(id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteApiIdCardTemplatesIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteApiIdCardTemplatesId>>
+>;
+
+export type DeleteApiIdCardTemplatesIdMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Delete ID card template
+ */
+export const useDeleteApiIdCardTemplatesId = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteApiIdCardTemplatesId>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteApiIdCardTemplatesId>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  return useMutation(getDeleteApiIdCardTemplatesIdMutationOptions(options));
+};
+
+/**
+ * @summary Get all messages (paginated)
+ */
+export const getGetTelegramMessagesUrl = (
+  params?: GetTelegramMessagesParams,
+) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/telegram/messages?${stringifiedParams}`
+    : `/api/telegram/messages`;
+};
+
+export const getTelegramMessages = async (
+  params?: GetTelegramMessagesParams,
+  options?: RequestInit,
+): Promise<TelegramMessageListResponse> => {
+  return customFetch<TelegramMessageListResponse>(
+    getGetTelegramMessagesUrl(params),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getGetTelegramMessagesQueryKey = (
+  params?: GetTelegramMessagesParams,
+) => {
+  return [`/api/telegram/messages`, ...(params ? [params] : [])] as const;
+};
+
+export const getGetTelegramMessagesQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTelegramMessages>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetTelegramMessagesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getTelegramMessages>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetTelegramMessagesQueryKey(params);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getTelegramMessages>>
+  > = ({ signal }) =>
+    getTelegramMessages(params, { signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getTelegramMessages>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetTelegramMessagesQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTelegramMessages>>
+>;
+export type GetTelegramMessagesQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get all messages (paginated)
+ */
+
+export function useGetTelegramMessages<
+  TData = Awaited<ReturnType<typeof getTelegramMessages>>,
+  TError = ErrorType<unknown>,
+>(
+  params?: GetTelegramMessagesParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getTelegramMessages>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTelegramMessagesQueryOptions(params, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Get unread count and list
+ */
+export const getGetTelegramMessagesUnreadUrl = () => {
+  return `/api/telegram/messages/unread`;
+};
+
+export const getTelegramMessagesUnread = async (
+  options?: RequestInit,
+): Promise<GetTelegramMessagesUnread200> => {
+  return customFetch<GetTelegramMessagesUnread200>(
+    getGetTelegramMessagesUnreadUrl(),
+    {
+      ...options,
+      method: "GET",
+    },
+  );
+};
+
+export const getGetTelegramMessagesUnreadQueryKey = () => {
+  return [`/api/telegram/messages/unread`] as const;
+};
+
+export const getGetTelegramMessagesUnreadQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTelegramMessagesUnread>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getTelegramMessagesUnread>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetTelegramMessagesUnreadQueryKey();
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getTelegramMessagesUnread>>
+  > = ({ signal }) => getTelegramMessagesUnread({ signal, ...requestOptions });
+
+  return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
+    Awaited<ReturnType<typeof getTelegramMessagesUnread>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetTelegramMessagesUnreadQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTelegramMessagesUnread>>
+>;
+export type GetTelegramMessagesUnreadQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get unread count and list
+ */
+
+export function useGetTelegramMessagesUnread<
+  TData = Awaited<ReturnType<typeof getTelegramMessagesUnread>>,
+  TError = ErrorType<unknown>,
+>(options?: {
+  query?: UseQueryOptions<
+    Awaited<ReturnType<typeof getTelegramMessagesUnread>>,
+    TError,
+    TData
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTelegramMessagesUnreadQueryOptions(options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Get single message
+ */
+export const getGetTelegramMessagesIdUrl = (id: number) => {
+  return `/api/telegram/messages/${id}`;
+};
+
+export const getTelegramMessagesId = async (
+  id: number,
+  options?: RequestInit,
+): Promise<TelegramMessage> => {
+  return customFetch<TelegramMessage>(getGetTelegramMessagesIdUrl(id), {
+    ...options,
+    method: "GET",
+  });
+};
+
+export const getGetTelegramMessagesIdQueryKey = (id: number) => {
+  return [`/api/telegram/messages/${id}`] as const;
+};
+
+export const getGetTelegramMessagesIdQueryOptions = <
+  TData = Awaited<ReturnType<typeof getTelegramMessagesId>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getTelegramMessagesId>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
+  const { query: queryOptions, request: requestOptions } = options ?? {};
+
+  const queryKey =
+    queryOptions?.queryKey ?? getGetTelegramMessagesIdQueryKey(id);
+
+  const queryFn: QueryFunction<
+    Awaited<ReturnType<typeof getTelegramMessagesId>>
+  > = ({ signal }) => getTelegramMessagesId(id, { signal, ...requestOptions });
+
+  return {
+    queryKey,
+    queryFn,
+    enabled: !!id,
+    ...queryOptions,
+  } as UseQueryOptions<
+    Awaited<ReturnType<typeof getTelegramMessagesId>>,
+    TError,
+    TData
+  > & { queryKey: QueryKey };
+};
+
+export type GetTelegramMessagesIdQueryResult = NonNullable<
+  Awaited<ReturnType<typeof getTelegramMessagesId>>
+>;
+export type GetTelegramMessagesIdQueryError = ErrorType<unknown>;
+
+/**
+ * @summary Get single message
+ */
+
+export function useGetTelegramMessagesId<
+  TData = Awaited<ReturnType<typeof getTelegramMessagesId>>,
+  TError = ErrorType<unknown>,
+>(
+  id: number,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof getTelegramMessagesId>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getGetTelegramMessagesIdQueryOptions(id, options);
+
+  const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
+    queryKey: QueryKey;
+  };
+
+  return { ...query, queryKey: queryOptions.queryKey };
+}
+
+/**
+ * @summary Update message status
+ */
+export const getPutTelegramMessagesIdUrl = (id: number) => {
+  return `/api/telegram/messages/${id}`;
+};
+
+export const putTelegramMessagesId = async (
+  id: number,
+  updateTelegramMessageStatusRequest: UpdateTelegramMessageStatusRequest,
+  options?: RequestInit,
+): Promise<TelegramMessage> => {
+  return customFetch<TelegramMessage>(getPutTelegramMessagesIdUrl(id), {
+    ...options,
+    method: "PUT",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(updateTelegramMessageStatusRequest),
+  });
+};
+
+export const getPutTelegramMessagesIdMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof putTelegramMessagesId>>,
+    TError,
+    { id: number; data: BodyType<UpdateTelegramMessageStatusRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof putTelegramMessagesId>>,
+  TError,
+  { id: number; data: BodyType<UpdateTelegramMessageStatusRequest> },
+  TContext
+> => {
+  const mutationKey = ["putTelegramMessagesId"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof putTelegramMessagesId>>,
+    { id: number; data: BodyType<UpdateTelegramMessageStatusRequest> }
+  > = (props) => {
+    const { id, data } = props ?? {};
+
+    return putTelegramMessagesId(id, data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PutTelegramMessagesIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof putTelegramMessagesId>>
+>;
+export type PutTelegramMessagesIdMutationBody =
+  BodyType<UpdateTelegramMessageStatusRequest>;
+export type PutTelegramMessagesIdMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Update message status
+ */
+export const usePutTelegramMessagesId = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof putTelegramMessagesId>>,
+    TError,
+    { id: number; data: BodyType<UpdateTelegramMessageStatusRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof putTelegramMessagesId>>,
+  TError,
+  { id: number; data: BodyType<UpdateTelegramMessageStatusRequest> },
+  TContext
+> => {
+  return useMutation(getPutTelegramMessagesIdMutationOptions(options));
+};
+
+/**
+ * @summary Delete message (admin only)
+ */
+export const getDeleteTelegramMessagesIdUrl = (id: number) => {
+  return `/api/telegram/messages/${id}`;
+};
+
+export const deleteTelegramMessagesId = async (
+  id: number,
+  options?: RequestInit,
+): Promise<MessageResponse> => {
+  return customFetch<MessageResponse>(getDeleteTelegramMessagesIdUrl(id), {
+    ...options,
+    method: "DELETE",
+  });
+};
+
+export const getDeleteTelegramMessagesIdMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteTelegramMessagesId>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof deleteTelegramMessagesId>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  const mutationKey = ["deleteTelegramMessagesId"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof deleteTelegramMessagesId>>,
+    { id: number }
+  > = (props) => {
+    const { id } = props ?? {};
+
+    return deleteTelegramMessagesId(id, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type DeleteTelegramMessagesIdMutationResult = NonNullable<
+  Awaited<ReturnType<typeof deleteTelegramMessagesId>>
+>;
+
+export type DeleteTelegramMessagesIdMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Delete message (admin only)
+ */
+export const useDeleteTelegramMessagesId = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof deleteTelegramMessagesId>>,
+    TError,
+    { id: number },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof deleteTelegramMessagesId>>,
+  TError,
+  { id: number },
+  TContext
+> => {
+  return useMutation(getDeleteTelegramMessagesIdMutationOptions(options));
+};
+
+/**
+ * @summary Send reply to user
+ */
+export const getPostTelegramReplyUrl = () => {
+  return `/api/telegram/reply`;
+};
+
+export const postTelegramReply = async (
+  telegramReplyRequest: TelegramReplyRequest,
+  options?: RequestInit,
+): Promise<TelegramMessage> => {
+  return customFetch<TelegramMessage>(getPostTelegramReplyUrl(), {
+    ...options,
+    method: "POST",
+    headers: { "Content-Type": "application/json", ...options?.headers },
+    body: JSON.stringify(telegramReplyRequest),
+  });
+};
+
+export const getPostTelegramReplyMutationOptions = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postTelegramReply>>,
+    TError,
+    { data: BodyType<TelegramReplyRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationOptions<
+  Awaited<ReturnType<typeof postTelegramReply>>,
+  TError,
+  { data: BodyType<TelegramReplyRequest> },
+  TContext
+> => {
+  const mutationKey = ["postTelegramReply"];
+  const { mutation: mutationOptions, request: requestOptions } = options
+    ? options.mutation &&
+      "mutationKey" in options.mutation &&
+      options.mutation.mutationKey
+      ? options
+      : { ...options, mutation: { ...options.mutation, mutationKey } }
+    : { mutation: { mutationKey }, request: undefined };
+
+  const mutationFn: MutationFunction<
+    Awaited<ReturnType<typeof postTelegramReply>>,
+    { data: BodyType<TelegramReplyRequest> }
+  > = (props) => {
+    const { data } = props ?? {};
+
+    return postTelegramReply(data, requestOptions);
+  };
+
+  return { mutationFn, ...mutationOptions };
+};
+
+export type PostTelegramReplyMutationResult = NonNullable<
+  Awaited<ReturnType<typeof postTelegramReply>>
+>;
+export type PostTelegramReplyMutationBody = BodyType<TelegramReplyRequest>;
+export type PostTelegramReplyMutationError = ErrorType<unknown>;
+
+/**
+ * @summary Send reply to user
+ */
+export const usePostTelegramReply = <
+  TError = ErrorType<unknown>,
+  TContext = unknown,
+>(options?: {
+  mutation?: UseMutationOptions<
+    Awaited<ReturnType<typeof postTelegramReply>>,
+    TError,
+    { data: BodyType<TelegramReplyRequest> },
+    TContext
+  >;
+  request?: SecondParameter<typeof customFetch>;
+}): UseMutationResult<
+  Awaited<ReturnType<typeof postTelegramReply>>,
+  TError,
+  { data: BodyType<TelegramReplyRequest> },
+  TContext
+> => {
+  return useMutation(getPostTelegramReplyMutationOptions(options));
 };

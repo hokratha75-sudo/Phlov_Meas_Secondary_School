@@ -29,6 +29,10 @@ async function buildAll() {
     // - use path traversal to read files (e.g. @google-cloud/secret-manager loads sibling .proto files)
     external: [
       "*.node",
+      // @workspace/db and @workspace/api-zod must be BUNDLED (not external) because
+      // they expose raw .ts source files that Node.js ESM cannot load at runtime.
+      // Other @workspace packages (frontend-only) are not imported by api-server.
+
       "sharp",
       "better-sqlite3",
       "sqlite3",

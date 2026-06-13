@@ -43,7 +43,7 @@ export default function Home() {
   const { t, lang } = useI18n();
   const { data: newsData, isLoading: newsLoading } = useListNews({ limit: 2, offset: 0 });
   const { data: activitiesData } = useListActivities({ limit: 3, offset: 0 });
-  const { data: settings } = useGetSiteSettings();
+  const { data: settings } = useGetSiteSettings({ query: { staleTime: 0, refetchOnMount: "always", refetchInterval: 3000 } });
 
   const hero = parseJson(settings?.["hero"], {
     enrollmentBannerEn: "ENROLLMENT OPEN 2024-2025",
@@ -84,8 +84,7 @@ export default function Home() {
 
   const quickInfo = [
     { icon: ClipboardList, titleEn: "Admissions", titleKh: "ការចុះឈ្មោះ", descEn: "Enrollment steps and required documents", descKh: "ជំហានចុះឈ្មោះ និងឯកសារចាំបាច់" },
-    { icon: BookMarked, titleEn: "Academics", titleKh: "ការសិក្សា", descEn: "Subjects, class tracks and exam support", descKh: "មុខវិជ្ជា ថ្នាក់ និងជំនួយប្រឡង" },
-    { icon: PieChart, titleEn: "Results", titleKh: "លទ្ធផល", descEn: "Bac II and annual performance summaries", descKh: "លទ្ធផល Bac II និងសេចក្តីសង្ខេបប្រចាំឆ្នាំ" },
+    { icon: PieChart, titleEn: "Results", titleKh: "លទ្ធផល", descEn: "Annual performance and exam summaries", descKh: "លទ្ធផលប្រឡង និងសេចក្តីសង្ខេបប្រចាំឆ្នាំ" },
     { icon: Mail, titleEn: "Contact", titleKh: "ទំនាក់ទំនង", descEn: "Phone, email and school office updates", descKh: "លេខទូរស័ព្ទ អ៊ីមែល និងព័ត៌មានការិយាល័យ" },
   ];
 
@@ -101,7 +100,7 @@ export default function Home() {
                 <span className="inline-flex w-fit items-center rounded-full bg-red-600 px-3 py-1 text-xs font-bold mb-4">
                   {lang === "kh" ? "ព័ត៌មានថ្មី" : "Latest Update"}
                 </span>
-                <h1 className="text-3xl md:text-5xl font-black leading-tight font-khmer max-w-2xl drop-shadow-lg">
+                <h1 className="text-3xl md:text-5xl font-black leading-tight font-khmer max-w-2xl drop-shadow-lg text-white">
                   {lang === "kh" ? hero.subtitleKh : hero.subtitleEn}
                 </h1>
                 <p className="mt-4 max-w-2xl text-white/90 text-sm md:text-base">
@@ -126,7 +125,7 @@ export default function Home() {
                   const Icon = item.icon;
                   return (
                     <div key={item.titleEn} className="bg-white border rounded-2xl p-6 shadow-sm hover:shadow-md transition-shadow">
-                      <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-[#1e3a6e] mb-4">
+                      <div className="w-10 h-10 rounded-full bg-blue-50 flex items-center justify-center text-primary mb-4">
                         <Icon size={20} />
                       </div>
                       <p className="font-bold text-gray-800 font-khmer">{lang === "kh" ? item.titleKh : item.titleEn}</p>
@@ -146,7 +145,7 @@ export default function Home() {
             {[
               { titleEn: "Academic Excellence", titleKh: "ឧត្តមភាពសិក្សា", descEn: "Strong learning programs and disciplined support", descKh: "កម្មវិធីសិក្សាមាំមួន និងការគាំទ្រមានវិន័យ" },
               { titleEn: "Student Support", titleKh: "ការគាំទ្រសិស្ស", descEn: "Guidance, mentoring and school activities", descKh: "ការណែនាំ ការបង្រៀន និងសកម្មភាពសាលា" },
-              { titleEn: "Cambodia Context", titleKh: "បរិបទកម្ពុជា", descEn: "Bac II readiness, civic values and community life", descKh: "ការត្រៀម Bac II តម្លៃពលរដ្ឋ និងជីវិតសហគមន៍" },
+              { titleEn: "Cambodia Context", titleKh: "បរិបទកម្ពុជា", descEn: "Exam readiness, civic values and community life", descKh: "ការត្រៀមប្រឡង តម្លៃពលរដ្ឋ និងជីវិតសហគមន៍" },
             ].map((item, i) => (
               <div key={i} className="bg-white rounded-2xl border shadow-sm p-6">
                 <p className="font-bold text-primary">{lang === "kh" ? item.titleKh : item.titleEn}</p>
@@ -197,13 +196,13 @@ export default function Home() {
               <div className="space-y-4 mt-8">
                 <img src="/campus-hero.png" alt="Students" className="w-full h-48 md:h-64 object-cover" />
                 <div className="bg-primary p-6 text-white">
-                  <h4 className="font-bold text-2xl mb-1">{stats.graduationRate}</h4>
+                  <h4 className="font-bold text-2xl mb-1 text-white">{stats.graduationRate}</h4>
                   <p className="text-sm opacity-80">{t("Graduation Rate", "អត្រាបញ្ចប់ការសិក្សា")}</p>
                 </div>
               </div>
               <div className="space-y-4">
                 <div className="bg-secondary p-6 text-white">
-                  <h4 className="font-bold text-2xl mb-1">{stats.yearsExcellence}</h4>
+                  <h4 className="font-bold text-2xl mb-1 text-white">{stats.yearsExcellence}</h4>
                   <p className="text-sm opacity-80">{t("Years of Excellence", "ឆ្នាំនៃឧត្តមភាព")}</p>
                 </div>
                 <img src="/campus-gate.png" alt="Campus Gate" className="w-full h-48 md:h-64 object-cover" />
@@ -318,7 +317,7 @@ export default function Home() {
             ].map((s, i) => (
               <div key={i} className="space-y-2">
                 <div className="flex justify-center mb-4">{s.icon}</div>
-                <h3 className="text-4xl md:text-5xl font-black">{s.val}</h3>
+                <h3 className="text-4xl md:text-5xl font-black text-white">{s.val}</h3>
                 <p className="text-white/80 font-medium uppercase tracking-wider text-sm">{lang === "kh" ? s.labelKh : s.labelEn}</p>
               </div>
             ))}

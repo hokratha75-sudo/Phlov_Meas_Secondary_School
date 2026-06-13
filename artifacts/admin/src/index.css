@@ -4,6 +4,11 @@
 
 @custom-variant dark (&:is(.dark *));
 
+@font-face {
+  font-family: 'Tacteing';
+  src: local('Tacteing'), local('tacteing'), local('Tacteing ');
+}
+
 @theme inline {
   --color-background: hsl(var(--background));
   --color-foreground: hsl(var(--foreground));
@@ -42,6 +47,7 @@
   --color-sidebar-accent-border: var(--sidebar-accent-border);
   --color-sidebar-ring: hsl(var(--sidebar-ring));
   --font-sans: var(--app-font-sans);
+  --font-moul: var(--app-font-moul);
   --font-serif: var(--app-font-serif);
   --font-mono: var(--app-font-mono);
   --radius-sm: calc(var(--radius) - 4px);
@@ -101,7 +107,8 @@
   --chart-4: 38 92% 50%;
   --chart-5: 262 52% 47%;
 
-  --app-font-sans: 'Inter', sans-serif;
+  --app-font-sans: 'Khmer OS Siemreap', 'Siemreap', 'Inter', sans-serif;
+  --app-font-moul: 'Khmer OS Muol Light', 'Muol', serif;
   --app-font-serif: Georgia, serif;
   --app-font-mono: Menlo, monospace;
   --radius: .5rem;
@@ -124,7 +131,208 @@
   --sidebar-accent-border: hsl(222 47% 30%);
 }
 
+.dark {
+  --background: 222 47% 11%;
+  --foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+
+  --card: 222 47% 11%;
+  --card-foreground: 210 40% 98%;
+  --card-border: 217.2 32.6% 17.5%;
+
+  --popover: 222 47% 11%;
+  --popover-foreground: 210 40% 98%;
+  --popover-border: 217.2 32.6% 17.5%;
+
+  --primary: 222 47% 40%;
+  --primary-foreground: 0 0% 100%;
+
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20% 65%;
+
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+
+  --sidebar: 222 47% 18%;
+  --sidebar-foreground: 210 40% 98%;
+  --sidebar-border: 217.2 32.6% 17.5%;
+  --sidebar-primary: 210 40% 98%;
+  --sidebar-primary-foreground: 222 47% 11%;
+  --sidebar-accent: 217.2 32.6% 17.5%;
+  --sidebar-accent-foreground: 210 40% 98%;
+  --sidebar-ring: 212.7 26.8% 83.9%;
+
+  --primary-border: hsl(210 40% 98%);
+  --secondary-border: hsl(217.2 32.6% 17.5%);
+  --muted-border: hsl(217.2 32.6% 17.5%);
+  --accent-border: hsl(217.2 32.6% 17.5%);
+  --destructive-border: hsl(0 62.8% 30.6%);
+  --sidebar-primary-border: hsl(210 40% 98%);
+  --sidebar-accent-border: hsl(217.2 32.6% 17.5%);
+}
+
+/* --- Dynamic Themes --- */
+:root[data-theme="emerald"] {
+  --primary: 160 84% 20%;
+  --primary-foreground: 0 0% 100%;
+}
+.dark[data-theme="emerald"] {
+  --primary: 160 60% 45%;
+  --primary-foreground: 0 0% 100%;
+}
+
+:root[data-theme="violet"] {
+  --primary: 262 52% 47%;
+  --primary-foreground: 0 0% 100%;
+}
+.dark[data-theme="violet"] {
+  --primary: 260 60% 55%;
+  --primary-foreground: 0 0% 100%;
+}
+
+:root[data-theme="rose"] {
+  --primary: 340 70% 40%;
+  --primary-foreground: 0 0% 100%;
+}
+.dark[data-theme="rose"] {
+  --primary: 340 70% 50%;
+  --primary-foreground: 0 0% 100%;
+}
+
+:root[data-theme="slate"] {
+  --primary: 215 15% 25%;
+  --primary-foreground: 0 0% 100%;
+}
+.dark[data-theme="slate"] {
+  --primary: 215 15% 35%;
+  --primary-foreground: 0 0% 100%;
+}
+
 @layer base {
   * { @apply border-border; }
   body { @apply font-sans antialiased bg-background text-foreground; }
+  h1, h2, h3, h4, h5, h6 { @apply font-moul font-normal text-primary dark:text-blue-300; }
+}
+
+/* ── Print Styles for Student Carnet (សៀវភៅសិក្ខាគារិក) ── */
+@media print {
+  /* Force white background and black text */
+  html, body {
+    background: white !important;
+    color: black !important;
+    margin: 0 !important;
+    padding: 0 !important;
+    overflow: visible !important;
+    height: auto !important;
+  }
+
+  /* Set A4 landscape page */
+  @page {
+    size: A4 landscape;
+    margin: 8mm;
+  }
+
+  /* Hide the sidebar, header, and any non-print UI */
+  aside,
+  header,
+  nav,
+  .print-hide,
+  [data-print-hide] {
+    display: none !important;
+  }
+
+  /* Make the main content area fill the full page without overflow restrictions */
+  main, .flex-1 {
+    overflow: visible !important;
+    padding: 0 !important;
+    margin: 0 !important;
+  }
+
+  /* Remove all shadows and rounded corners for cleaner printing */
+  * {
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  /* Show the print-only container */
+  .carnet-print-container {
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 99999 !important;
+    background: white !important;
+  }
+
+  /* Page break utility */
+  .page-break {
+    page-break-after: always;
+    break-after: page;
+  }
+  .page-break:last-child {
+    page-break-after: avoid;
+    break-after: avoid;
+  }
+}
+
+/* ── Print Styles for Student Grade Book (សៀវភៅសិក្ខាគារិកមធ្យមសិក្សា) ── */
+/* On screen: hide the grade book print layout */
+.gradebook-print-only {
+  display: none !important;
+}
+
+@media print {
+  @page {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  /* Hide the grade book screen-only UI */
+  .gradebook-screen-only {
+    display: none !important;
+  }
+
+  /* Show the grade book print-only container */
+  .gradebook-print-only {
+    display: block !important;
+    position: absolute !important;
+    top: 0 !important;
+    left: 0 !important;
+    width: 100% !important;
+    z-index: 99999 !important;
+    background: white !important;
+  }
+
+  /* Grade book print spread (A4 landscape) */
+  .gradebook-print-spread {
+    width: 297mm;
+    height: 209mm; /* 210mm - 1mm tolerance */
+    page-break-after: always;
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    overflow: hidden;
+  }
+
+  .gradebook-print-spread:last-child {
+    page-break-after: avoid;
+  }
+
+  /* Each logical page inside the spread (A5 portrait) */
+  .gradebook-print-page {
+    width: 148.5mm;
+    height: 100%;
+    padding: 10mm;
+    box-sizing: border-box;
+    position: relative;
+  }
 }

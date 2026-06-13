@@ -71,6 +71,12 @@ export const GetMeResponse = zod.object({
  * @summary Get dashboard statistics
  */
 export const GetDashboardStatsResponse = zod.object({
+  totalStudents: zod.number(),
+  totalTeachers: zod.number(),
+  totalClasses: zod.number(),
+  totalSubjects: zod.number(),
+  newStudents: zod.number(),
+  droppedStudents: zod.number(),
   newsCount: zod.number(),
   activitiesCount: zod.number(),
   teachersCount: zod.number(),
@@ -119,6 +125,11 @@ export const CreateNewsBody = zod.object({
   imageUrl: zod.string().nullish(),
   category: zod.string(),
   isPublished: zod.boolean().optional(),
+  sendToMain: zod.boolean().optional(),
+  sendToTeachers: zod.boolean().optional(),
+  sendToStudents: zod.boolean().optional(),
+  sendToParents: zod.boolean().optional(),
+  pinToMain: zod.boolean().optional(),
 });
 
 /**
@@ -157,6 +168,11 @@ export const UpdateNewsBody = zod.object({
   imageUrl: zod.string().nullish(),
   category: zod.string(),
   isPublished: zod.boolean().optional(),
+  sendToMain: zod.boolean().optional(),
+  sendToTeachers: zod.boolean().optional(),
+  sendToStudents: zod.boolean().optional(),
+  sendToParents: zod.boolean().optional(),
+  pinToMain: zod.boolean().optional(),
 });
 
 export const UpdateNewsResponse = zod.object({
@@ -313,6 +329,27 @@ export const ListTeachersResponse = zod.object({
       bioKh: zod.string().nullish(),
       phone: zod.string().nullish(),
       email: zod.string().nullish(),
+      address: zod.string().nullish(),
+      gender: zod.string().nullish(),
+      dob: zod.string().nullish(),
+      pob: zod.string().nullish(),
+      officerId: zod.string().nullish(),
+      position: zod.string().nullish(),
+      educationLevel: zod.string().nullish(),
+      employmentDate: zod.string().nullish(),
+      framework: zod.string().nullish(),
+      additionalSubjects: zod.string().nullish(),
+      additionalTeachingHours: zod.number().nullish(),
+      designatedTeachingHours: zod.number().nullish(),
+      remarks: zod.string().nullish(),
+      familyStatus: zod.string().nullish(),
+      degreeInfo: zod.string().nullish(),
+      pedagogyInfo: zod.string().nullish(),
+      trainingInfo: zod.string().nullish(),
+      workExperience: zod.string().nullish(),
+      teachingSkills: zod.string().nullish(),
+      techSkills: zod.string().nullish(),
+      languages: zod.string().nullish(),
       createdAt: zod.string(),
       updatedAt: zod.string(),
     }),
@@ -333,6 +370,27 @@ export const CreateTeacherBody = zod.object({
   bioKh: zod.string().nullish(),
   phone: zod.string().nullish(),
   email: zod.string().nullish(),
+  address: zod.string().nullish(),
+  gender: zod.string().nullish(),
+  dob: zod.string().nullish(),
+  pob: zod.string().nullish(),
+  officerId: zod.string().nullish(),
+  position: zod.string().nullish(),
+  educationLevel: zod.string().nullish(),
+  employmentDate: zod.string().nullish(),
+  framework: zod.string().nullish(),
+  additionalSubjects: zod.string().nullish(),
+  additionalTeachingHours: zod.number().nullish(),
+  designatedTeachingHours: zod.number().nullish(),
+  remarks: zod.string().nullish(),
+  familyStatus: zod.string().nullish(),
+  degreeInfo: zod.string().nullish(),
+  pedagogyInfo: zod.string().nullish(),
+  trainingInfo: zod.string().nullish(),
+  workExperience: zod.string().nullish(),
+  teachingSkills: zod.string().nullish(),
+  techSkills: zod.string().nullish(),
+  languages: zod.string().nullish(),
 });
 
 /**
@@ -352,6 +410,27 @@ export const UpdateTeacherBody = zod.object({
   bioKh: zod.string().nullish(),
   phone: zod.string().nullish(),
   email: zod.string().nullish(),
+  address: zod.string().nullish(),
+  gender: zod.string().nullish(),
+  dob: zod.string().nullish(),
+  pob: zod.string().nullish(),
+  officerId: zod.string().nullish(),
+  position: zod.string().nullish(),
+  educationLevel: zod.string().nullish(),
+  employmentDate: zod.string().nullish(),
+  framework: zod.string().nullish(),
+  additionalSubjects: zod.string().nullish(),
+  additionalTeachingHours: zod.number().nullish(),
+  designatedTeachingHours: zod.number().nullish(),
+  remarks: zod.string().nullish(),
+  familyStatus: zod.string().nullish(),
+  degreeInfo: zod.string().nullish(),
+  pedagogyInfo: zod.string().nullish(),
+  trainingInfo: zod.string().nullish(),
+  workExperience: zod.string().nullish(),
+  teachingSkills: zod.string().nullish(),
+  techSkills: zod.string().nullish(),
+  languages: zod.string().nullish(),
 });
 
 export const UpdateTeacherResponse = zod.object({
@@ -365,6 +444,27 @@ export const UpdateTeacherResponse = zod.object({
   bioKh: zod.string().nullish(),
   phone: zod.string().nullish(),
   email: zod.string().nullish(),
+  address: zod.string().nullish(),
+  gender: zod.string().nullish(),
+  dob: zod.string().nullish(),
+  pob: zod.string().nullish(),
+  officerId: zod.string().nullish(),
+  position: zod.string().nullish(),
+  educationLevel: zod.string().nullish(),
+  employmentDate: zod.string().nullish(),
+  framework: zod.string().nullish(),
+  additionalSubjects: zod.string().nullish(),
+  additionalTeachingHours: zod.number().nullish(),
+  designatedTeachingHours: zod.number().nullish(),
+  remarks: zod.string().nullish(),
+  familyStatus: zod.string().nullish(),
+  degreeInfo: zod.string().nullish(),
+  pedagogyInfo: zod.string().nullish(),
+  trainingInfo: zod.string().nullish(),
+  workExperience: zod.string().nullish(),
+  teachingSkills: zod.string().nullish(),
+  techSkills: zod.string().nullish(),
+  languages: zod.string().nullish(),
   createdAt: zod.string(),
   updatedAt: zod.string(),
 });
@@ -381,6 +481,147 @@ export const DeleteTeacherResponse = zod.object({
 });
 
 /**
+ * @summary List all classrooms
+ */
+export const ListClassroomsResponse = zod.object({
+  data: zod.array(
+    zod.object({
+      id: zod.number(),
+      name: zod.string(),
+      grade: zod.string(),
+      roomNumber: zod.string().nullish(),
+      teacherId: zod.number().nullish(),
+      teacher: zod
+        .object({
+          id: zod.number(),
+          nameEn: zod.string(),
+          nameKh: zod.string(),
+          subjectEn: zod.string(),
+          subjectKh: zod.string(),
+          photoUrl: zod.string().nullish(),
+          bioEn: zod.string().nullish(),
+          bioKh: zod.string().nullish(),
+          phone: zod.string().nullish(),
+          email: zod.string().nullish(),
+          address: zod.string().nullish(),
+          gender: zod.string().nullish(),
+          dob: zod.string().nullish(),
+          pob: zod.string().nullish(),
+          officerId: zod.string().nullish(),
+          position: zod.string().nullish(),
+          educationLevel: zod.string().nullish(),
+          employmentDate: zod.string().nullish(),
+          framework: zod.string().nullish(),
+          additionalSubjects: zod.string().nullish(),
+          additionalTeachingHours: zod.number().nullish(),
+          designatedTeachingHours: zod.number().nullish(),
+          remarks: zod.string().nullish(),
+          familyStatus: zod.string().nullish(),
+          degreeInfo: zod.string().nullish(),
+          pedagogyInfo: zod.string().nullish(),
+          trainingInfo: zod.string().nullish(),
+          workExperience: zod.string().nullish(),
+          teachingSkills: zod.string().nullish(),
+          techSkills: zod.string().nullish(),
+          languages: zod.string().nullish(),
+          createdAt: zod.string(),
+          updatedAt: zod.string(),
+        })
+        .optional(),
+      studentsCount: zod
+        .number()
+        .describe("Number of students in the classroom"),
+      createdAt: zod.string(),
+      updatedAt: zod.string(),
+    }),
+  ),
+  total: zod.number(),
+});
+
+/**
+ * @summary Create classroom
+ */
+export const CreateClassroomBody = zod.object({
+  name: zod.string(),
+  grade: zod.string(),
+  roomNumber: zod.string().nullish(),
+  teacherId: zod.number().nullish(),
+});
+
+/**
+ * @summary Update classroom
+ */
+export const UpdateClassroomParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const UpdateClassroomBody = zod.object({
+  name: zod.string(),
+  grade: zod.string(),
+  roomNumber: zod.string().nullish(),
+  teacherId: zod.number().nullish(),
+});
+
+export const UpdateClassroomResponse = zod.object({
+  id: zod.number(),
+  name: zod.string(),
+  grade: zod.string(),
+  roomNumber: zod.string().nullish(),
+  teacherId: zod.number().nullish(),
+  teacher: zod
+    .object({
+      id: zod.number(),
+      nameEn: zod.string(),
+      nameKh: zod.string(),
+      subjectEn: zod.string(),
+      subjectKh: zod.string(),
+      photoUrl: zod.string().nullish(),
+      bioEn: zod.string().nullish(),
+      bioKh: zod.string().nullish(),
+      phone: zod.string().nullish(),
+      email: zod.string().nullish(),
+      address: zod.string().nullish(),
+      gender: zod.string().nullish(),
+      dob: zod.string().nullish(),
+      pob: zod.string().nullish(),
+      officerId: zod.string().nullish(),
+      position: zod.string().nullish(),
+      educationLevel: zod.string().nullish(),
+      employmentDate: zod.string().nullish(),
+      framework: zod.string().nullish(),
+      additionalSubjects: zod.string().nullish(),
+      additionalTeachingHours: zod.number().nullish(),
+      designatedTeachingHours: zod.number().nullish(),
+      remarks: zod.string().nullish(),
+      familyStatus: zod.string().nullish(),
+      degreeInfo: zod.string().nullish(),
+      pedagogyInfo: zod.string().nullish(),
+      trainingInfo: zod.string().nullish(),
+      workExperience: zod.string().nullish(),
+      teachingSkills: zod.string().nullish(),
+      techSkills: zod.string().nullish(),
+      languages: zod.string().nullish(),
+      createdAt: zod.string(),
+      updatedAt: zod.string(),
+    })
+    .optional(),
+  studentsCount: zod.number().describe("Number of students in the classroom"),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Delete classroom
+ */
+export const DeleteClassroomParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const DeleteClassroomResponse = zod.object({
+  message: zod.string(),
+});
+
+/**
  * @summary List all students
  */
 export const listStudentsQueryLimitDefault = 50;
@@ -390,6 +631,7 @@ export const ListStudentsQueryParams = zod.object({
   limit: zod.coerce.number().default(listStudentsQueryLimitDefault),
   offset: zod.coerce.number().default(listStudentsQueryOffsetDefault),
   grade: zod.coerce.string().optional(),
+  classId: zod.coerce.number().optional(),
 });
 
 export const ListStudentsResponse = zod.object({
@@ -400,11 +642,82 @@ export const ListStudentsResponse = zod.object({
       nameEn: zod.string(),
       nameKh: zod.string(),
       grade: zod.string(),
+      classId: zod.number().nullish(),
       gender: zod.string(),
       enrollmentYear: zod.number(),
       phone: zod.string().nullish(),
       parentPhone: zod.string().nullish(),
       address: zod.string().nullish(),
+      photoUrl: zod.string().nullish(),
+      biography: zod.string().nullish(),
+      familyStatus: zod.string().nullish(),
+      classroom: zod
+        .object({
+          id: zod.number(),
+          name: zod.string(),
+          grade: zod.string(),
+          roomNumber: zod.string().nullish(),
+          teacherId: zod.number().nullish(),
+          teacher: zod
+            .object({
+              id: zod.number(),
+              nameEn: zod.string(),
+              nameKh: zod.string(),
+              subjectEn: zod.string(),
+              subjectKh: zod.string(),
+              photoUrl: zod.string().nullish(),
+              bioEn: zod.string().nullish(),
+              bioKh: zod.string().nullish(),
+              phone: zod.string().nullish(),
+              email: zod.string().nullish(),
+              address: zod.string().nullish(),
+              gender: zod.string().nullish(),
+              dob: zod.string().nullish(),
+              pob: zod.string().nullish(),
+              officerId: zod.string().nullish(),
+              position: zod.string().nullish(),
+              educationLevel: zod.string().nullish(),
+              employmentDate: zod.string().nullish(),
+              framework: zod.string().nullish(),
+              additionalSubjects: zod.string().nullish(),
+              additionalTeachingHours: zod.number().nullish(),
+              designatedTeachingHours: zod.number().nullish(),
+              remarks: zod.string().nullish(),
+              familyStatus: zod.string().nullish(),
+              degreeInfo: zod.string().nullish(),
+              pedagogyInfo: zod.string().nullish(),
+              trainingInfo: zod.string().nullish(),
+              workExperience: zod.string().nullish(),
+              teachingSkills: zod.string().nullish(),
+              techSkills: zod.string().nullish(),
+              languages: zod.string().nullish(),
+              createdAt: zod.string(),
+              updatedAt: zod.string(),
+            })
+            .optional(),
+          studentsCount: zod
+            .number()
+            .describe("Number of students in the classroom"),
+          createdAt: zod.string(),
+          updatedAt: zod.string(),
+        })
+        .nullish(),
+      disciplineLogs: zod
+        .array(
+          zod.object({
+            id: zod.number(),
+            studentId: zod.number(),
+            faultDate: zod.string(),
+            faultDescription: zod.string(),
+            penaltyType: zod.string(),
+            createdAt: zod.string(),
+            updatedAt: zod.string(),
+          }),
+        )
+        .optional(),
+      telegramChatId: zod.number().nullish(),
+      telegramLinkCode: zod.string().nullish(),
+      telegramLinkedAt: zod.coerce.date().nullish(),
       createdAt: zod.string(),
       updatedAt: zod.string(),
     }),
@@ -420,11 +733,15 @@ export const CreateStudentBody = zod.object({
   nameEn: zod.string(),
   nameKh: zod.string(),
   grade: zod.string(),
+  classId: zod.number().nullish(),
   gender: zod.string(),
   enrollmentYear: zod.number(),
   phone: zod.string().nullish(),
   parentPhone: zod.string().nullish(),
   address: zod.string().nullish(),
+  photoUrl: zod.string().nullish(),
+  biography: zod.string().nullish(),
+  familyStatus: zod.string().nullish(),
 });
 
 /**
@@ -439,11 +756,15 @@ export const UpdateStudentBody = zod.object({
   nameEn: zod.string(),
   nameKh: zod.string(),
   grade: zod.string(),
+  classId: zod.number().nullish(),
   gender: zod.string(),
   enrollmentYear: zod.number(),
   phone: zod.string().nullish(),
   parentPhone: zod.string().nullish(),
   address: zod.string().nullish(),
+  photoUrl: zod.string().nullish(),
+  biography: zod.string().nullish(),
+  familyStatus: zod.string().nullish(),
 });
 
 export const UpdateStudentResponse = zod.object({
@@ -452,11 +773,82 @@ export const UpdateStudentResponse = zod.object({
   nameEn: zod.string(),
   nameKh: zod.string(),
   grade: zod.string(),
+  classId: zod.number().nullish(),
   gender: zod.string(),
   enrollmentYear: zod.number(),
   phone: zod.string().nullish(),
   parentPhone: zod.string().nullish(),
   address: zod.string().nullish(),
+  photoUrl: zod.string().nullish(),
+  biography: zod.string().nullish(),
+  familyStatus: zod.string().nullish(),
+  classroom: zod
+    .object({
+      id: zod.number(),
+      name: zod.string(),
+      grade: zod.string(),
+      roomNumber: zod.string().nullish(),
+      teacherId: zod.number().nullish(),
+      teacher: zod
+        .object({
+          id: zod.number(),
+          nameEn: zod.string(),
+          nameKh: zod.string(),
+          subjectEn: zod.string(),
+          subjectKh: zod.string(),
+          photoUrl: zod.string().nullish(),
+          bioEn: zod.string().nullish(),
+          bioKh: zod.string().nullish(),
+          phone: zod.string().nullish(),
+          email: zod.string().nullish(),
+          address: zod.string().nullish(),
+          gender: zod.string().nullish(),
+          dob: zod.string().nullish(),
+          pob: zod.string().nullish(),
+          officerId: zod.string().nullish(),
+          position: zod.string().nullish(),
+          educationLevel: zod.string().nullish(),
+          employmentDate: zod.string().nullish(),
+          framework: zod.string().nullish(),
+          additionalSubjects: zod.string().nullish(),
+          additionalTeachingHours: zod.number().nullish(),
+          designatedTeachingHours: zod.number().nullish(),
+          remarks: zod.string().nullish(),
+          familyStatus: zod.string().nullish(),
+          degreeInfo: zod.string().nullish(),
+          pedagogyInfo: zod.string().nullish(),
+          trainingInfo: zod.string().nullish(),
+          workExperience: zod.string().nullish(),
+          teachingSkills: zod.string().nullish(),
+          techSkills: zod.string().nullish(),
+          languages: zod.string().nullish(),
+          createdAt: zod.string(),
+          updatedAt: zod.string(),
+        })
+        .optional(),
+      studentsCount: zod
+        .number()
+        .describe("Number of students in the classroom"),
+      createdAt: zod.string(),
+      updatedAt: zod.string(),
+    })
+    .nullish(),
+  disciplineLogs: zod
+    .array(
+      zod.object({
+        id: zod.number(),
+        studentId: zod.number(),
+        faultDate: zod.string(),
+        faultDescription: zod.string(),
+        penaltyType: zod.string(),
+        createdAt: zod.string(),
+        updatedAt: zod.string(),
+      }),
+    )
+    .optional(),
+  telegramChatId: zod.number().nullish(),
+  telegramLinkCode: zod.string().nullish(),
+  telegramLinkedAt: zod.coerce.date().nullish(),
   createdAt: zod.string(),
   updatedAt: zod.string(),
 });
@@ -524,4 +916,648 @@ export const DeleteContactParams = zod.object({
 
 export const DeleteContactResponse = zod.object({
   message: zod.string(),
+});
+
+/**
+ * @summary Create discipline log
+ */
+export const CreateDisciplineLogBody = zod.object({
+  studentId: zod.number(),
+  faultDate: zod.string(),
+  faultDescription: zod.string(),
+  penaltyType: zod.string(),
+});
+
+/**
+ * @summary Update discipline log
+ */
+export const UpdateDisciplineLogParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const UpdateDisciplineLogBody = zod.object({
+  studentId: zod.number(),
+  faultDate: zod.string(),
+  faultDescription: zod.string(),
+  penaltyType: zod.string(),
+});
+
+export const UpdateDisciplineLogResponse = zod.object({
+  id: zod.number(),
+  studentId: zod.number(),
+  faultDate: zod.string(),
+  faultDescription: zod.string(),
+  penaltyType: zod.string(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Delete discipline log
+ */
+export const DeleteDisciplineLogParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const DeleteDisciplineLogResponse = zod.object({
+  message: zod.string(),
+});
+
+/**
+ * @summary List library borrow/return logs
+ */
+export const listLibraryLogsQueryLimitDefault = 50;
+export const listLibraryLogsQueryOffsetDefault = 0;
+
+export const ListLibraryLogsQueryParams = zod.object({
+  limit: zod.coerce.number().default(listLibraryLogsQueryLimitDefault),
+  offset: zod.coerce.number().default(listLibraryLogsQueryOffsetDefault),
+  status: zod.coerce.string().optional(),
+  search: zod.coerce.string().optional(),
+});
+
+export const ListLibraryLogsResponse = zod.object({
+  data: zod.array(
+    zod.object({
+      id: zod.number(),
+      studentId: zod.number(),
+      student: zod.object({
+        id: zod.number(),
+        studentId: zod.string(),
+        nameEn: zod.string(),
+        nameKh: zod.string(),
+        grade: zod.string(),
+        classId: zod.number().nullish(),
+        gender: zod.string(),
+        enrollmentYear: zod.number(),
+        phone: zod.string().nullish(),
+        parentPhone: zod.string().nullish(),
+        address: zod.string().nullish(),
+        photoUrl: zod.string().nullish(),
+        biography: zod.string().nullish(),
+        familyStatus: zod.string().nullish(),
+        classroom: zod
+          .object({
+            id: zod.number(),
+            name: zod.string(),
+            grade: zod.string(),
+            roomNumber: zod.string().nullish(),
+            teacherId: zod.number().nullish(),
+            teacher: zod
+              .object({
+                id: zod.number(),
+                nameEn: zod.string(),
+                nameKh: zod.string(),
+                subjectEn: zod.string(),
+                subjectKh: zod.string(),
+                photoUrl: zod.string().nullish(),
+                bioEn: zod.string().nullish(),
+                bioKh: zod.string().nullish(),
+                phone: zod.string().nullish(),
+                email: zod.string().nullish(),
+                address: zod.string().nullish(),
+                gender: zod.string().nullish(),
+                dob: zod.string().nullish(),
+                pob: zod.string().nullish(),
+                officerId: zod.string().nullish(),
+                position: zod.string().nullish(),
+                educationLevel: zod.string().nullish(),
+                employmentDate: zod.string().nullish(),
+                framework: zod.string().nullish(),
+                additionalSubjects: zod.string().nullish(),
+                additionalTeachingHours: zod.number().nullish(),
+                designatedTeachingHours: zod.number().nullish(),
+                remarks: zod.string().nullish(),
+                familyStatus: zod.string().nullish(),
+                degreeInfo: zod.string().nullish(),
+                pedagogyInfo: zod.string().nullish(),
+                trainingInfo: zod.string().nullish(),
+                workExperience: zod.string().nullish(),
+                teachingSkills: zod.string().nullish(),
+                techSkills: zod.string().nullish(),
+                languages: zod.string().nullish(),
+                createdAt: zod.string(),
+                updatedAt: zod.string(),
+              })
+              .optional(),
+            studentsCount: zod
+              .number()
+              .describe("Number of students in the classroom"),
+            createdAt: zod.string(),
+            updatedAt: zod.string(),
+          })
+          .nullish(),
+        disciplineLogs: zod
+          .array(
+            zod.object({
+              id: zod.number(),
+              studentId: zod.number(),
+              faultDate: zod.string(),
+              faultDescription: zod.string(),
+              penaltyType: zod.string(),
+              createdAt: zod.string(),
+              updatedAt: zod.string(),
+            }),
+          )
+          .optional(),
+        telegramChatId: zod.number().nullish(),
+        telegramLinkCode: zod.string().nullish(),
+        telegramLinkedAt: zod.coerce.date().nullish(),
+        createdAt: zod.string(),
+        updatedAt: zod.string(),
+      }),
+      bookTitle: zod.string(),
+      bookCode: zod.string().nullish(),
+      borrowDate: zod.string(),
+      returnDate: zod.string().nullish(),
+      dueDate: zod.string().nullish(),
+      bookStatus: zod.string(),
+      createdAt: zod.string(),
+      updatedAt: zod.string(),
+    }),
+  ),
+  total: zod.number(),
+});
+
+/**
+ * @summary Create a library borrow log
+ */
+export const CreateLibraryLogBody = zod.object({
+  studentId: zod.number(),
+  bookTitle: zod.string(),
+  bookCode: zod.string().nullish(),
+  borrowDate: zod.string(),
+  returnDate: zod.string().nullish(),
+  dueDate: zod.string().nullish(),
+  bookStatus: zod.string(),
+});
+
+/**
+ * @summary Update library log
+ */
+export const UpdateLibraryLogParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const UpdateLibraryLogBody = zod.object({
+  studentId: zod.number(),
+  bookTitle: zod.string(),
+  bookCode: zod.string().nullish(),
+  borrowDate: zod.string(),
+  returnDate: zod.string().nullish(),
+  dueDate: zod.string().nullish(),
+  bookStatus: zod.string(),
+});
+
+export const UpdateLibraryLogResponse = zod.object({
+  id: zod.number(),
+  studentId: zod.number(),
+  student: zod.object({
+    id: zod.number(),
+    studentId: zod.string(),
+    nameEn: zod.string(),
+    nameKh: zod.string(),
+    grade: zod.string(),
+    classId: zod.number().nullish(),
+    gender: zod.string(),
+    enrollmentYear: zod.number(),
+    phone: zod.string().nullish(),
+    parentPhone: zod.string().nullish(),
+    address: zod.string().nullish(),
+    photoUrl: zod.string().nullish(),
+    biography: zod.string().nullish(),
+    familyStatus: zod.string().nullish(),
+    classroom: zod
+      .object({
+        id: zod.number(),
+        name: zod.string(),
+        grade: zod.string(),
+        roomNumber: zod.string().nullish(),
+        teacherId: zod.number().nullish(),
+        teacher: zod
+          .object({
+            id: zod.number(),
+            nameEn: zod.string(),
+            nameKh: zod.string(),
+            subjectEn: zod.string(),
+            subjectKh: zod.string(),
+            photoUrl: zod.string().nullish(),
+            bioEn: zod.string().nullish(),
+            bioKh: zod.string().nullish(),
+            phone: zod.string().nullish(),
+            email: zod.string().nullish(),
+            address: zod.string().nullish(),
+            gender: zod.string().nullish(),
+            dob: zod.string().nullish(),
+            pob: zod.string().nullish(),
+            officerId: zod.string().nullish(),
+            position: zod.string().nullish(),
+            educationLevel: zod.string().nullish(),
+            employmentDate: zod.string().nullish(),
+            framework: zod.string().nullish(),
+            additionalSubjects: zod.string().nullish(),
+            additionalTeachingHours: zod.number().nullish(),
+            designatedTeachingHours: zod.number().nullish(),
+            remarks: zod.string().nullish(),
+            familyStatus: zod.string().nullish(),
+            degreeInfo: zod.string().nullish(),
+            pedagogyInfo: zod.string().nullish(),
+            trainingInfo: zod.string().nullish(),
+            workExperience: zod.string().nullish(),
+            teachingSkills: zod.string().nullish(),
+            techSkills: zod.string().nullish(),
+            languages: zod.string().nullish(),
+            createdAt: zod.string(),
+            updatedAt: zod.string(),
+          })
+          .optional(),
+        studentsCount: zod
+          .number()
+          .describe("Number of students in the classroom"),
+        createdAt: zod.string(),
+        updatedAt: zod.string(),
+      })
+      .nullish(),
+    disciplineLogs: zod
+      .array(
+        zod.object({
+          id: zod.number(),
+          studentId: zod.number(),
+          faultDate: zod.string(),
+          faultDescription: zod.string(),
+          penaltyType: zod.string(),
+          createdAt: zod.string(),
+          updatedAt: zod.string(),
+        }),
+      )
+      .optional(),
+    telegramChatId: zod.number().nullish(),
+    telegramLinkCode: zod.string().nullish(),
+    telegramLinkedAt: zod.coerce.date().nullish(),
+    createdAt: zod.string(),
+    updatedAt: zod.string(),
+  }),
+  bookTitle: zod.string(),
+  bookCode: zod.string().nullish(),
+  borrowDate: zod.string(),
+  returnDate: zod.string().nullish(),
+  dueDate: zod.string().nullish(),
+  bookStatus: zod.string(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Delete library log
+ */
+export const DeleteLibraryLogParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const DeleteLibraryLogResponse = zod.object({
+  message: zod.string(),
+});
+
+/**
+ * @summary List student grades by classroom, year, and period
+ */
+export const ListGradesQueryParams = zod.object({
+  classroomId: zod.coerce.number().optional(),
+  academicYear: zod.coerce.string().optional(),
+  examPeriod: zod.coerce.string().optional(),
+});
+
+export const ListGradesResponse = zod.object({
+  data: zod.array(
+    zod.object({
+      id: zod.number(),
+      studentId: zod.number(),
+      classroomId: zod.number(),
+      academicYear: zod.string(),
+      examPeriod: zod.string(),
+      scores: zod.record(zod.string(), zod.number()),
+      totalScore: zod.number().nullish(),
+      average: zod.number().nullish(),
+      rank: zod.number().nullish(),
+      createdAt: zod.string(),
+      updatedAt: zod.string(),
+      student: zod
+        .object({
+          id: zod.number(),
+          studentId: zod.string(),
+          nameEn: zod.string(),
+          nameKh: zod.string(),
+          grade: zod.string(),
+          classId: zod.number().nullish(),
+          gender: zod.string(),
+          enrollmentYear: zod.number(),
+          phone: zod.string().nullish(),
+          parentPhone: zod.string().nullish(),
+          address: zod.string().nullish(),
+          photoUrl: zod.string().nullish(),
+          biography: zod.string().nullish(),
+          familyStatus: zod.string().nullish(),
+          classroom: zod
+            .object({
+              id: zod.number(),
+              name: zod.string(),
+              grade: zod.string(),
+              roomNumber: zod.string().nullish(),
+              teacherId: zod.number().nullish(),
+              teacher: zod
+                .object({
+                  id: zod.number(),
+                  nameEn: zod.string(),
+                  nameKh: zod.string(),
+                  subjectEn: zod.string(),
+                  subjectKh: zod.string(),
+                  photoUrl: zod.string().nullish(),
+                  bioEn: zod.string().nullish(),
+                  bioKh: zod.string().nullish(),
+                  phone: zod.string().nullish(),
+                  email: zod.string().nullish(),
+                  address: zod.string().nullish(),
+                  gender: zod.string().nullish(),
+                  dob: zod.string().nullish(),
+                  pob: zod.string().nullish(),
+                  officerId: zod.string().nullish(),
+                  position: zod.string().nullish(),
+                  educationLevel: zod.string().nullish(),
+                  employmentDate: zod.string().nullish(),
+                  framework: zod.string().nullish(),
+                  additionalSubjects: zod.string().nullish(),
+                  additionalTeachingHours: zod.number().nullish(),
+                  designatedTeachingHours: zod.number().nullish(),
+                  remarks: zod.string().nullish(),
+                  familyStatus: zod.string().nullish(),
+                  degreeInfo: zod.string().nullish(),
+                  pedagogyInfo: zod.string().nullish(),
+                  trainingInfo: zod.string().nullish(),
+                  workExperience: zod.string().nullish(),
+                  teachingSkills: zod.string().nullish(),
+                  techSkills: zod.string().nullish(),
+                  languages: zod.string().nullish(),
+                  createdAt: zod.string(),
+                  updatedAt: zod.string(),
+                })
+                .optional(),
+              studentsCount: zod
+                .number()
+                .describe("Number of students in the classroom"),
+              createdAt: zod.string(),
+              updatedAt: zod.string(),
+            })
+            .nullish(),
+          disciplineLogs: zod
+            .array(
+              zod.object({
+                id: zod.number(),
+                studentId: zod.number(),
+                faultDate: zod.string(),
+                faultDescription: zod.string(),
+                penaltyType: zod.string(),
+                createdAt: zod.string(),
+                updatedAt: zod.string(),
+              }),
+            )
+            .optional(),
+          telegramChatId: zod.number().nullish(),
+          telegramLinkCode: zod.string().nullish(),
+          telegramLinkedAt: zod.coerce.date().nullish(),
+          createdAt: zod.string(),
+          updatedAt: zod.string(),
+        })
+        .optional(),
+    }),
+  ),
+  total: zod.number(),
+});
+
+/**
+ * @summary Bulk create or update grades
+ */
+export const BulkUpdateGradesBody = zod.object({
+  classroomId: zod.number(),
+  academicYear: zod.string(),
+  examPeriod: zod.string(),
+  grades: zod.array(
+    zod.object({
+      studentId: zod.number(),
+      scores: zod.record(zod.string(), zod.number()),
+      totalScore: zod.number().nullish(),
+      average: zod.number().nullish(),
+      rank: zod.number().nullish(),
+    }),
+  ),
+});
+
+export const BulkUpdateGradesResponse = zod.object({
+  message: zod.string(),
+});
+
+/**
+ * @summary List all ID card templates
+ */
+export const GetApiIdCardTemplatesResponse = zod.object({
+  data: zod.array(
+    zod.object({
+      id: zod.number(),
+      name: zod.string(),
+      baseStyle: zod.string(),
+      config: zod.object({}).passthrough(),
+      createdAt: zod.string(),
+      updatedAt: zod.string(),
+    }),
+  ),
+  total: zod.number(),
+});
+
+/**
+ * @summary Create ID card template
+ */
+export const PostApiIdCardTemplatesBody = zod.object({
+  name: zod.string(),
+  baseStyle: zod.string().optional(),
+  config: zod.object({}).passthrough(),
+});
+
+/**
+ * @summary Update ID card template
+ */
+export const PutApiIdCardTemplatesIdParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const PutApiIdCardTemplatesIdBody = zod.object({
+  name: zod.string().optional(),
+  baseStyle: zod.string().optional(),
+  config: zod.object({}).passthrough().optional(),
+});
+
+export const PutApiIdCardTemplatesIdResponse = zod.object({
+  id: zod.number(),
+  name: zod.string(),
+  baseStyle: zod.string(),
+  config: zod.object({}).passthrough(),
+  createdAt: zod.string(),
+  updatedAt: zod.string(),
+});
+
+/**
+ * @summary Delete ID card template
+ */
+export const DeleteApiIdCardTemplatesIdParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const DeleteApiIdCardTemplatesIdResponse = zod.object({
+  message: zod.string(),
+});
+
+/**
+ * @summary Get all messages (paginated)
+ */
+export const getTelegramMessagesQueryLimitDefault = 50;
+export const getTelegramMessagesQueryOffsetDefault = 0;
+
+export const GetTelegramMessagesQueryParams = zod.object({
+  limit: zod.coerce.number().default(getTelegramMessagesQueryLimitDefault),
+  offset: zod.coerce.number().default(getTelegramMessagesQueryOffsetDefault),
+  search: zod.coerce.string().optional(),
+  status: zod.coerce.string().optional(),
+});
+
+export const GetTelegramMessagesResponse = zod.object({
+  data: zod.array(
+    zod.object({
+      id: zod.number(),
+      messageId: zod.number(),
+      chatId: zod.number(),
+      userId: zod.number().nullish(),
+      username: zod.string().nullish(),
+      firstName: zod.string().nullish(),
+      lastName: zod.string().nullish(),
+      messageText: zod.string().nullish(),
+      isFromBot: zod.boolean(),
+      isReplyToAdmin: zod.boolean(),
+      repliedBy: zod.number().nullish(),
+      repliedAt: zod.string().nullish(),
+      status: zod.string(),
+      createdAt: zod.string(),
+    }),
+  ),
+  total: zod.number(),
+});
+
+/**
+ * @summary Get unread count and list
+ */
+export const GetTelegramMessagesUnreadResponse = zod.object({
+  count: zod.number(),
+  data: zod.array(
+    zod.object({
+      id: zod.number(),
+      messageId: zod.number(),
+      chatId: zod.number(),
+      userId: zod.number().nullish(),
+      username: zod.string().nullish(),
+      firstName: zod.string().nullish(),
+      lastName: zod.string().nullish(),
+      messageText: zod.string().nullish(),
+      isFromBot: zod.boolean(),
+      isReplyToAdmin: zod.boolean(),
+      repliedBy: zod.number().nullish(),
+      repliedAt: zod.string().nullish(),
+      status: zod.string(),
+      createdAt: zod.string(),
+    }),
+  ),
+});
+
+/**
+ * @summary Get single message
+ */
+export const GetTelegramMessagesIdParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const GetTelegramMessagesIdResponse = zod.object({
+  id: zod.number(),
+  messageId: zod.number(),
+  chatId: zod.number(),
+  userId: zod.number().nullish(),
+  username: zod.string().nullish(),
+  firstName: zod.string().nullish(),
+  lastName: zod.string().nullish(),
+  messageText: zod.string().nullish(),
+  isFromBot: zod.boolean(),
+  isReplyToAdmin: zod.boolean(),
+  repliedBy: zod.number().nullish(),
+  repliedAt: zod.string().nullish(),
+  status: zod.string(),
+  createdAt: zod.string(),
+});
+
+/**
+ * @summary Update message status
+ */
+export const PutTelegramMessagesIdParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const PutTelegramMessagesIdBody = zod.object({
+  status: zod.string(),
+});
+
+export const PutTelegramMessagesIdResponse = zod.object({
+  id: zod.number(),
+  messageId: zod.number(),
+  chatId: zod.number(),
+  userId: zod.number().nullish(),
+  username: zod.string().nullish(),
+  firstName: zod.string().nullish(),
+  lastName: zod.string().nullish(),
+  messageText: zod.string().nullish(),
+  isFromBot: zod.boolean(),
+  isReplyToAdmin: zod.boolean(),
+  repliedBy: zod.number().nullish(),
+  repliedAt: zod.string().nullish(),
+  status: zod.string(),
+  createdAt: zod.string(),
+});
+
+/**
+ * @summary Delete message (admin only)
+ */
+export const DeleteTelegramMessagesIdParams = zod.object({
+  id: zod.coerce.number(),
+});
+
+export const DeleteTelegramMessagesIdResponse = zod.object({
+  message: zod.string(),
+});
+
+/**
+ * @summary Send reply to user
+ */
+export const PostTelegramReplyBody = zod.object({
+  chatId: zod.number(),
+  messageText: zod.string(),
+});
+
+export const PostTelegramReplyResponse = zod.object({
+  id: zod.number(),
+  messageId: zod.number(),
+  chatId: zod.number(),
+  userId: zod.number().nullish(),
+  username: zod.string().nullish(),
+  firstName: zod.string().nullish(),
+  lastName: zod.string().nullish(),
+  messageText: zod.string().nullish(),
+  isFromBot: zod.boolean(),
+  isReplyToAdmin: zod.boolean(),
+  repliedBy: zod.number().nullish(),
+  repliedAt: zod.string().nullish(),
+  status: zod.string(),
+  createdAt: zod.string(),
 });

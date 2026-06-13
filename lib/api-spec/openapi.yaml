@@ -26,6 +26,8 @@ tags:
     description: Dashboard statistics
   - name: settings
     description: Site settings management
+  - name: grades
+    description: Student grades management
 
 paths:
   /settings:
@@ -425,6 +427,78 @@ paths:
               schema:
                 $ref: "#/components/schemas/MessageResponse"
 
+  /classrooms:
+    get:
+      operationId: listClassrooms
+      tags: [classrooms]
+      summary: List all classrooms
+      responses:
+        "200":
+          description: Classrooms list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/ClassroomListResponse"
+    post:
+      operationId: createClassroom
+      tags: [classrooms]
+      summary: Create classroom
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateClassroomRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Classroom"
+
+  /classrooms/{id}:
+    put:
+      operationId: updateClassroom
+      tags: [classrooms]
+      summary: Update classroom
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateClassroomRequest"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/Classroom"
+    delete:
+      operationId: deleteClassroom
+      tags: [classrooms]
+      summary: Delete classroom
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
   /students:
     get:
       operationId: listStudents
@@ -445,6 +519,10 @@ paths:
           in: query
           schema:
             type: string
+        - name: classId
+          in: query
+          schema:
+            type: integer
       responses:
         "200":
           description: Students list
@@ -574,6 +652,406 @@ paths:
               schema:
                 $ref: "#/components/schemas/MessageResponse"
 
+  /discipline-logs:
+    post:
+      operationId: createDisciplineLog
+      tags: [students]
+      summary: Create discipline log
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDisciplineLogRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DisciplineLog"
+
+  /discipline-logs/{id}:
+    put:
+      operationId: updateDisciplineLog
+      tags: [students]
+      summary: Update discipline log
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateDisciplineLogRequest"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/DisciplineLog"
+    delete:
+      operationId: deleteDisciplineLog
+      tags: [students]
+      summary: Delete discipline log
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /library/logs:
+    get:
+      operationId: listLibraryLogs
+      tags: [library]
+      summary: List library borrow/return logs
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: status
+          in: query
+          schema:
+            type: string
+        - name: search
+          in: query
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Library logs list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LibraryLogListResponse"
+    post:
+      operationId: createLibraryLog
+      tags: [library]
+      summary: Create a library borrow log
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLibraryLogRequest"
+      responses:
+        "201":
+          description: Created
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LibraryLog"
+
+  /library/logs/{id}:
+    put:
+      operationId: updateLibraryLog
+      tags: [library]
+      summary: Update library log
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/CreateLibraryLogRequest"
+      responses:
+        "200":
+          description: Updated
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LibraryLog"
+    delete:
+      operationId: deleteLibraryLog
+      tags: [library]
+      summary: Delete library log
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        "200":
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+  /grades:
+    get:
+      operationId: listGrades
+      tags: [grades]
+      summary: List student grades by classroom, year, and period
+      parameters:
+        - name: classroomId
+          in: query
+          required: false
+          schema:
+            type: integer
+        - name: academicYear
+          in: query
+          required: false
+          schema:
+            type: string
+        - name: examPeriod
+          in: query
+          required: false
+          schema:
+            type: string
+      responses:
+        "200":
+          description: Grades list
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/StudentGradeListResponse"
+    post:
+      operationId: bulkUpdateGrades
+      tags: [grades]
+      summary: Bulk create or update grades
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/BulkUpdateGradesRequest"
+      responses:
+        "200":
+          description: Successfully updated grades
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/MessageResponse"
+
+
+  /api/id-card-templates:
+    get:
+      summary: List all ID card templates
+      tags: [IDCardTemplates]
+      security:
+        - bearerAuth: []
+      responses:
+        '200':
+          description: A list of ID card templates
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ListIdCardTemplatesResponse'
+    post:
+      summary: Create ID card template
+      tags: [IDCardTemplates]
+      security:
+        - bearerAuth: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CreateIdCardTemplateBody'
+      responses:
+        '201':
+          description: The created template
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdCardTemplate'
+
+  /api/id-card-templates/{id}:
+    put:
+      summary: Update ID card template
+      tags: [IDCardTemplates]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateIdCardTemplateBody'
+      responses:
+        '200':
+          description: The updated template
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/IdCardTemplate'
+    delete:
+      summary: Delete ID card template
+      tags: [IDCardTemplates]
+      security:
+        - bearerAuth: []
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Template deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DeleteIdCardTemplateResponse'
+
+  /telegram/messages:
+    get:
+      summary: Get all messages (paginated)
+      tags: [TelegramInbox]
+      parameters:
+        - name: limit
+          in: query
+          schema:
+            type: integer
+            default: 50
+        - name: offset
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: search
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+      responses:
+        '200':
+          description: A list of telegram messages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelegramMessageListResponse'
+
+  /telegram/messages/unread:
+    get:
+      summary: Get unread count and list
+      tags: [TelegramInbox]
+      responses:
+        '200':
+          description: Unread messages
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  count:
+                    type: integer
+                  data:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/TelegramMessage'
+                required: [count, data]
+
+  /telegram/messages/{id}:
+    get:
+      summary: Get single message
+      tags: [TelegramInbox]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: A single message
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelegramMessage'
+    put:
+      summary: Update message status
+      tags: [TelegramInbox]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/UpdateTelegramMessageStatusRequest'
+      responses:
+        '200':
+          description: Status updated
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelegramMessage'
+    delete:
+      summary: Delete message (admin only)
+      tags: [TelegramInbox]
+      parameters:
+        - name: id
+          in: path
+          required: true
+          schema:
+            type: integer
+      responses:
+        '200':
+          description: Deleted
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MessageResponse'
+
+  /telegram/reply:
+    post:
+      summary: Send reply to user
+      tags: [TelegramInbox]
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/TelegramReplyRequest'
+      responses:
+        '200':
+          description: Reply sent
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TelegramMessage'
+
 components:
   schemas:
     HealthStatus:
@@ -629,6 +1107,18 @@ components:
     DashboardStats:
       type: object
       properties:
+        totalStudents:
+          type: integer
+        totalTeachers:
+          type: integer
+        totalClasses:
+          type: integer
+        totalSubjects:
+          type: integer
+        newStudents:
+          type: integer
+        droppedStudents:
+          type: integer
         newsCount:
           type: integer
         activitiesCount:
@@ -639,7 +1129,7 @@ components:
           type: integer
         unreadContactsCount:
           type: integer
-      required: [newsCount, activitiesCount, teachersCount, studentsCount, unreadContactsCount]
+      required: [totalStudents, totalTeachers, totalClasses, totalSubjects, newStudents, droppedStudents, newsCount, activitiesCount, teachersCount, studentsCount, unreadContactsCount]
 
     NewsArticle:
       type: object
@@ -686,6 +1176,16 @@ components:
         category:
           type: string
         isPublished:
+          type: boolean
+        sendToMain:
+          type: boolean
+        sendToTeachers:
+          type: boolean
+        sendToStudents:
+          type: boolean
+        sendToParents:
+          type: boolean
+        pinToMain:
           type: boolean
       required: [titleEn, titleKh, contentEn, contentKh, category]
 
@@ -793,6 +1293,69 @@ components:
         email:
           type: string
           nullable: true
+        address:
+          type: string
+          nullable: true
+        gender:
+          type: string
+          nullable: true
+        dob:
+          type: string
+          nullable: true
+        pob:
+          type: string
+          nullable: true
+        officerId:
+          type: string
+          nullable: true
+        position:
+          type: string
+          nullable: true
+        educationLevel:
+          type: string
+          nullable: true
+        employmentDate:
+          type: string
+          nullable: true
+        framework:
+          type: string
+          nullable: true
+        additionalSubjects:
+          type: string
+          nullable: true
+        additionalTeachingHours:
+          type: integer
+          nullable: true
+        designatedTeachingHours:
+          type: integer
+          nullable: true
+        remarks:
+          type: string
+          nullable: true
+        familyStatus:
+          type: string
+          nullable: true
+        degreeInfo:
+          type: string
+          nullable: true
+        pedagogyInfo:
+          type: string
+          nullable: true
+        trainingInfo:
+          type: string
+          nullable: true
+        workExperience:
+          type: string
+          nullable: true
+        teachingSkills:
+          type: string
+          nullable: true
+        techSkills:
+          type: string
+          nullable: true
+        languages:
+          type: string
+          nullable: true
         createdAt:
           type: string
         updatedAt:
@@ -825,6 +1388,69 @@ components:
         email:
           type: string
           nullable: true
+        address:
+          type: string
+          nullable: true
+        gender:
+          type: string
+          nullable: true
+        dob:
+          type: string
+          nullable: true
+        pob:
+          type: string
+          nullable: true
+        officerId:
+          type: string
+          nullable: true
+        position:
+          type: string
+          nullable: true
+        educationLevel:
+          type: string
+          nullable: true
+        employmentDate:
+          type: string
+          nullable: true
+        framework:
+          type: string
+          nullable: true
+        additionalSubjects:
+          type: string
+          nullable: true
+        additionalTeachingHours:
+          type: integer
+          nullable: true
+        designatedTeachingHours:
+          type: integer
+          nullable: true
+        remarks:
+          type: string
+          nullable: true
+        familyStatus:
+          type: string
+          nullable: true
+        degreeInfo:
+          type: string
+          nullable: true
+        pedagogyInfo:
+          type: string
+          nullable: true
+        trainingInfo:
+          type: string
+          nullable: true
+        workExperience:
+          type: string
+          nullable: true
+        teachingSkills:
+          type: string
+          nullable: true
+        techSkills:
+          type: string
+          nullable: true
+        languages:
+          type: string
+          nullable: true
       required: [nameEn, nameKh, subjectEn, subjectKh]
 
     TeacherListResponse:
@@ -834,6 +1460,58 @@ components:
           type: array
           items:
             $ref: "#/components/schemas/Teacher"
+        total:
+          type: integer
+      required: [data, total]
+
+    Classroom:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        grade:
+          type: string
+        roomNumber:
+          type: string
+          nullable: true
+        teacherId:
+          type: integer
+          nullable: true
+        teacher:
+          $ref: "#/components/schemas/Teacher"
+        studentsCount:
+          type: integer
+          description: Number of students in the classroom
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required: [id, name, grade, createdAt, updatedAt, studentsCount]
+
+    CreateClassroomRequest:
+      type: object
+      properties:
+        name:
+          type: string
+        grade:
+          type: string
+        roomNumber:
+          type: string
+          nullable: true
+        teacherId:
+          type: integer
+          nullable: true
+      required: [name, grade]
+
+    ClassroomListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/Classroom"
         total:
           type: integer
       required: [data, total]
@@ -851,6 +1529,9 @@ components:
           type: string
         grade:
           type: string
+        classId:
+          type: integer
+          nullable: true
         gender:
           type: string
         enrollmentYear:
@@ -863,6 +1544,32 @@ components:
           nullable: true
         address:
           type: string
+          nullable: true
+        photoUrl:
+          type: string
+          nullable: true
+        biography:
+          type: string
+          nullable: true
+        familyStatus:
+          type: string
+          nullable: true
+        classroom:
+          $ref: "#/components/schemas/Classroom"
+          nullable: true
+        disciplineLogs:
+          type: array
+          items:
+            $ref: "#/components/schemas/DisciplineLog"
+        telegramChatId:
+          type: integer
+          nullable: true
+        telegramLinkCode:
+          type: string
+          nullable: true
+        telegramLinkedAt:
+          type: string
+          format: date-time
           nullable: true
         createdAt:
           type: string
@@ -881,6 +1588,9 @@ components:
           type: string
         grade:
           type: string
+        classId:
+          type: integer
+          nullable: true
         gender:
           type: string
         enrollmentYear:
@@ -892,6 +1602,15 @@ components:
           type: string
           nullable: true
         address:
+          type: string
+          nullable: true
+        photoUrl:
+          type: string
+          nullable: true
+        biography:
+          type: string
+          nullable: true
+        familyStatus:
           type: string
           nullable: true
       required: [studentId, nameEn, nameKh, grade, gender, enrollmentYear]
@@ -906,6 +1625,38 @@ components:
         total:
           type: integer
       required: [data, total]
+
+    DisciplineLog:
+      type: object
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: integer
+        faultDate:
+          type: string
+        faultDescription:
+          type: string
+        penaltyType:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required: [id, studentId, faultDate, faultDescription, penaltyType, createdAt, updatedAt]
+
+    CreateDisciplineLogRequest:
+      type: object
+      properties:
+        studentId:
+          type: integer
+        faultDate:
+          type: string
+        faultDescription:
+          type: string
+        penaltyType:
+          type: string
+      required: [studentId, faultDate, faultDescription, penaltyType]
 
     ContactMessage:
       type: object
@@ -953,3 +1704,270 @@ components:
         value:
           type: string
       required: [key, value]
+
+    StudentGrade:
+      type: object
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: integer
+        classroomId:
+          type: integer
+        academicYear:
+          type: string
+        examPeriod:
+          type: string
+        scores:
+          type: object
+          additionalProperties:
+            type: number
+        totalScore:
+          type: number
+          nullable: true
+        average:
+          type: number
+          nullable: true
+        rank:
+          type: integer
+          nullable: true
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+        student:
+          $ref: "#/components/schemas/Student"
+      required: [id, studentId, classroomId, academicYear, examPeriod, scores, createdAt, updatedAt]
+
+    StudentGradeInput:
+      type: object
+      properties:
+        studentId:
+          type: integer
+        scores:
+          type: object
+          additionalProperties:
+            type: number
+        totalScore:
+          type: number
+          nullable: true
+        average:
+          type: number
+          nullable: true
+        rank:
+          type: integer
+          nullable: true
+      required: [studentId, scores]
+
+    BulkUpdateGradesRequest:
+      type: object
+      properties:
+        classroomId:
+          type: integer
+        academicYear:
+          type: string
+        examPeriod:
+          type: string
+        grades:
+          type: array
+          items:
+            $ref: "#/components/schemas/StudentGradeInput"
+      required: [classroomId, academicYear, examPeriod, grades]
+
+    StudentGradeListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/StudentGrade"
+        total:
+          type: integer
+      required: [data, total]
+
+    IdCardTemplate:
+      type: object
+      properties:
+        id:
+          type: integer
+        name:
+          type: string
+        baseStyle:
+          type: string
+        config:
+          type: object
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required: [id, name, baseStyle, config, createdAt, updatedAt]
+
+    ListIdCardTemplatesResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/IdCardTemplate'
+        total:
+          type: integer
+      required: [data, total]
+
+    CreateIdCardTemplateBody:
+      type: object
+      properties:
+        name:
+          type: string
+        baseStyle:
+          type: string
+        config:
+          type: object
+      required: [name, config]
+
+    UpdateIdCardTemplateBody:
+      type: object
+      properties:
+        name:
+          type: string
+        baseStyle:
+          type: string
+        config:
+          type: object
+
+    DeleteIdCardTemplateResponse:
+      type: object
+      properties:
+        message:
+          type: string
+      required: [message]
+
+    LibraryLog:
+      type: object
+      properties:
+        id:
+          type: integer
+        studentId:
+          type: integer
+        student:
+          $ref: "#/components/schemas/Student"
+        bookTitle:
+          type: string
+        bookCode:
+          type: string
+          nullable: true
+        borrowDate:
+          type: string
+        returnDate:
+          type: string
+          nullable: true
+        dueDate:
+          type: string
+          nullable: true
+        bookStatus:
+          type: string
+        createdAt:
+          type: string
+        updatedAt:
+          type: string
+      required: [id, studentId, student, bookTitle, bookStatus, borrowDate, createdAt, updatedAt]
+
+    CreateLibraryLogRequest:
+      type: object
+      properties:
+        studentId:
+          type: integer
+        bookTitle:
+          type: string
+        bookCode:
+          type: string
+          nullable: true
+        borrowDate:
+          type: string
+        returnDate:
+          type: string
+          nullable: true
+        dueDate:
+          type: string
+          nullable: true
+        bookStatus:
+          type: string
+      required: [studentId, bookTitle, bookStatus, borrowDate]
+
+    LibraryLogListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: "#/components/schemas/LibraryLog"
+        total:
+          type: integer
+      required: [data, total]
+
+
+    TelegramMessage:
+      type: object
+      properties:
+        id:
+          type: integer
+        messageId:
+          type: integer
+        chatId:
+          type: integer
+        userId:
+          type: integer
+          nullable: true
+        username:
+          type: string
+          nullable: true
+        firstName:
+          type: string
+          nullable: true
+        lastName:
+          type: string
+          nullable: true
+        messageText:
+          type: string
+          nullable: true
+        isFromBot:
+          type: boolean
+        isReplyToAdmin:
+          type: boolean
+        repliedBy:
+          type: integer
+          nullable: true
+        repliedAt:
+          type: string
+          nullable: true
+        status:
+          type: string
+        createdAt:
+          type: string
+      required: [id, messageId, chatId, isFromBot, isReplyToAdmin, status, createdAt]
+
+    TelegramMessageListResponse:
+      type: object
+      properties:
+        data:
+          type: array
+          items:
+            $ref: '#/components/schemas/TelegramMessage'
+        total:
+          type: integer
+      required: [data, total]
+
+    UpdateTelegramMessageStatusRequest:
+      type: object
+      properties:
+        status:
+          type: string
+      required: [status]
+
+    TelegramReplyRequest:
+      type: object
+      properties:
+        chatId:
+          type: integer
+        messageText:
+          type: string
+      required: [chatId, messageText]

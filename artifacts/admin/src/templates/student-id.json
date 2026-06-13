@@ -1,0 +1,311 @@
+{
+  "id": "phlov-meas-student-id-v1",
+  "name": "Phlov Meas — Student ID Card",
+  "version": "1.0",
+  "meta": {
+    "createdAt": "2025-08-01T00:00:00.000Z",
+    "updatedAt": "2025-08-01T00:00:00.000Z",
+    "author": "Phlov Meas School Admin"
+  },
+  "front": {
+    "background": "#0D1B3D",
+    "elements": [
+      {
+        "id": "bg_white_body",
+        "type": "image",
+        "x": 0, "y": 33, "width": 54, "height": 53,
+        "visible": true, "locked": true, "zIndex": 0,
+        "src": "", "dataKey": null,
+        "objectFit": "cover",
+        "borderRadius": 0, "borderColor": "transparent", "borderWidth": 0, "shadow": false
+      },
+      {
+        "id": "logo",
+        "type": "image",
+        "x": 2, "y": 2.5, "width": 11, "height": 11,
+        "visible": true, "locked": false, "zIndex": 2,
+        "src": "", "dataKey": "template.logo",
+        "objectFit": "contain",
+        "borderRadius": 5, "borderColor": "#F4C430", "borderWidth": 1, "shadow": true
+      },
+      {
+        "id": "dept_text",
+        "type": "text",
+        "x": 14, "y": 2.5, "width": 38, "height": 5,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "{{template.department}}",
+        "dataKey": "template.department",
+        "fontFamily": "khmer",
+        "fontSize": 5.2, "fontWeight": 400, "color": "#ffffff",
+        "textAlign": "center", "lineHeight": 1.55, "letterSpacing": 0.01, "italic": false
+      },
+      {
+        "id": "school_name_kh",
+        "type": "text",
+        "x": 14, "y": 7, "width": 38, "height": 7,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "{{template.schoolNameKh}}",
+        "dataKey": "template.schoolNameKh",
+        "fontFamily": "moul",
+        "fontSize": 8.5, "fontWeight": 700, "color": "#ffffff",
+        "textAlign": "center", "lineHeight": 1.3, "letterSpacing": 0.005, "italic": false
+      },
+      {
+        "id": "school_name_en",
+        "type": "text",
+        "x": 14, "y": 14, "width": 38, "height": 4,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "{{template.schoolNameEn}}",
+        "dataKey": "template.schoolNameEn",
+        "fontFamily": "sans",
+        "fontSize": 4.5, "fontWeight": 700, "color": "#ffffff",
+        "textAlign": "center", "lineHeight": 1.3, "letterSpacing": 0.04, "italic": false
+      },
+      {
+        "id": "slogan",
+        "type": "text",
+        "x": 14, "y": 18, "width": 38, "height": 4,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "\"{{template.slogan}}\"",
+        "dataKey": "template.slogan",
+        "fontFamily": "khmer",
+        "fontSize": 3.8, "fontWeight": 400, "color": "#F4C430",
+        "textAlign": "center", "lineHeight": 1.5, "letterSpacing": 0, "italic": true
+      },
+      {
+        "id": "ribbon_bg",
+        "type": "divider",
+        "x": 5, "y": 24, "width": 44, "height": 7,
+        "visible": true, "locked": true, "zIndex": 1,
+        "orientation": "horizontal", "color": "#F4C430", "thickness": 7, "style": "solid"
+      },
+      {
+        "id": "ribbon_title_kh",
+        "type": "text",
+        "x": 7, "y": 24.5, "width": 40, "height": 5,
+        "visible": true, "locked": false, "zIndex": 3,
+        "content": "ប័ណ្ណសម្គាល់សិស្ស",
+        "dataKey": null,
+        "fontFamily": "moul",
+        "fontSize": 9, "fontWeight": 700, "color": "#0D1B3D",
+        "textAlign": "center", "lineHeight": 1.2, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "ribbon_title_en",
+        "type": "text",
+        "x": 7, "y": 29, "width": 40, "height": 3,
+        "visible": true, "locked": false, "zIndex": 3,
+        "content": "STUDENT ID CARD",
+        "dataKey": null,
+        "fontFamily": "sans",
+        "fontSize": 3.8, "fontWeight": 700, "color": "#0D1B3D",
+        "textAlign": "center", "lineHeight": 1, "letterSpacing": 0.12, "italic": false
+      },
+      {
+        "id": "student_photo",
+        "type": "image",
+        "x": 17, "y": 34, "width": 20, "height": 25,
+        "visible": true, "locked": false, "zIndex": 2,
+        "src": "", "dataKey": "student.photo",
+        "objectFit": "cover",
+        "borderRadius": 6, "borderColor": "#F4C430", "borderWidth": 1.5, "shadow": true
+      },
+      {
+        "id": "label_id",
+        "type": "text",
+        "x": 1, "y": 61, "width": 13, "height": 7,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "លេខសម្គាល់\nID Card No.",
+        "dataKey": null,
+        "fontFamily": "khmer",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#0D1B3D",
+        "textAlign": "right", "lineHeight": 1.55, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "value_id",
+        "type": "text",
+        "x": 15, "y": 61, "width": 25, "height": 5,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "{{student.id}}",
+        "dataKey": "student.id",
+        "fontFamily": "sans",
+        "fontSize": 6, "fontWeight": 700, "color": "#E53935",
+        "textAlign": "left", "lineHeight": 1.55, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "label_name",
+        "type": "text",
+        "x": 1, "y": 68, "width": 13, "height": 7,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "ឈ្មោះសិស្ស\nStudent Name",
+        "dataKey": null,
+        "fontFamily": "khmer",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#0D1B3D",
+        "textAlign": "right", "lineHeight": 1.55, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "value_name_kh",
+        "type": "text",
+        "x": 15, "y": 68, "width": 25, "height": 5,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "{{student.nameKh}}",
+        "dataKey": "student.nameKh",
+        "fontFamily": "moul",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#0D1B3D",
+        "textAlign": "left", "lineHeight": 1.5, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "label_grade",
+        "type": "text",
+        "x": 1, "y": 75, "width": 13, "height": 6,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "ថ្នាក់\nGrade",
+        "dataKey": null,
+        "fontFamily": "khmer",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#0D1B3D",
+        "textAlign": "right", "lineHeight": 1.55, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "value_grade",
+        "type": "text",
+        "x": 15, "y": 75, "width": 25, "height": 5,
+        "visible": true, "locked": false, "zIndex": 2,
+        "content": "{{student.grade}}",
+        "dataKey": "student.grade",
+        "fontFamily": "sans",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#0D1B3D",
+        "textAlign": "left", "lineHeight": 1.55, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "qr_code",
+        "type": "qrcode",
+        "x": 40, "y": 60, "width": 13, "height": 13,
+        "visible": true, "locked": false, "zIndex": 2,
+        "dataKey": "student.id",
+        "fgColor": "#0D1B3D", "bgColor": "#ffffff"
+      }
+    ]
+  },
+  "back": {
+    "background": "#ffffff",
+    "elements": [
+      {
+        "id": "label_birthplace",
+        "type": "text",
+        "x": 4, "y": 5, "width": 21, "height": 7,
+        "visible": true, "locked": false, "zIndex": 1,
+        "content": "ទីកន្លែងកំណើត\nPlace of Birth",
+        "dataKey": null,
+        "fontFamily": "khmer",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#0D1B3D",
+        "textAlign": "right", "lineHeight": 1.6, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "value_birthplace",
+        "type": "text",
+        "x": 26, "y": 5, "width": 27, "height": 7,
+        "visible": true, "locked": false, "zIndex": 1,
+        "content": "{{student.birthPlace}}",
+        "dataKey": "student.birthPlace",
+        "fontFamily": "khmer",
+        "fontSize": 5.5, "fontWeight": 600, "color": "#0D1B3D",
+        "textAlign": "left", "lineHeight": 1.6, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "label_guardian",
+        "type": "text",
+        "x": 4, "y": 13, "width": 21, "height": 7,
+        "visible": true, "locked": false, "zIndex": 1,
+        "content": "ព័ត៌មានអាណាព្យាបាល\nGuardian Info",
+        "dataKey": null,
+        "fontFamily": "khmer",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#0D1B3D",
+        "textAlign": "right", "lineHeight": 1.6, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "value_parent_name",
+        "type": "text",
+        "x": 26, "y": 13, "width": 27, "height": 5,
+        "visible": true, "locked": false, "zIndex": 1,
+        "content": "{{student.fatherName}}",
+        "dataKey": "student.fatherName",
+        "fontFamily": "khmer",
+        "fontSize": 5.5, "fontWeight": 600, "color": "#0D1B3D",
+        "textAlign": "left", "lineHeight": 1.5, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "value_parent_phone",
+        "type": "text",
+        "x": 26, "y": 18, "width": 27, "height": 4,
+        "visible": true, "locked": false, "zIndex": 1,
+        "content": "{{student.parentPhone}}",
+        "dataKey": "student.parentPhone",
+        "fontFamily": "sans",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#0D1B3D",
+        "textAlign": "left", "lineHeight": 1.5, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "divider_main",
+        "type": "divider",
+        "x": 2, "y": 24, "width": 50, "height": 0.5,
+        "visible": true, "locked": false, "zIndex": 1,
+        "orientation": "horizontal", "color": "#e5e7eb", "thickness": 0.5, "style": "solid"
+      },
+      {
+        "id": "terms_title",
+        "type": "text",
+        "x": 2, "y": 26, "width": 50, "height": 5,
+        "visible": true, "locked": false, "zIndex": 1,
+        "content": "លក្ខខណ្ឌប្រើប្រាស់ · Terms & Conditions",
+        "dataKey": null,
+        "fontFamily": "khmer",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#0D1B3D",
+        "textAlign": "left", "lineHeight": 1.4, "letterSpacing": 0.01, "italic": false
+      },
+      {
+        "id": "terms_kh",
+        "type": "text",
+        "x": 4, "y": 32, "width": 48, "height": 18,
+        "visible": true, "locked": false, "zIndex": 1,
+        "content": "• ប័ណ្ណនេះជាកម្មសិទ្ធិរបស់សាលា\n• មិនអាចផ្ទេរទៅអ្នកដទៃបាន\n• បើបាត់សូមប្រគល់ជូនសាលាវិញ",
+        "dataKey": null,
+        "fontFamily": "khmer",
+        "fontSize": 5, "fontWeight": 500, "color": "#0D1B3D",
+        "textAlign": "left", "lineHeight": 1.7, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "emergency_label",
+        "type": "text",
+        "x": 4, "y": 56, "width": 21, "height": 6,
+        "visible": true, "locked": false, "zIndex": 1,
+        "content": "ទូរស័ព្ទបន្ទាន់\nEmergency",
+        "dataKey": null,
+        "fontFamily": "khmer",
+        "fontSize": 5.5, "fontWeight": 700, "color": "#E53935",
+        "textAlign": "right", "lineHeight": 1.5, "letterSpacing": 0, "italic": false
+      },
+      {
+        "id": "emergency_number",
+        "type": "text",
+        "x": 26, "y": 57, "width": 27, "height": 5,
+        "visible": true, "locked": false, "zIndex": 1,
+        "content": "023 987 654",
+        "dataKey": null,
+        "fontFamily": "sans",
+        "fontSize": 7, "fontWeight": 700, "color": "#E53935",
+        "textAlign": "left", "lineHeight": 1.3, "letterSpacing": 0.02, "italic": false
+      },
+      {
+        "id": "bottom_bar",
+        "type": "text",
+        "x": 0, "y": 78, "width": 54, "height": 8,
+        "visible": true, "locked": true, "zIndex": 5,
+        "content": "www.phlovmeas.edu.kh",
+        "dataKey": null,
+        "fontFamily": "sans",
+        "fontSize": 4.5, "fontWeight": 500, "color": "#ffffff",
+        "textAlign": "center", "lineHeight": 1, "letterSpacing": 0.03, "italic": false
+      }
+    ]
+  }
+}

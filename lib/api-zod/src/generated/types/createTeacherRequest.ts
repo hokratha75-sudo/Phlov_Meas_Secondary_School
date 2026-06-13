@@ -16,4 +16,25 @@ export interface CreateTeacherRequest {
   bioKh?: string | null;
   phone?: string | null;
   email?: string | null;
+  address?: string | null;
+  gender?: string | null;
+  dob?: string | null;
+  pob?: string | null;
+  officerId?: string | null;
+  position?: string | null;
+  educationLevel?: string | null;
+  employmentDate?: string | null;
+  framework?: string | null;
+  additionalSubjects?: string | null;
+  additionalTeachingHours?: number | null;
+  designatedTeachingHours?: number | null;
+  remarks?: string | null;
+  familyStatus?: string | null;
+  degreeInfo?: string | null;
+  pedagogyInfo?: string | null;
+  trainingInfo?: string | null;
+  workExperience?: string | null;
+  teachingSkills?: string | null;
+  techSkills?: string | null;
+  languages?: string | null;
 }

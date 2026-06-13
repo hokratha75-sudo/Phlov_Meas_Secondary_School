@@ -36,9 +36,16 @@ export default function Contact() {
     setSubmitting(true);
     setError(null);
     try {
+      const csrfRes = await fetch("/api/csrf-token");
+      if (!csrfRes.ok) throw new Error("Failed to fetch CSRF token");
+      const { csrfToken } = await csrfRes.json();
+
       const res = await fetch("/api/contacts", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { 
+          "Content-Type": "application/json",
+          "x-csrf-token": csrfToken
+        },
         body: JSON.stringify({
           fullName: form.fullName.trim(),
           phone: form.phone.trim() || undefined,
@@ -96,7 +103,7 @@ export default function Contact() {
                 <div>
                   <h4 className="font-bold text-gray-900 text-lg mb-1">{t("Our Location", "ទីតាំងរបស់យើង")}</h4>
                   <p className="text-gray-600">
-                    {t("Treng District, Stung Treng Province, Cambodia", "ស្រុកត្រែង ខេត្តស្ទឹងត្រែង ប្រទេសកម្ពុជា")}
+                    {t("Phlov Meas Commune, Rotanak Mondol District, Battambang Province, Cambodia", "ឃុំផ្លូវមាស ស្រុករតនមណ្ឌល ខេត្តបាត់ដំបង ប្រទេសកម្ពុជា")}
                   </p>
                 </div>
               </div>
@@ -267,13 +274,13 @@ export default function Contact() {
           <div className="flex items-center gap-3 mb-4">
             <MapPin className="text-secondary shrink-0" size={20} />
             <p className="font-semibold text-gray-700">
-              {t("Treng District, Stung Treng Province, Cambodia", "ស្រុកត្រែង ខេត្តស្ទឹងត្រែង ប្រទេសកម្ពុជា")}
+              {t("Phlov Meas Commune, Rotanak Mondol District, Battambang Province, Cambodia", "ឃុំផ្លូវមាស ស្រុករតនមណ្ឌល ខេត្តបាត់ដំបង ប្រទេសកម្ពុជា")}
             </p>
           </div>
           <div className="w-full h-[450px] border shadow-sm overflow-hidden">
             <iframe
-              title="Treng Secondary School Location"
-              src="https://maps.google.com/maps?q=Stung+Treng+Cambodia&output=embed&z=13"
+              title="Phlov Meas Secondary School Location"
+              src="https://maps.google.com/maps?q=អនុវិទ្យាល័យ+ផ្លូវមាស+បាត់ដំបង&output=embed&z=15"
               width="100%"
               height="100%"
               style={{ border: 0 }}
@@ -284,7 +291,7 @@ export default function Contact() {
           </div>
           <div className="mt-3 flex justify-end">
             <a
-              href="https://maps.google.com/maps?q=Stung+Treng+Cambodia"
+              href="https://maps.google.com/maps?q=អនុវិទ្យាល័យ+ផ្លូវមាស+បាត់ដំបង"
               target="_blank"
               rel="noopener noreferrer"
               className="text-sm text-secondary font-semibold hover:underline flex items-center gap-1"

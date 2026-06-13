@@ -34,6 +34,12 @@ export interface LoginResponse {
 }
 
 export interface DashboardStats {
+  totalStudents: number;
+  totalTeachers: number;
+  totalClasses: number;
+  totalSubjects: number;
+  newStudents: number;
+  droppedStudents: number;
   newsCount: number;
   activitiesCount: number;
   teachersCount: number;
@@ -63,6 +69,11 @@ export interface CreateNewsRequest {
   imageUrl?: string | null;
   category: string;
   isPublished?: boolean;
+  sendToMain?: boolean;
+  sendToTeachers?: boolean;
+  sendToStudents?: boolean;
+  sendToParents?: boolean;
+  pinToMain?: boolean;
 }
 
 export interface NewsListResponse {
@@ -113,6 +124,27 @@ export interface Teacher {
   bioKh?: string | null;
   phone?: string | null;
   email?: string | null;
+  address?: string | null;
+  gender?: string | null;
+  dob?: string | null;
+  pob?: string | null;
+  officerId?: string | null;
+  position?: string | null;
+  educationLevel?: string | null;
+  employmentDate?: string | null;
+  framework?: string | null;
+  additionalSubjects?: string | null;
+  additionalTeachingHours?: number | null;
+  designatedTeachingHours?: number | null;
+  remarks?: string | null;
+  familyStatus?: string | null;
+  degreeInfo?: string | null;
+  pedagogyInfo?: string | null;
+  trainingInfo?: string | null;
+  workExperience?: string | null;
+  teachingSkills?: string | null;
+  techSkills?: string | null;
+  languages?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -127,11 +159,67 @@ export interface CreateTeacherRequest {
   bioKh?: string | null;
   phone?: string | null;
   email?: string | null;
+  address?: string | null;
+  gender?: string | null;
+  dob?: string | null;
+  pob?: string | null;
+  officerId?: string | null;
+  position?: string | null;
+  educationLevel?: string | null;
+  employmentDate?: string | null;
+  framework?: string | null;
+  additionalSubjects?: string | null;
+  additionalTeachingHours?: number | null;
+  designatedTeachingHours?: number | null;
+  remarks?: string | null;
+  familyStatus?: string | null;
+  degreeInfo?: string | null;
+  pedagogyInfo?: string | null;
+  trainingInfo?: string | null;
+  workExperience?: string | null;
+  teachingSkills?: string | null;
+  techSkills?: string | null;
+  languages?: string | null;
 }
 
 export interface TeacherListResponse {
   data: Teacher[];
   total: number;
+}
+
+export interface Classroom {
+  id: number;
+  name: string;
+  grade: string;
+  roomNumber?: string | null;
+  teacherId?: number | null;
+  teacher?: Teacher;
+  /** Number of students in the classroom */
+  studentsCount: number;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateClassroomRequest {
+  name: string;
+  grade: string;
+  roomNumber?: string | null;
+  teacherId?: number | null;
+}
+
+export interface ClassroomListResponse {
+  data: Classroom[];
+  total: number;
+}
+
+export interface DisciplineLog {
+  id: number;
+  studentId: number;
+  faultDate: string;
+  faultDescription: string;
+  penaltyType: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
 export interface Student {
@@ -140,11 +228,20 @@ export interface Student {
   nameEn: string;
   nameKh: string;
   grade: string;
+  classId?: number | null;
   gender: string;
   enrollmentYear: number;
   phone?: string | null;
   parentPhone?: string | null;
   address?: string | null;
+  photoUrl?: string | null;
+  biography?: string | null;
+  familyStatus?: string | null;
+  classroom?: Classroom | null;
+  disciplineLogs?: DisciplineLog[];
+  telegramChatId?: number | null;
+  telegramLinkCode?: string | null;
+  telegramLinkedAt?: string | null;
   createdAt: string;
   updatedAt: string;
 }
@@ -154,16 +251,27 @@ export interface CreateStudentRequest {
   nameEn: string;
   nameKh: string;
   grade: string;
+  classId?: number | null;
   gender: string;
   enrollmentYear: number;
   phone?: string | null;
   parentPhone?: string | null;
   address?: string | null;
+  photoUrl?: string | null;
+  biography?: string | null;
+  familyStatus?: string | null;
 }
 
 export interface StudentListResponse {
   data: Student[];
   total: number;
+}
+
+export interface CreateDisciplineLogRequest {
+  studentId: number;
+  faultDate: string;
+  faultDescription: string;
+  penaltyType: string;
 }
 
 export interface ContactMessage {
@@ -193,6 +301,141 @@ export interface UpdateSettingRequest {
   value: string;
 }
 
+export type StudentGradeScores = { [key: string]: number };
+
+export interface StudentGrade {
+  id: number;
+  studentId: number;
+  classroomId: number;
+  academicYear: string;
+  examPeriod: string;
+  scores: StudentGradeScores;
+  totalScore?: number | null;
+  average?: number | null;
+  rank?: number | null;
+  createdAt: string;
+  updatedAt: string;
+  student?: Student;
+}
+
+export type StudentGradeInputScores = { [key: string]: number };
+
+export interface StudentGradeInput {
+  studentId: number;
+  scores: StudentGradeInputScores;
+  totalScore?: number | null;
+  average?: number | null;
+  rank?: number | null;
+}
+
+export interface BulkUpdateGradesRequest {
+  classroomId: number;
+  academicYear: string;
+  examPeriod: string;
+  grades: StudentGradeInput[];
+}
+
+export interface StudentGradeListResponse {
+  data: StudentGrade[];
+  total: number;
+}
+
+export type IdCardTemplateConfig = { [key: string]: unknown };
+
+export interface IdCardTemplate {
+  id: number;
+  name: string;
+  baseStyle: string;
+  config: IdCardTemplateConfig;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface ListIdCardTemplatesResponse {
+  data: IdCardTemplate[];
+  total: number;
+}
+
+export type CreateIdCardTemplateBodyConfig = { [key: string]: unknown };
+
+export interface CreateIdCardTemplateBody {
+  name: string;
+  baseStyle?: string;
+  config: CreateIdCardTemplateBodyConfig;
+}
+
+export type UpdateIdCardTemplateBodyConfig = { [key: string]: unknown };
+
+export interface UpdateIdCardTemplateBody {
+  name?: string;
+  baseStyle?: string;
+  config?: UpdateIdCardTemplateBodyConfig;
+}
+
+export interface DeleteIdCardTemplateResponse {
+  message: string;
+}
+
+export interface LibraryLog {
+  id: number;
+  studentId: number;
+  student: Student;
+  bookTitle: string;
+  bookCode?: string | null;
+  borrowDate: string;
+  returnDate?: string | null;
+  dueDate?: string | null;
+  bookStatus: string;
+  createdAt: string;
+  updatedAt: string;
+}
+
+export interface CreateLibraryLogRequest {
+  studentId: number;
+  bookTitle: string;
+  bookCode?: string | null;
+  borrowDate: string;
+  returnDate?: string | null;
+  dueDate?: string | null;
+  bookStatus: string;
+}
+
+export interface LibraryLogListResponse {
+  data: LibraryLog[];
+  total: number;
+}
+
+export interface TelegramMessage {
+  id: number;
+  messageId: number;
+  chatId: number;
+  userId?: number | null;
+  username?: string | null;
+  firstName?: string | null;
+  lastName?: string | null;
+  messageText?: string | null;
+  isFromBot: boolean;
+  isReplyToAdmin: boolean;
+  repliedBy?: number | null;
+  repliedAt?: string | null;
+  status: string;
+  createdAt: string;
+}
+
+export interface TelegramMessageListResponse {
+  data: TelegramMessage[];
+  total: number;
+}
+
+export interface UpdateTelegramMessageStatusRequest {
+  status: string;
+}
+
+export interface TelegramReplyRequest {
+  chatId: number;
+  messageText: string;
+}
+
 export type ListNewsParams = {
   limit?: number;
   offset?: number;
@@ -207,9 +450,35 @@ export type ListStudentsParams = {
   limit?: number;
   offset?: number;
   grade?: string;
+  classId?: number;
 };
 
 export type ListContactsParams = {
   limit?: number;
   offset?: number;
+};
+
+export type ListLibraryLogsParams = {
+  limit?: number;
+  offset?: number;
+  status?: string;
+  search?: string;
+};
+
+export type ListGradesParams = {
+  classroomId?: number;
+  academicYear?: string;
+  examPeriod?: string;
+};
+
+export type GetTelegramMessagesParams = {
+  limit?: number;
+  offset?: number;
+  search?: string;
+  status?: string;
+};
+
+export type GetTelegramMessagesUnread200 = {
+  count: number;
+  data: TelegramMessage[];
 };

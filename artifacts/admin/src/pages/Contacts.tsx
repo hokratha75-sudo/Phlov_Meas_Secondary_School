@@ -45,21 +45,21 @@ export default function ContactsPage() {
       <div className="flex items-center justify-between mb-6">
         <div className="flex items-center gap-3">
           <div>
-            <h2 className="text-xl font-bold text-gray-800">Contact Messages</h2>
+            <h2 className="text-xl text-primary">Contact Messages</h2>
             <p className="text-gray-500 text-sm">{data?.total ?? 0} total messages</p>
           </div>
           {unreadCount > 0 && (
-            <span className="bg-[#1e3a6e] text-white text-xs font-bold px-2.5 py-1 rounded-full">
+            <span className="bg-primary text-white text-xs font-bold px-2.5 py-1 rounded-full">
               {unreadCount} new
             </span>
           )}
         </div>
         <div className="flex items-center gap-2">
-          <div className="hidden md:flex items-center gap-2 border rounded-lg px-3 py-1.5 bg-white">
+          <div className="hidden md:flex items-center gap-2 border rounded-lg px-3 py-1.5 bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
             <Search size={14} className="text-gray-400" />
             <input value={search} onChange={e => setSearch(e.target.value)} placeholder="Search messages..." className="text-sm outline-none" />
           </div>
-          <select value={filter} onChange={e => setFilter(e.target.value as Filter)} className="border rounded-lg px-3 py-1.5 text-sm bg-white">
+          <select value={filter} onChange={e => setFilter(e.target.value as Filter)} className="border rounded-lg px-3 py-1.5 text-sm bg-white dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
             <option value="all">All</option>
             <option value="unread">Unread</option>
             <option value="read">Read</option>
@@ -67,7 +67,7 @@ export default function ContactsPage() {
           {unreadCount > 0 && (
             <button
               onClick={markAllRead}
-              className="flex items-center gap-1.5 text-sm text-[#1e3a6e] font-medium border border-[#1e3a6e]/30 rounded-lg px-3 py-1.5 hover:bg-[#1e3a6e]/5 transition-colors"
+              className="flex items-center gap-1.5 text-sm text-primary font-medium border border-primary/30 rounded-lg px-3 py-1.5 hover:bg-primary/5 transition-colors"
             >
               <CheckCheck size={14} />
               Mark all read
@@ -76,7 +76,7 @@ export default function ContactsPage() {
           <button
             onClick={() => refetch()}
             disabled={isFetching}
-            className="flex items-center gap-1.5 text-sm text-gray-500 border rounded-lg px-3 py-1.5 hover:bg-gray-50 transition-colors disabled:opacity-50"
+            className="flex items-center gap-1.5 text-sm text-gray-500 border rounded-lg px-3 py-1.5 hover:bg-gray-50 transition-colors disabled:opacity-50 dark:bg-gray-900/50"
           >
             <RefreshCw size={14} className={isFetching ? "animate-spin" : ""} />
             Refresh
@@ -88,16 +88,16 @@ export default function ContactsPage() {
         {filtered.map(msg => (
           <div
             key={msg.id}
-            className={`bg-white border rounded-xl p-5 shadow-sm flex gap-4 transition-all ${!msg.isRead ? "border-l-4 border-l-[#1e3a6e]" : ""}`}
+            className={`bg-white dark:bg-gray-800 border dark:border-gray-700 rounded-xl p-5 shadow-sm flex gap-4 transition-all ${!msg.isRead ? "border-l-4 border-l-primary" : ""}`}
           >
-            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${!msg.isRead ? "bg-blue-50 text-[#1e3a6e]" : "bg-gray-50 text-gray-400"}`}>
+            <div className={`w-10 h-10 rounded-full flex items-center justify-center shrink-0 ${!msg.isRead ? "bg-blue-50 text-primary" : "bg-gray-50 text-gray-400"}`}>
               {msg.isRead ? <MailOpen size={18} /> : <Mail size={18} />}
             </div>
             <div className="flex-1 min-w-0">
               <div className="flex items-center gap-2 mb-1 flex-wrap">
-                <p className="font-bold text-gray-800">{msg.fullName}</p>
+                <p className="font-bold text-primary">{msg.fullName}</p>
                 {!msg.isRead && (
-                  <span className="bg-[#1e3a6e] text-white text-xs px-2 py-0.5 rounded-full">New</span>
+                  <span className="bg-primary text-white text-xs px-2 py-0.5 rounded-full">New</span>
                 )}
                 <span className="text-xs text-gray-400 ml-auto shrink-0">
                   {new Date(msg.createdAt).toLocaleString()}
@@ -115,14 +115,14 @@ export default function ContactsPage() {
                   </span>
                 )}
               </div>
-              <p className="text-sm text-gray-700 leading-relaxed whitespace-pre-wrap">{msg.message}</p>
+              <p className="text-sm text-gray-700 dark:text-gray-300 leading-relaxed whitespace-pre-wrap">{msg.message}</p>
             </div>
             <div className="flex flex-col gap-2 shrink-0">
               {!msg.isRead && (
                 <button
                   onClick={() => markRead({ id: msg.id }, { onSuccess: () => refetch() })}
                   title="Mark as read"
-                  className="p-2 text-gray-400 hover:text-[#1e3a6e] border rounded-lg hover:bg-blue-50 transition-colors"
+                  className="p-2 text-gray-400 hover:text-primary border rounded-lg hover:bg-blue-50 transition-colors"
                 >
                   <MailOpen size={14} />
                 </button>
@@ -153,7 +153,7 @@ export default function ContactsPage() {
         ))}
 
         {!filtered.length && (
-          <div className="bg-white border rounded-xl py-16 text-center text-gray-400">
+          <div className="bg-white border rounded-xl py-16 text-center text-gray-400 dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
             <Mail size={40} className="mx-auto mb-3 opacity-30" />
             <p className="font-medium">No messages yet.</p>
             <p className="text-sm mt-1">Messages from the contact form will appear here.</p>
