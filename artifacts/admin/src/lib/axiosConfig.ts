@@ -1,8 +1,16 @@
 import axios from 'axios';
 
+const getBaseUrl = () => {
+  const url = import.meta.env.VITE_API_URL || '';
+  if (url && !url.endsWith('/api')) {
+    return `${url}/api`;
+  }
+  return url || '/api';
+};
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || '/api',
-  timeout: 10000,
+  baseURL: getBaseUrl(),
+  timeout: 30000,
   withCredentials: true, // Important for cookies (CSRF, session)
 });
 
@@ -21,7 +29,7 @@ export const fetchCsrfToken = async (): Promise<string | null> => {
   isFetchingCsrf = true;
   csrfPromise = (async () => {
     try {
-      const response = await axios.get('/api/csrf-token', { withCredentials: true });
+      const response = await api.get('/csrf-token');
       csrfToken = response.data.csrfToken;
       return csrfToken;
     } finally {
