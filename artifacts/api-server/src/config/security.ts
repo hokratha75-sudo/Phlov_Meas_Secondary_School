@@ -7,9 +7,18 @@ const isProduction = process.env.NODE_ENV === "production";
  * Strict CORS Configuration
  * Restricts cross-origin requests to only allowed domains.
  */
+// Build allowed origins list dynamically
+const productionOrigins: string[] = [];
+if (process.env.FRONTEND_URL) productionOrigins.push(process.env.FRONTEND_URL);
+if (process.env.ADMIN_URL) productionOrigins.push(process.env.ADMIN_URL);
+// Fallback if no env vars set
+if (productionOrigins.length === 0) {
+  productionOrigins.push("https://yourdomain.com", "https://admin.yourdomain.com");
+}
+
 export const corsConfig: CorsOptions = {
   origin: isProduction 
-    ? [process.env.FRONTEND_URL || "https://yourdomain.com", process.env.ADMIN_URL || "https://admin.yourdomain.com"]
+    ? productionOrigins
     : [
         "http://localhost:3000",
         "http://localhost:3001",
@@ -24,11 +33,13 @@ export const corsConfig: CorsOptions = {
 
 /**
  * Cookie configuration for sessions and CSRF
+ * In production with cross-origin (Vercel frontend + Railway backend),
+ * sameSite must be "none" + secure:true for cookies to be sent cross-origin.
  */
 export const cookieConfig = {
   httpOnly: true,
   secure: isProduction, // HTTPS only in production
-  sameSite: (isProduction ? "strict" : "lax") as "strict" | "lax" | "none", // mitigate CSRF
+  sameSite: (isProduction ? "none" : "lax") as "strict" | "lax" | "none",
   path: "/",
 };
 
