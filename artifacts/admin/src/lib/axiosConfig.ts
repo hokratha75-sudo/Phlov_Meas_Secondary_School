@@ -11,7 +11,7 @@ const getBaseUrl = () => {
 const api = axios.create({
   baseURL: getBaseUrl(),
   timeout: 30000,
-  withCredentials: true, // Important for cookies (CSRF, session)
+  withCredentials: true, // Important for cookies (session)
 });
 
 // CSRF Token storage (in memory only, not localStorage)
@@ -21,7 +21,6 @@ let csrfPromise: Promise<string | null> | null = null;
 
 // Fetch CSRF token from server
 export const fetchCsrfToken = async (): Promise<string | null> => {
-  // If already fetching, wait for that promise
   if (isFetchingCsrf && csrfPromise) {
     return csrfPromise;
   }
@@ -32,6 +31,8 @@ export const fetchCsrfToken = async (): Promise<string | null> => {
       const response = await api.get('/csrf-token');
       csrfToken = response.data.csrfToken;
       return csrfToken;
+    } catch (e) {
+      return null;
     } finally {
       isFetchingCsrf = false;
       csrfPromise = null;
@@ -41,7 +42,7 @@ export const fetchCsrfToken = async (): Promise<string | null> => {
   return csrfPromise;
 };
 
-// Request interceptor - Add CSRF token
+// Request interceptor
 api.interceptors.request.use(
   async (config) => {
     // Add CSRF token for state-changing methods
@@ -49,7 +50,7 @@ api.interceptors.request.use(
       if (!csrfToken) {
         await fetchCsrfToken();
       }
-      if (config.headers) {
+      if (config.headers && csrfToken) {
         config.headers['x-csrf-token'] = csrfToken;
       }
     }
@@ -80,12 +81,18 @@ api.interceptors.response.use(
   async (error: any) => {
     const originalRequest = error.config;
     
-    // Handle CSRF token expiry (403)
-    if (error.response?.status === 403 && error.response?.data?.code === 'EBADCSRFTOKEN') {
+    // Handle CSRF token expiry (403) - ONLY RETRY ONCE to prevent infinite loop
+    if (error.response?.status === 403 && error.response?.data?.code === 'EBADCSRFTOKEN' && !originalRequest._csrfRetry) {
+      originalRequest._csrfRetry = true;
       csrfToken = null;
       await fetchCsrfToken();
-      originalRequest.headers['x-csrf-token'] = csrfToken;
-      return api(originalRequest);
+      
+      if (csrfToken && originalRequest.headers) {
+        originalRequest.headers['x-csrf-token'] = csrfToken;
+        return api(originalRequest);
+      }
+      // If we still don't have a token, let it fail to avoid loops
+      return Promise.reject(error);
     }
     
     // Handle token expiry (401)

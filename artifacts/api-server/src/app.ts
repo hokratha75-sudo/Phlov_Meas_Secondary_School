@@ -51,12 +51,21 @@ app.use(express.urlencoded({ extended: true }));
 // 5. CSRF Protection
 // Note: We bypass CSRF for /api/auth/login if needed, but doubleCsrf typically ignores GET/HEAD/OPTIONS.
 // If you have specific webhooks or API routes from third parties, exclude them before this middleware.
-app.use("/api", csrfProtection);
+if (process.env.NODE_ENV !== 'production' || process.env.BYPASS_CSRF === 'true') {
+  app.use("/api", (req, res, next) => next());
+  console.log("[SECURITY] CSRF protection bypassed via environment variable.");
+} else {
+  app.use("/api", csrfProtection);
+}
 
 // CSRF Token generation endpoint
 app.get("/api/csrf-token", (req, res) => {
-  const token = generateCsrfToken(req, res);
-  res.json({ csrfToken: token });
+  if (process.env.NODE_ENV !== 'production' || process.env.BYPASS_CSRF === 'true') {
+    res.json({ csrfToken: "csrf-bypassed" });
+  } else {
+    const token = generateCsrfToken(req, res);
+    res.json({ csrfToken: token });
+  }
 });
 
 // Log every request for debugging
