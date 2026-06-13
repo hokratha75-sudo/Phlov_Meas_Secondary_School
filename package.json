@@ -5,6 +5,7 @@
   "scripts": {
     "predev": "node kill-dev-ports.mjs",
     "dev": "pnpm --filter @workspace/api-server --filter @workspace/school-website --filter @workspace/admin --parallel run dev",
+    "start": "pnpm --filter @workspace/api-server run start:prod",
     "build": "pnpm run typecheck && pnpm -r --if-present run build",
     "typecheck:libs": "tsc --build",
     "typecheck": "pnpm run typecheck:libs && pnpm -r --filter \"./artifacts/**\" --filter \"./scripts\" --if-present run typecheck"
