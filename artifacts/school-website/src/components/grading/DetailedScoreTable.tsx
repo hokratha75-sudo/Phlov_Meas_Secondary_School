@@ -1,10 +1,10 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
 interface Student {
   id: number;
   name: string;
-  gender: 'Male' | 'Female';
+  gender: string;
   math: number;
   science: number;
   english: number;
@@ -27,7 +27,7 @@ const mockStudents: Student[] = [
   ...Array.from({ length: 45 }, (_, i) => ({
     id: i + 6,
     name: `Student ${i + 6}`,
-    gender: i % 2 === 0 ? "Male" : "Female",
+    gender: (i % 2 === 0 ? "Male" : "Female") as "Male" | "Female",
     math: Math.floor(Math.random() * 40) + 60, // 60-100
     science: Math.floor(Math.random() * 40) + 60,
     english: Math.floor(Math.random() * 40) + 60,

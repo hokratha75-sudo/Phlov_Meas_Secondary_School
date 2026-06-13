@@ -43,7 +43,7 @@ export default function Home() {
   const { t, lang } = useI18n();
   const { data: newsData, isLoading: newsLoading } = useListNews({ limit: 2, offset: 0 });
   const { data: activitiesData } = useListActivities({ limit: 3, offset: 0 });
-  const { data: settings } = useGetSiteSettings({ query: { staleTime: 0, refetchOnMount: "always", refetchInterval: 3000 } });
+  const { data: settings } = useGetSiteSettings({});
 
   const hero = parseJson(settings?.["hero"], {
     enrollmentBannerEn: "ENROLLMENT OPEN 2024-2025",

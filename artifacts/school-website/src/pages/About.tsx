@@ -17,7 +17,7 @@ const DEFAULT_LEADERSHIP: LeadershipEntry[] = [
 
 export default function About() {
   const { t, lang } = useI18n();
-  const { data: settings } = useGetSiteSettings({ query: { staleTime: 0, refetchOnMount: "always", refetchInterval: 3000 } });
+  const { data: settings } = useGetSiteSettings({});
 
   const mission = parseJson(settings?.["mission"], {
     textEn: "To provide high-quality education that empowers students with knowledge, critical thinking skills, and moral values necessary to become responsible citizens and leaders in a rapidly changing world.",

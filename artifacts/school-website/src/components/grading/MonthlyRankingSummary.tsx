@@ -1,10 +1,10 @@
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow, TableCaption } from "@/components/ui/table";
 import { Badge } from "@/components/ui/badge";
 
 interface StudentSummary {
   id: number;
   name: string;
-  gender: 'Male' | 'Female';
+  gender: string;
   total: number;
   average: number;
   rank: number;
@@ -32,7 +32,7 @@ const mockStudentsSummary: StudentSummary[] = [
   ...Array.from({ length: 11 }, (_, i) => ({
     id: 11 + i,
     name: `D Student ${i + 1}`,
-    gender: i % 2 === 0 ? "Male" : "Female",
+    gender: (i % 2 === 0 ? "Male" : "Female") as "Male" | "Female",
     total: 320 - (i * 5), // Decreasing scores
     average: 64 - (i * 1),
     rank: 11 + i,
@@ -43,7 +43,7 @@ const mockStudentsSummary: StudentSummary[] = [
   ...Array.from({ length: 14 }, (_, i) => ({
     id: 22 + i,
     name: `E Student ${i + 1}`,
-    gender: i % 2 === 0 ? "Male" : "Female",
+    gender: (i % 2 === 0 ? "Male" : "Female") as "Male" | "Female",
     total: 280 - (i * 4),
     average: 56 - (i * 0.8),
     rank: 22 + i,
@@ -54,7 +54,7 @@ const mockStudentsSummary: StudentSummary[] = [
   ...Array.from({ length: 15 }, (_, i) => ({
     id: 36 + i,
     name: `F Student ${i + 1}`,
-    gender: i % 2 === 0 ? "Male" : "Female",
+    gender: (i % 2 === 0 ? "Male" : "Female") as "Male" | "Female",
     total: 220 - (i * 3),
     average: 44 - (i * 0.6),
     rank: 36 + i,
@@ -125,7 +125,7 @@ export function MonthlyRankingSummary() {
                     <Badge
                       variant={
                         student.grade === 'F' ? 'destructive' :
-                        student.grade === 'A' || student.grade === 'B' ? 'primary' :
+                        student.grade === 'A' || student.grade === 'B' ? 'default' :
                         student.grade === 'C' || student.grade === 'D' ? 'secondary' : 'outline'
                       }
                       className="text-xs px-2.5 py-0.5"

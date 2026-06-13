@@ -28,7 +28,7 @@ const PROGRAM_ICONS = [
 
 export default function Academics() {
   const { t, lang } = useI18n();
-  const { data: settings } = useGetSiteSettings({ query: { staleTime: 0, refetchOnMount: "always", refetchInterval: 3000 } });
+  const { data: settings } = useGetSiteSettings({});
   const programs = parseJson<ProgramEntry[]>(settings?.["academic_programs"], DEFAULT_PROGRAMS);
 
   return (

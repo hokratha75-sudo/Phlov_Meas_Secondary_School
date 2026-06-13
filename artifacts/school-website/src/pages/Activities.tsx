@@ -107,7 +107,7 @@ function ActivitySkeleton() {
 export default function Activities() {
   const { t, lang } = useI18n();
   const { data, isLoading } = useListActivities({ limit: 6, offset: 0 });
-  const { data: settings } = useGetSiteSettings({ query: { staleTime: 0, refetchOnMount: "always", refetchInterval: 3000 } });
+  const { data: settings } = useGetSiteSettings({});
 
   const clubs = parseJson<ClubEntry[]>(settings?.["clubs"], DEFAULT_CLUBS);
   const activityItems = data?.data && data.data.length > 0 ? data.data : STATIC_ACTIVITIES;
