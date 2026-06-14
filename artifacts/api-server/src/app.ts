@@ -55,7 +55,19 @@ if (process.env.NODE_ENV !== 'production' || process.env.BYPASS_CSRF === 'true')
   app.use("/api", (req, res, next) => next());
   console.log("[SECURITY] CSRF protection bypassed via environment variable.");
 } else {
-  app.use("/api", csrfProtection);
+  // Skip CSRF for requests authenticated via Bearer token (Authorization header).
+  // Such requests are inherently CSRF-safe because cross-origin scripts cannot
+  // set arbitrary request headers (blocked by CORS). Cookies-based sessions still
+  // get full CSRF protection.
+  app.use("/api", (req: any, res: any, next: any) => {
+    const authHeader = req.headers["authorization"] as string | undefined;
+    if (authHeader?.startsWith("Bearer ")) {
+      // Bearer token requests are CSRF-safe, skip protection
+      return next();
+    }
+    // For cookie-based sessions, apply full CSRF protection
+    return csrfProtection(req, res, next);
+  });
 }
 
 // CSRF Token generation endpoint
