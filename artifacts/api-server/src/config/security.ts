@@ -38,7 +38,9 @@ export const corsConfig: CorsOptions = {
       ],
   credentials: true,
   methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS", "PATCH"],
-  allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token"],
+  allowedHeaders: ["Content-Type", "Authorization", "x-csrf-token", "X-Requested-With", "Accept", "Origin"],
+  preflightContinue: false,
+  optionsSuccessStatus: 204,
   exposedHeaders: ["x-csrf-token"]
 };
 
