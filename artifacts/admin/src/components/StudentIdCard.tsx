@@ -3,7 +3,7 @@ import { useReactToPrint } from "react-to-print";
 import QRCode from "react-qr-code";
 import type { Student } from "@workspace/api-client-react";
 import { Printer, X, Settings2, Image as ImageIcon, Type, Palette } from "lucide-react";
-import api from "@/lib/axiosConfig";
+import api, { resolveUrl } from "@/lib/axiosConfig";
 
 interface StudentIdCardProps {
   student: Student;
@@ -128,7 +128,7 @@ export default function StudentIdCardModal({ student, onClose, token }: StudentI
                   </div>
                   {template.signatureUrl && (
                     <div className="mt-2 p-2 border rounded-lg inline-block bg-white relative group dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
-                      <img src={template.signatureUrl} alt="Signature Preview" className="h-12 object-contain" />
+                      <img src={resolveUrl(template.signatureUrl)} alt="Signature Preview" className="h-12 object-contain" />
                       <button onClick={() => setTemplate({...template, signatureUrl: ""})} className="absolute -top-1 -right-1 bg-red-500 text-white rounded-full p-0.5 shadow hover:bg-red-600 transition-colors"><X size={10} /></button>
                     </div>
                   )}
@@ -228,7 +228,7 @@ export default function StudentIdCardModal({ student, onClose, token }: StudentI
                     {/* Right Side: Photo */}
                     <div className="w-[50px] h-[65px] border border-blue-500 border-dashed rounded bg-gray-50 flex-shrink-0 ml-1 mt-1 overflow-hidden z-10 relative flex items-center justify-center dark:bg-gray-900/50">
                       {studentData.photoUrl ? (
-                        <img src={studentData.photoUrl} alt="Student" className="w-full h-full object-cover" />
+                        <img src={resolveUrl(studentData.photoUrl)} alt="Student" className="w-full h-full object-cover" />
                       ) : (
                         <span className="text-[8px] text-gray-400 text-center font-siemreap px-1 leading-tight">រូបថត 4x6</span>
                       )}
@@ -247,7 +247,7 @@ export default function StudentIdCardModal({ student, onClose, token }: StudentI
                     <div className="text-center font-moul text-[9px] mb-2 mr-2 text-black relative">
                       <div className="h-10 flex items-center justify-center relative">
                         {template.signatureUrl ? (
-                          <img src={template.signatureUrl} alt="Signature & Stamp" className="absolute bottom-[-10px] right-[-10px] w-20 h-16 object-contain z-30 pointer-events-none" />
+                          <img src={resolveUrl(template.signatureUrl)} alt="Signature & Stamp" className="absolute bottom-[-10px] right-[-10px] w-20 h-16 object-contain z-30 pointer-events-none" />
                         ) : (
                           <div className="h-full"></div>
                         )}

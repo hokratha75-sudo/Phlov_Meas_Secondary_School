@@ -146,4 +146,19 @@ export const setupAxiosInterceptors = () => {
   fetchCsrfToken().catch(console.error);
 };
 
+export const resolveUrl = (url: string | null | undefined): string => {
+  if (!url) return "";
+  if (url.startsWith("http://") || url.startsWith("https://") || url.startsWith("data:")) {
+    return url;
+  }
+  const baseUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || "";
+  if (url.startsWith("/uploads/")) {
+    return `${baseUrl}${url}`;
+  }
+  if (url.startsWith("uploads/")) {
+    return `${baseUrl}/${url}`;
+  }
+  return url;
+};
+
 export default api;

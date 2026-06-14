@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo, useCallback } from "react";
 import { useAuth } from "@/lib/auth";
 import { useTranslation } from "@/lib/i18n";
-import api from "@/lib/axiosConfig";
+import api, { resolveUrl } from "@/lib/axiosConfig";
 import { useListStudents, useListClassrooms } from "@workspace/api-client-react";
 import {
   Link2, Unlink, RefreshCw, CheckCircle, XCircle, Search, Copy, Loader2, Users, Filter, Info, ExternalLink
@@ -252,7 +252,7 @@ export default function StudentTelegramManager() {
                         <div className="flex items-center gap-3">
                           <div className="w-9 h-9 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-primary dark:text-blue-400 text-xs font-bold overflow-hidden">
                             {student.photoUrl ? (
-                              <img src={student.photoUrl} alt="" className="w-full h-full object-cover" />
+                              <img src={resolveUrl(student.photoUrl)} alt="" className="w-full h-full object-cover" />
                             ) : (
                               student.nameKh ? student.nameKh[0] : student.nameEn[0]
                             )}

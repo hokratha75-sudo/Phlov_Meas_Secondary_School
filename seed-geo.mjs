@@ -12,6 +12,7 @@
  * ─────────────────────────────────────────────────────
  */
 
+import 'dotenv/config';
 import pg from "pg";
 import fs from "fs";
 import path from "path";
@@ -23,7 +24,7 @@ const ROOT_DIR = __dirname;
 const GEO_DIR = path.join(ROOT_DIR, "data", "cambodia_geo");
 
 const DB_NAME = "highschool_hub";
-const DB_URL = `postgresql://postgres:@localhost:5432/${DB_NAME}`;
+const DB_URL = process.env.DATABASE_URL || `postgresql://postgres:@localhost:5432/${DB_NAME}`;
 
 function parseCSV(csvText) {
   const lines = csvText.split(/\r?\n/);
@@ -62,15 +63,46 @@ function parseCSV(csvText) {
   return result;
 }
 
+async function batchInsert(client, tableName, columns, rows, mapRowToValues, chunkSize = 500) {
+  let insertedCount = 0;
+  for (let i = 0; i < rows.length; i += chunkSize) {
+    const chunk = rows.slice(i, i + chunkSize);
+    const placeholders = [];
+    const values = [];
+    let paramIndex = 1;
+    
+    for (const row of chunk) {
+      const vals = mapRowToValues(row);
+      if (!vals) continue;
+      
+      const chunkPlaceholders = [];
+      for (let j = 0; j < vals.length; j++) {
+        chunkPlaceholders.push(`$${paramIndex++}`);
+        values.push(vals[j]);
+      }
+      placeholders.push(`(${chunkPlaceholders.join(', ')})`);
+      insertedCount++;
+    }
+    
+    if (placeholders.length > 0) {
+      const sql = `INSERT INTO ${tableName} (${columns.join(', ')}) VALUES ${placeholders.join(', ')} ON CONFLICT (code) DO NOTHING`;
+      await client.query(sql, values);
+    }
+  }
+  return insertedCount;
+}
+
 async function main() {
-  console.log("\n📍 Cambodia Geo Data Seeder");
+  console.log("\n📍 Cambodia Geo Data Seeder (Chunked Batch Insert Mode)");
 
   if (!fs.existsSync(GEO_DIR)) {
     console.error(`❌ Data directory not found: ${GEO_DIR}`);
     process.exit(1);
   }
 
-  console.log(`Connecting to PostgreSQL Database "${DB_NAME}"...`);
+  console.log(`Connecting to PostgreSQL Database...`);
+  const parsedUrl = new URL(DB_URL);
+  console.log(`Host: ${parsedUrl.host}, Database: ${parsedUrl.pathname}`);
   const client = new pg.Client({ connectionString: DB_URL });
 
   try {
@@ -98,85 +130,89 @@ async function main() {
     console.log(`\n⏳ Seeding provinces...`);
     const provCsv = fs.readFileSync(path.join(GEO_DIR, "CambodiaProvinceList2025.csv"), "utf8");
     const provinces = parseCSV(provCsv);
-    for (const p of provinces) {
-      if (!p.province_code) continue;
-      await client.query(
-        `INSERT INTO provinces (code, name_kh, name_en) VALUES ($1, $2, $3) ON CONFLICT (code) DO NOTHING`,
-        [p.province_code, p.province_kh, p.province_en]
-      );
-    }
-    console.log(`✅ ${provinces.length} Provinces seeded.`);
+    const seededProvinces = await batchInsert(
+      client,
+      "provinces",
+      ["code", "name_kh", "name_en"],
+      provinces,
+      (p) => p.province_code ? [p.province_code, p.province_kh, p.province_en] : null
+    );
+    console.log(`✅ ${seededProvinces} Provinces seeded.`);
 
     // --- DISTRICTS ---
     console.log(`⏳ Seeding districts...`);
     const distCsv = fs.readFileSync(path.join(GEO_DIR, "CambodiaDistrictList2025.csv"), "utf8");
     const districts = parseCSV(distCsv);
-    let distCount = 0;
-    const districtSet = new Set();
-    for (const d of districts) {
-      if (!d.district_code) continue;
-      districtSet.add(d.district_code);
-      await client.query(
-        `INSERT INTO districts (code, province_code, name_kh, name_en) VALUES ($1, $2, $3, $4) ON CONFLICT (code) DO NOTHING`,
-        [d.district_code, d.province_code, d.district_kh, d.district_en]
-      );
-      distCount++;
-    }
-    console.log(`✅ ${distCount} Districts seeded.`);
+    const districtSet = new Set(districts.map(d => d.district_code).filter(Boolean));
+    const seededDistricts = await batchInsert(
+      client,
+      "districts",
+      ["code", "province_code", "name_kh", "name_en"],
+      districts,
+      (d) => d.district_code ? [d.district_code, d.province_code, d.district_kh, d.district_en] : null
+    );
+    console.log(`✅ ${seededDistricts} Districts seeded.`);
 
     // --- COMMUNES ---
     console.log(`⏳ Seeding communes...`);
     const commCsv = fs.readFileSync(path.join(GEO_DIR, "CambodiaCommuneList2025.csv"), "utf8");
     const communes = parseCSV(commCsv);
-    let commCount = 0;
     const communeSet = new Set();
-    for (const c of communes) {
-      if (!c.commune_code || !districtSet.has(c.district_code)) continue;
-      communeSet.add(c.commune_code);
-      await client.query(
-        `INSERT INTO communes (code, district_code, province_code, name_kh, name_en) VALUES ($1, $2, $3, $4, $5) ON CONFLICT (code) DO NOTHING`,
-        [c.commune_code, c.district_code, c.province_code, c.commune_kh, c.commune_en]
-      );
-      commCount++;
-      if (commCount % 500 === 0) process.stdout.write(".");
-    }
-    console.log(`\n✅ ${commCount} Communes seeded.`);
+    const filteredCommunes = communes.filter(c => {
+      if (c.commune_code && districtSet.has(c.district_code)) {
+        communeSet.add(c.commune_code);
+        return true;
+      }
+      return false;
+    });
+    const seededCommunes = await batchInsert(
+      client,
+      "communes",
+      ["code", "district_code", "province_code", "name_kh", "name_en"],
+      filteredCommunes,
+      (c) => [c.commune_code, c.district_code, c.province_code, c.commune_kh, c.commune_en]
+    );
+    console.log(`✅ ${seededCommunes} Communes seeded.`);
 
     // --- VILLAGES ---
     console.log(`⏳ Seeding villages (this may take a moment)...`);
     const villCsv = fs.readFileSync(path.join(GEO_DIR, "CambodiaVillagesList2025.csv"), "utf8");
     const villages = parseCSV(villCsv);
-    let villCount = 0;
     let missingCommuneCount = 0;
-
-    // Use transaction for speed
-    await client.query("BEGIN");
-    for (const v of villages) {
-      if (!v.village_code) continue;
-      
-      // Skip if commune does not exist (Data inconsistency workaround)
+    const filteredVillages = villages.filter(v => {
+      if (!v.village_code) return false;
       if (!communeSet.has(v.commune_code)) {
         missingCommuneCount++;
-        continue;
+        return false;
       }
+      return true;
+    });
 
-      await client.query(
-        `INSERT INTO villages (code, commune_code, district_code, province_code, name_kh, name_en) VALUES ($1, $2, $3, $4, $5, $6) ON CONFLICT (code) DO NOTHING`,
-        [v.village_code, v.commune_code, v.district_code, v.province_code, v.village_kh, v.village_en]
-      );
-      villCount++;
-      if (villCount % 1000 === 0) process.stdout.write(".");
-    }
-    await client.query("COMMIT");
-    console.log(`\n✅ ${villCount} Villages seeded.`);
+    const seededVillages = await batchInsert(
+      client,
+      "villages",
+      ["code", "commune_code", "district_code", "province_code", "name_kh", "name_en"],
+      filteredVillages,
+      (v) => [v.village_code, v.commune_code, v.district_code, v.province_code, v.village_kh, v.village_en]
+    );
+    console.log(`✅ ${seededVillages} Villages seeded.`);
     if (missingCommuneCount > 0) {
       console.log(`⚠️  Skipped ${missingCommuneCount} villages due to missing communes in the source data.`);
     }
 
     console.log(`\n🎉 All Geo Data has been successfully imported into the database!\n`);
 
+    const pCheck = await client.query('SELECT COUNT(*) FROM provinces');
+    const dCheck = await client.query('SELECT COUNT(*) FROM districts');
+    const cCheck = await client.query('SELECT COUNT(*) FROM communes');
+    const vCheck = await client.query('SELECT COUNT(*) FROM villages');
+    console.log(`Verification counts right after commit:`);
+    console.log(`Provinces: ${pCheck.rows[0].count}`);
+    console.log(`Districts: ${dCheck.rows[0].count}`);
+    console.log(`Communes: ${cCheck.rows[0].count}`);
+    console.log(`Villages: ${vCheck.rows[0].count}`);
+
   } catch (error) {
-    await client.query("ROLLBACK").catch(() => {});
     console.error(`\n❌ Error seeding data:`, error);
   } finally {
     await client.end();

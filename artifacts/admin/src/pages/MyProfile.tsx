@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useAuth } from "@/lib/auth";
-import api from "@/lib/axiosConfig";
+import api, { resolveUrl } from "@/lib/axiosConfig";
 import { useTranslation } from "@/lib/i18n";
 import { useToast } from "@/hooks/use-toast";
 import { 
@@ -203,7 +203,7 @@ export default function MyProfile() {
             <div className="flex gap-4 items-center">
               <div className="w-16 h-16 rounded-xl overflow-hidden border-2 border-white ring-1 ring-gray-100 shrink-0 bg-blue-50/50 flex items-center justify-center">
                 {photoUrl ? (
-                  <img src={photoUrl} alt="" className="w-full h-full object-cover" />
+                  <img src={resolveUrl(photoUrl)} alt="" className="w-full h-full object-cover" />
                 ) : (
                   <GraduationCap size={28} className="text-blue-300" />
                 )}

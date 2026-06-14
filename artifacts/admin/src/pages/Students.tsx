@@ -9,6 +9,7 @@ import StudentIdCardStudio from "@/components/StudentIdCardStudio";
 import ExcelJS from 'exceljs';
 import { GeoDropdowns } from "@/components/GeoDropdowns";
 import { exportStudentProfileToExcel } from "@/utils/excelExport";
+import { resolveUrl } from "@/lib/axiosConfig";
 
 const GRADES = ["Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"];
 
@@ -125,7 +126,7 @@ function StudentModal({ item, onClose, onSave, token, classrooms }: { item?: Stu
               <div className="flex flex-col items-center gap-3 shrink-0">
                 <div className="w-28 h-32 bg-gray-50 border-2 border-dashed border-gray-200 rounded-2xl overflow-hidden flex items-center justify-center relative group transition-all hover:border-blue-400 hover:bg-blue-50/50 dark:bg-gray-900/50">
                   {form.photoUrl ? (
-                    <img src={form.photoUrl} alt="Student" className="w-full h-full object-cover" />
+                    <img src={resolveUrl(form.photoUrl)} alt="Student" className="w-full h-full object-cover" />
                   ) : (
                     <div className="flex flex-col items-center text-gray-400">
                       <UserPlus size={28} className="mb-2" />
@@ -460,7 +461,7 @@ export default function StudentsPage() {
                       <div className="flex items-center gap-3">
                         <div className="w-10 h-10 rounded-full bg-gray-100 border border-gray-200 overflow-hidden flex-shrink-0 shadow-sm flex items-center justify-center">
                           {s.photoUrl ? (
-                            <img src={s.photoUrl} alt="Avatar" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling?.classList.remove('hidden'); }} />
+                            <img src={resolveUrl(s.photoUrl)} alt="Avatar" className="w-full h-full object-cover" onError={(e) => { e.currentTarget.style.display = 'none'; e.currentTarget.nextElementSibling?.classList.remove('hidden'); }} />
                           ) : null}
                           <span className={`text-gray-400 font-bold text-sm ${s.photoUrl ? 'hidden' : ''}`}>{s.nameEn?.[0]?.toUpperCase() || "?"}</span>
                         </div>

@@ -1,7 +1,7 @@
 import { useState, useEffect, useCallback } from "react";
 import { useAuth } from "@/lib/auth";
 import { useTranslation } from "@/lib/i18n";
-import api from "@/lib/axiosConfig";
+import api, { resolveUrl } from "@/lib/axiosConfig";
 import {
   Bot, Send, Link2, Unlink, RefreshCw, CheckCircle, XCircle, MessageSquare, Users, Hash, Copy, ExternalLink, Loader2, Search
 } from "lucide-react";
@@ -333,7 +333,7 @@ export default function TelegramSettings() {
                     <td className="px-4 py-3">
                       <div className="flex items-center gap-3">
                         <div className="w-8 h-8 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center text-blue-600 dark:text-blue-400 text-xs font-bold overflow-hidden">
-                          {t.photoUrl ? <img src={t.photoUrl} alt="" className="w-full h-full object-cover" /> : t.nameKh[0]}
+                          {t.photoUrl ? <img src={resolveUrl(t.photoUrl)} alt="" className="w-full h-full object-cover" /> : t.nameKh[0]}
                         </div>
                         <div>
                           <p className="font-medium text-gray-900 dark:text-gray-100">{t.nameKh}</p>

@@ -9,7 +9,7 @@ import { exportTeachersListToExcel, exportTeacherProfileToExcel } from "@/utils/
 import ImageUpload from "@/components/ImageUpload";
 import { GeoDropdowns } from "@/components/GeoDropdowns";
 import { useTranslation } from "@/lib/i18n";
-import api from "@/lib/axiosConfig";
+import api, { resolveUrl } from "@/lib/axiosConfig";
 
 // Extended form type to include login credentials
 type TeacherForm = CreateTeacherRequest & {
@@ -482,7 +482,7 @@ export default function TeachersPage() {
                   <td className="px-6 py-4">
                     <div className="w-12 h-12 rounded-lg overflow-hidden border dark:border-gray-700 bg-gray-50 dark:bg-gray-800 shrink-0">
                       {tData.photoUrl ? (
-                        <img src={tData.photoUrl} alt={tData.nameEn} className="w-full h-full object-cover" />
+                        <img src={resolveUrl(tData.photoUrl)} alt={tData.nameEn} className="w-full h-full object-cover" />
                       ) : (
                         <div className="w-full h-full flex items-center justify-center text-gray-300 dark:text-gray-600">
                           <GraduationCap size={20} />

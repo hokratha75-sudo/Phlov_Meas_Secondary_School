@@ -5,6 +5,7 @@ import { Plus, Pencil, Trash2, X, Calendar, Activity as ActivityIcon } from "luc
 import type { Activity, CreateActivityRequest } from "@workspace/api-client-react";
 import ImageUpload from "@/components/ImageUpload";
 import { useTranslation } from "@/lib/i18n";
+import { resolveUrl } from "@/lib/axiosConfig";
 
 const CATEGORIES = ["general", "sports", "culture", "academics", "festival", "community", "national"];
 
@@ -130,7 +131,7 @@ export default function ActivitiesPage() {
       <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-4">
         {data?.data.map(a => (
           <div key={a.id} className="bg-white border rounded-xl overflow-hidden shadow-sm group hover:shadow-md transition-shadow dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
-            {a.imageUrl && <img src={a.imageUrl} alt={a.titleEn} className="w-full h-40 object-cover" />}
+            {a.imageUrl && <img src={resolveUrl(a.imageUrl)} alt={a.titleEn} className="w-full h-40 object-cover" />}
             <div className="p-4">
               <div className="flex items-start justify-between gap-2 mb-2">
                 <div className="flex-1 min-w-0">

@@ -1,7 +1,7 @@
 import { useState, useRef } from "react";
 import { Upload, X, Loader2, Image as ImageIcon } from "lucide-react";
 import { useAuth } from "@/lib/auth";
-import api from "@/lib/axiosConfig";
+import api, { resolveUrl } from "@/lib/axiosConfig";
 
 interface ImageUploadProps {
   value: string;
@@ -45,7 +45,7 @@ export default function ImageUpload({ value, onChange, label }: ImageUploadProps
         <div className="relative group">
           {value ? (
             <div className="w-20 h-20 rounded-xl overflow-hidden border bg-gray-50 flex items-center justify-center dark:bg-gray-900/50">
-              <img src={value} alt="Preview" className="w-full h-full object-cover" />
+              <img src={resolveUrl(value)} alt="Preview" className="w-full h-full object-cover" />
               <button
                 onClick={() => onChange("")}
                 className="absolute -top-2 -right-2 bg-red-500 text-white rounded-full p-1 opacity-0 group-hover:opacity-100 transition-opacity shadow-lg"
