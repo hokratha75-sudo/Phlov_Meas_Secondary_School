@@ -730,20 +730,34 @@ router.post("/leave-requests", requireAuth, async (req: any, res) => {
     const role = req.adminUser?.role;
     const userId = req.adminUser?.id;
 
+    console.log(`[POST] /api/leave-requests - role=${role}, userId=${userId}, body=`, JSON.stringify(req.body));
+
     let teacherId: number;
     if (role === "teacher") {
-      teacherId = userId;
+      teacherId = Number(userId);
     } else {
       teacherId = Number(req.body.teacherId);
     }
 
-    const { leaveType, startDate, endDate, totalDays, reason, addressDuringLeave, attachmentUrl } = req.body;
-    if (!leaveType || !startDate || !endDate || !totalDays || !reason || !addressDuringLeave) {
-      res.status(400).json({ error: "All fields except attachment are required." });
+    if (!teacherId || isNaN(teacherId)) {
+      res.status(400).json({ error: "គ្មាន teacherId ត្រឹមត្រូវទេ។ សូម login ឡើងវិញ។" });
       return;
     }
 
+    const { leaveType, startDate, endDate, totalDays, reason, addressDuringLeave, attachmentUrl } = req.body;
+
+    // Validate each field individually for clearer error messages
+    if (!leaveType) { res.status(400).json({ error: "សូមជ្រើសប្រភេទច្បាប់ឈប់សម្រាក។" }); return; }
+    if (!startDate) { res.status(400).json({ error: "សូមជ្រើសកាលបរិច្ឆេទចាប់ផ្ដើម។" }); return; }
+    if (!endDate) { res.status(400).json({ error: "សូមជ្រើសកាលបរិច្ឆេទបញ្ចប់។" }); return; }
+    if (!reason || String(reason).trim() === "") { res.status(400).json({ error: "សូមបំពេញមូលហេតុ។" }); return; }
+    if (!addressDuringLeave || String(addressDuringLeave).trim() === "") { res.status(400).json({ error: "សូមបំពេញអាសយដ្ឋានអំឡុងពេលឈប់សម្រាក។" }); return; }
+
     const totalDaysNum = Number(totalDays);
+    if (isNaN(totalDaysNum) || totalDaysNum <= 0) {
+      res.status(400).json({ error: "ចំនួនថ្ងៃឈប់សម្រាកត្រូវតែធំជាង ០ ថ្ងៃ។" });
+      return;
+    }
 
     // Sub-decree 217 Validations:
     if (leaveType === "ANNUAL") {
@@ -792,14 +806,14 @@ router.post("/leave-requests", requireAuth, async (req: any, res) => {
       startDate,
       endDate,
       totalDays: totalDaysNum,
-      reason,
-      addressDuringLeave,
+      reason: String(reason).trim(),
+      addressDuringLeave: String(addressDuringLeave).trim(),
       attachmentUrl: attachmentUrl || null,
       signatureUrl: req.body.signatureUrl || null,
       status: "PENDING",
     }).returning();
 
-    console.log(`[POST] /api/leave-requests - Created request ${item?.id} under Sub-decree 217`);
+    console.log(`[POST] /api/leave-requests - Created request ${item?.id} for teacherId=${teacherId}`);
 
     // --- TELEGRAM NOTIFICATION ---
     const [t] = await db.select().from(teachers).where(eq(teachers.id, teacherId));

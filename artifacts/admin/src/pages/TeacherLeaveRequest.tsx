@@ -70,7 +70,8 @@ export default function TeacherLeaveRequestPage() {
         throw new Error(res.data.message || "បរាជ័យក្នុងការបង្ហោះឯកសារ");
       }
     } catch (err: any) {
-      alert("❌ " + (err.response?.data?.message || err.message || "Upload error"));
+      const uploadError = err.response?.data?.error || err.response?.data?.message || err.message || "Upload error";
+      alert("❌ " + uploadError);
     }
   };
 
@@ -132,7 +133,8 @@ export default function TeacherLeaveRequestPage() {
         navigate(`/leave-requests/${created.id}`);
       }, 2000);
     } catch (err: any) {
-      alert("❌ " + err.message);
+      const apiError = err.response?.data?.error || err.response?.data?.details || err.message;
+      alert("❌ " + apiError);
       setSubmitting(false);
     }
   };
