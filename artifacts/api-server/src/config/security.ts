@@ -18,7 +18,18 @@ if (productionOrigins.length === 0) {
 
 export const corsConfig: CorsOptions = {
   origin: isProduction 
-    ? productionOrigins
+    ? (origin, callback) => {
+        // Allow requests with no origin (mobile apps, curl, etc.)
+        if (!origin) return callback(null, true);
+        // Allow if origin is in the explicit list
+        if (productionOrigins.includes(origin)) return callback(null, true);
+        // Allow any *.vercel.app subdomain
+        if (origin.endsWith('.vercel.app')) return callback(null, true);
+        // Allow any *.up.railway.app subdomain
+        if (origin.endsWith('.up.railway.app')) return callback(null, true);
+        console.warn(`[CORS] Blocked origin: ${origin}`);
+        callback(new Error('Not allowed by CORS'));
+      }
     : [
         "http://localhost:3000",
         "http://localhost:3001",
