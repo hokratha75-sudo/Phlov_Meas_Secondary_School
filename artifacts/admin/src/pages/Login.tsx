@@ -19,7 +19,8 @@ export default function Login() {
       await login(username, password);
       setLocation("/");
     } catch (err: any) {
-      setError(err.response?.data?.message || err.message || "Invalid credentials");
+      const errorMessage = err.response?.data?.error || err.response?.data?.message || err.message || "Invalid credentials";
+      setError(errorMessage);
     } finally {
       setLoading(false);
     }
