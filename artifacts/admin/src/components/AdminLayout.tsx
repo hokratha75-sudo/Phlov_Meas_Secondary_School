@@ -297,16 +297,24 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           </div>
 
           <div className="flex items-center gap-2 sm:gap-3 text-sm shrink-0">
-            <div className="hidden xl:flex items-center gap-2 border-r border-gray-200 dark:border-gray-700 pr-3 mr-1">
-              <button
-                onClick={() => setLang(lang === "en" ? "km" : "en")}
-                className="inline-flex items-center gap-2 px-3 py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium dark:bg-gray-900/50"
-              >
-                <Languages size={16} />
-                {lang === "en" ? "EN" : "ខ្មែរ"}
-              </button>
-              <a href={import.meta.env.VITE_WEBSITE_URL || "http://localhost:3000"} target="_blank" className="text-primary dark:text-blue-400 font-semibold hover:bg-blue-50 dark:hover:bg-gray-800 px-3 py-1.5 rounded-lg transition-colors border border-transparent">{labels.viewWebsite}</a>
-            </div>
+            {/* Language Switcher (Visible on all screens) */}
+            <button
+              onClick={() => setLang(lang === "en" ? "km" : "en")}
+              className="inline-flex items-center gap-1.5 px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium dark:bg-gray-900/50"
+              title={lang === "km" ? "ប្តូរភាសា" : "Switch Language"}
+            >
+              <Languages size={16} className="shrink-0" />
+              <span className="text-xs sm:text-sm font-semibold">{lang === "en" ? "EN" : "ខ្មែរ"}</span>
+            </button>
+
+            {/* View Website Link (Hidden on small screens, visible on xl) */}
+            <a 
+              href={import.meta.env.VITE_WEBSITE_URL || "http://localhost:3000"} 
+              target="_blank" 
+              className="hidden xl:inline-flex text-primary dark:text-blue-400 font-semibold hover:bg-blue-50 dark:hover:bg-gray-800 px-3 py-1.5 rounded-lg transition-colors border border-transparent mr-1"
+            >
+              {labels.viewWebsite}
+            </a>
 
             <div className="relative">
               <button 
