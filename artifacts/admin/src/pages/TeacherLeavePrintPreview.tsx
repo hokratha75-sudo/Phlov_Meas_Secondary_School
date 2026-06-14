@@ -57,7 +57,7 @@ export default function TeacherLeavePrintPreviewPage({ id }: Props) {
   const handleExportExcel = async () => {
     setExporting(true);
     try {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+      const baseUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || "";
       const headers: Record<string, string> = {};
       if (token) {
         headers["Authorization"] = `Bearer ${token}`;
@@ -173,7 +173,7 @@ export default function TeacherLeavePrintPreviewPage({ id }: Props) {
   const t = request.teacher;
   const getSignatureUrl = (url: string | null | undefined) => {
     if (!url) return "";
-    const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+    const baseUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || "";
     if (url.includes("/uploads/")) {
       const parts = url.split("/uploads/");
       return `${baseUrl}/uploads/${parts[parts.length - 1]}`;

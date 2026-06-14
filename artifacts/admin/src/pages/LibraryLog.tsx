@@ -222,7 +222,7 @@ export default function LibraryLogPage() {
   const handleExportExcel = async () => {
     setExporting(true);
     try {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+      const baseUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || "";
       const statusParam = statusFilter !== "All" ? `status=${statusFilter}` : "";
       const searchParam = searchTerm ? `search=${encodeURIComponent(searchTerm)}` : "";
       const queryParams = [statusParam, searchParam].filter(Boolean).join("&");

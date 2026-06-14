@@ -1,6 +1,7 @@
 import { type ReactNode, useEffect, useMemo, useState } from "react";
 import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
+import api from "@/lib/axiosConfig";
 import {
   LayoutDashboard, Newspaper, Activity, GraduationCap, Users, Mail, LogOut, Menu, School, Settings, FileText, ClipboardList, Award, BookOpen, Languages, ChevronDown, Calendar, Book, Bell, Search, Moon, Sun, Palette
 } from "lucide-react";
@@ -114,27 +115,13 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
     if (!user) return;
     const fetchPending = async () => {
       try {
-        const baseUrl = import.meta.env.DEV ? "" : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:8080');
-        
         const [leaveRes, contactRes] = await Promise.all([
-          fetch(`${baseUrl}/api/leave-requests-pending-count`, {
-            headers: { Authorization: `Bearer ${token}` },
-            credentials: "include"
-          }),
-          fetch(`${baseUrl}/api/contacts/unread-count`, {
-            headers: { Authorization: `Bearer ${token}` },
-            credentials: "include"
-          })
+          api.get('/leave-requests-pending-count'),
+          api.get('/contacts/unread-count')
         ]);
 
-        if (leaveRes.ok) {
-          const data = await leaveRes.json();
-          setPendingLeaveCount(data.count ?? 0);
-        }
-        if (contactRes.ok) {
-          const data = await contactRes.json();
-          setUnreadContactsCount(data.count ?? 0);
-        }
+        setPendingLeaveCount(leaveRes.data?.count ?? 0);
+        setUnreadContactsCount(contactRes.data?.count ?? 0);
       } catch { /* silent */ }
     };
     fetchPending();

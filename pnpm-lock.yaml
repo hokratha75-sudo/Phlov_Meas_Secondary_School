@@ -77,6 +77,10 @@ overrides:
 importers:
 
   .:
+    dependencies:
+      dotenv:
+        specifier: ^16.6.1
+        version: 16.6.1
     devDependencies:
       bcryptjs:
         specifier: ^3.0.3

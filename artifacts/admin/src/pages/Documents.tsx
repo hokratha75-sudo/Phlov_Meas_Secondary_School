@@ -208,7 +208,7 @@ export default function DocumentsPage() {
 
     const apiBase = import.meta.env.DEV 
       ? "/api" 
-      : (import.meta.env.VITE_API_BASE_URL || "http://localhost:8080") + "/api";
+      : (import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || "") + "/api";
 
     // Use XMLHttpRequest to get accurate progress updates
     const xhr = new XMLHttpRequest();

@@ -521,7 +521,7 @@ export default function StudentGradeBook() {
     }
     setIsSyncing(true);
     try {
-      const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+      const baseUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || "";
       // We will fetch the full record from the backend
       const res = await fetch(`${baseUrl}/api/students/${studentSyncId}/full-record`, {
         headers: { Authorization: `Bearer ${localStorage.getItem("admin_token")}` }

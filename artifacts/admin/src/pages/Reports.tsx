@@ -227,7 +227,7 @@ export default function ReportsPage() {
         const gradeLevel = parseInt((classroom?.grade || "").replace(/[^0-9]/g, "")) || 0;
         const isScience = (classroom?.name || "").toUpperCase().includes("A");
         
-        const baseUrl = import.meta.env.VITE_API_BASE_URL || "http://localhost:8080";
+        const baseUrl = import.meta.env.VITE_API_URL || import.meta.env.VITE_API_BASE_URL || "";
         
         // 1. Fetch Subject Configs
         const configsRes = await api.get(`/subject-configs?gradeLevel=${gradeLevel}&isScienceTrack=${isScience}`);

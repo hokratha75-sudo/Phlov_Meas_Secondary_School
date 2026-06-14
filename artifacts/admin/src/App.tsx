@@ -55,11 +55,29 @@ setCustomFetchFn(async (input: RequestInfo | URL, init?: RequestInit) => {
     url = url.substring(4);
   }
   
+  // Convert Headers object or headers initializer to plain object for Axios
+  const headersObj: Record<string, string> = {};
+  if (init?.headers) {
+    if (init.headers instanceof Headers) {
+      init.headers.forEach((value, key) => {
+        headersObj[key] = value;
+      });
+    } else if (Array.isArray(init.headers)) {
+      init.headers.forEach(([key, value]) => {
+        headersObj[key] = value;
+      });
+    } else {
+      Object.keys(init.headers).forEach((key) => {
+        headersObj[key] = (init.headers as Record<string, string>)[key];
+      });
+    }
+  }
+  
   try {
     const res = await api({
       url,
       method: init?.method || "GET",
-      headers: init?.headers as any,
+      headers: headersObj,
       data: (function() {
         if (!init?.body) return undefined;
         if (typeof init.body === "string") {
