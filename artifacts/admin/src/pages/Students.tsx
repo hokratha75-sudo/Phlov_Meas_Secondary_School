@@ -9,7 +9,7 @@ import StudentIdCardStudio from "@/components/StudentIdCardStudio";
 import ExcelJS from 'exceljs';
 import { GeoDropdowns } from "@/components/GeoDropdowns";
 import { exportStudentProfileToExcel } from "@/utils/excelExport";
-import { resolveUrl } from "@/lib/axiosConfig";
+import api, { resolveUrl } from "@/lib/axiosConfig";
 
 const GRADES = ["Grade 7", "Grade 8", "Grade 9", "Grade 10", "Grade 11", "Grade 12"];
 
@@ -143,10 +143,14 @@ function StudentModal({ item, onClose, onSave, token, classrooms }: { item?: Stu
                       const formData = new FormData();
                       formData.append("file", file);
                       try {
-                        const res = await fetch("/api/upload", { method: "POST", headers: { Authorization: `Bearer ${token}` }, body: formData });
-                        const data = await res.json();
-                        if (res.ok && data.url) setForm(f => ({ ...f, photoUrl: data.url }));
-                        else alert(data.message || "Upload failed");
+                        const res = await api.post("/upload", formData, {
+                          headers: { "Content-Type": "multipart/form-data" }
+                        });
+                        if (res.data && res.data.url) {
+                          setForm(f => ({ ...f, photoUrl: res.data.url }));
+                        } else {
+                          alert(res.data.message || "Upload failed");
+                        }
                       } catch (err) { alert("Upload error"); } 
                       finally { setIsUploading(false); }
                     }} disabled={isUploading} />

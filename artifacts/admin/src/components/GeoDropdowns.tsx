@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useQuery } from "@tanstack/react-query";
-import { useAuth } from "@/lib/auth";
+import api from "@/lib/axiosConfig";
 
 type Province = { code: string; nameKh: string; nameEn: string };
 type District = { code: string; provinceCode: string; nameKh: string; nameEn: string };
@@ -24,32 +24,27 @@ export function GeoDropdowns({
   onChange,
   className = ""
 }: GeoDropdownsProps) {
-  const { token } = useAuth();
   
-  const headers = {
-    "Authorization": `Bearer ${token}`
-  };
-
   const { data: provinces = [] } = useQuery<Province[]>({
     queryKey: ["geo", "provinces"],
-    queryFn: () => fetch("/api/geo/provinces", { headers }).then(r => r.json())
+    queryFn: () => api.get("/geo/provinces").then(r => r.data)
   });
 
   const { data: districts = [] } = useQuery<District[]>({
     queryKey: ["geo", "districts", selectedProvince],
-    queryFn: () => fetch(`/api/geo/districts?provinceCode=${selectedProvince}`, { headers }).then(r => r.json()),
+    queryFn: () => api.get(`/geo/districts?provinceCode=${selectedProvince}`).then(r => r.data),
     enabled: !!selectedProvince
   });
 
   const { data: communes = [] } = useQuery<Commune[]>({
     queryKey: ["geo", "communes", selectedDistrict],
-    queryFn: () => fetch(`/api/geo/communes?districtCode=${selectedDistrict}`, { headers }).then(r => r.json()),
+    queryFn: () => api.get(`/geo/communes?districtCode=${selectedDistrict}`).then(r => r.data),
     enabled: !!selectedDistrict
   });
 
   const { data: villages = [] } = useQuery<Village[]>({
     queryKey: ["geo", "villages", selectedCommune],
-    queryFn: () => fetch(`/api/geo/villages?communeCode=${selectedCommune}`, { headers }).then(r => r.json()),
+    queryFn: () => api.get(`/geo/villages?communeCode=${selectedCommune}`).then(r => r.data),
     enabled: !!selectedCommune
   });
 
