@@ -304,8 +304,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               className="inline-flex items-center gap-1.5 px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium dark:bg-gray-900/50"
               title={lang === "km" ? "ប្តូរភាសា" : "Switch Language"}
             >
-              <Languages size={16} className="shrink-0" />
-              <span className="text-xs sm:text-sm font-semibold tracking-wide">{lang === "en" ? "KH" : "EN"}</span>
+              <img
+                src={lang === "en" ? "https://flagcdn.com/w40/kh.png" : "https://flagcdn.com/w40/gb.png"}
+                alt={lang === "en" ? "ខ្មែរ" : "English"}
+                className="w-6 h-4 rounded-sm object-cover shadow-sm"
+              />
+              <span className="text-xs font-semibold tracking-wide hidden sm:inline">{lang === "en" ? "KH" : "EN"}</span>
             </button>
 
             {/* View Website Link (Hidden on small screens, visible on xl) */}
