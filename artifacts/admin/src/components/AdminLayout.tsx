@@ -267,15 +267,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
             <LogOut size={16} />
             {labels.signOut}
           </button>
-            {/* Language Switcher for mobile sidebar */}
-            <button
-              onClick={() => setLang(lang === "en" ? "km" : "en")}
-              className="inline-flex items-center gap-1.5 px-2 py-1.5 sm:px-3 sm:py-1.5 rounded-lg border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors font-medium dark:bg-gray-900/50 mt-2"
-              title={lang === "km" ? "ប្តូរភាសា" : "Switch Language"}
-            >
-              <Languages size={16} className="shrink-0" />
-              <span className="text-xs sm:text-sm font-semibold">{lang === "en" ? "🇬🇧" : "🇰🇭"}</span>
-            </button>
+  
         </div>
       </aside>
 
@@ -313,7 +305,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
               title={lang === "km" ? "ប្តូរភាសា" : "Switch Language"}
             >
               <Languages size={16} className="shrink-0" />
-              <span className="text-xs sm:text-sm font-semibold">{lang === "en" ? "🇬🇧" : "🇰🇭"}</span>
+              <span className="text-xs sm:text-sm font-semibold tracking-wide">{lang === "en" ? "KH" : "EN"}</span>
             </button>
 
             {/* View Website Link (Hidden on small screens, visible on xl) */}
