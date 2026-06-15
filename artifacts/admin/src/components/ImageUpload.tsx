@@ -23,11 +23,7 @@ export default function ImageUpload({ value, onChange, label }: ImageUploadProps
     formData.append("file", file);
 
     try {
-      const response = await api.post("/upload", formData, {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        }
-      });
+      const response = await api.post("/upload", formData);
 
       onChange(response.data.url);
     } catch (err) {

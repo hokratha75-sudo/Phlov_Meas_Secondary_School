@@ -110,9 +110,7 @@ export default function StudentIdCardModal({ student, onClose, token }: StudentI
                       const formData = new FormData();
                       formData.append("file", file);
                       try {
-                        const res = await api.post("/upload", formData, {
-                          headers: { "Content-Type": "multipart/form-data" }
-                        });
+                        const res = await api.post("/upload", formData);
                         if (res.data && res.data.url) {
                           setTemplate({...template, signatureUrl: res.data.url});
                         } else {

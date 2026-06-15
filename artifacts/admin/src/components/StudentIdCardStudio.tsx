@@ -167,7 +167,7 @@ const StudentIdCardStudio: React.FC<StudentIdCardStudioProps> = ({ students: api
     const formData = new FormData();
     formData.append('file', file);
     try {
-      const res = await api.post('/upload', formData, { headers: { 'Content-Type': 'multipart/form-data', ...headers } });
+      const res = await api.post('/upload', formData, { headers });
       setter(res.data?.url ?? URL.createObjectURL(file));
     } catch {
       setter(URL.createObjectURL(file));

@@ -123,9 +123,7 @@ export default function MasterTimetable() {
     formData.append('file', file);
 
     try {
-      const res = await api.post('/schedules/import', formData, {
-        headers: { 'Content-Type': 'multipart/form-data' }
-      });
+      const res = await api.post('/schedules/import', formData);
       
       let desc = `ជោគជ័យ: ${res.data.successCount}, បរាជ័យ: ${res.data.failedCount}`;
       if (res.data.failedCount > 0 && res.data.errors) {

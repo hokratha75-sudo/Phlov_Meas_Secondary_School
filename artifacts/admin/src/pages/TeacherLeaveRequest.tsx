@@ -61,9 +61,7 @@ export default function TeacherLeaveRequestPage() {
     formData.append("file", file);
 
     try {
-      const res = await api.post("/upload", formData, {
-        headers: { "Content-Type": "multipart/form-data" }
-      });
+      const res = await api.post("/upload", formData);
       if (res.data && res.data.url) {
         setForm((f) => ({ ...f, [field]: res.data.url }));
       } else {
