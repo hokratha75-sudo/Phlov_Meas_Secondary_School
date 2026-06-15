@@ -172,7 +172,7 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
         lg:relative lg:translate-x-0
         ${open ? "translate-x-0" : "-translate-x-full"}
       `}>
-        <div className="flex items-center gap-3 px-6 py-5 border-b border-white/10">
+        <div className="flex items-center gap-3 px-6 py-5 border-b border-white/10 relative z-10">
           <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center shrink-0 overflow-hidden border-2 border-white/20 shadow-inner dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
             <img src="/logosala.png" alt="Logo" className="w-full h-full object-contain p-1" />
           </div>
@@ -182,7 +182,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
           </div>
         </div>
 
-        <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto">
+        {/* Sidebar Kbach Watermark */}
+        <div className="absolute bottom-0 left-0 w-full h-64 z-0 opacity-[0.05] pointer-events-none overflow-hidden flex items-end justify-center pb-4">
+          <img src="/kbach-01.png" alt="" className="w-48 h-48 object-contain filter invert" />
+        </div>
+
+        <nav className="flex-1 px-4 py-4 space-y-1 overflow-y-auto relative z-10">
           {localizedNav.map((item) => {
             const hasSub = !!item.subItems;
             const isExpanded = expandedMenus[item.href];
@@ -275,8 +280,17 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
       {open && <div className="fixed inset-0 z-40 bg-black/40 lg:hidden" onClick={() => setOpen(false)} />}
 
       {/* Main */}
-      <div className="flex-1 flex flex-col overflow-hidden">
-        <header className="bg-white dark:bg-[#1e293b] border-b dark:border-gray-800 px-4 lg:px-6 py-3 flex items-center justify-between shrink-0 gap-4 z-10 relative dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100">
+      <div className="flex-1 flex flex-col overflow-hidden relative">
+        {/* Main Content Kbach Watermark */}
+        <div className="absolute inset-0 z-0 opacity-[0.03] dark:opacity-[0.05] pointer-events-none flex items-center justify-center">
+          <img 
+            src="/kbach-01.png" 
+            alt="" 
+            className="w-[600px] h-[600px] object-contain dark:filter dark:invert" 
+          />
+        </div>
+
+        <header className="bg-white/90 dark:bg-[#1e293b]/90 backdrop-blur-md border-b dark:border-gray-800 px-4 lg:px-6 py-3 flex items-center justify-between shrink-0 gap-4 z-10 relative dark:text-gray-100">
           <div className="flex items-center gap-4">
             <button className="lg:hidden text-gray-600 dark:text-gray-300 hover:text-gray-900 dark:hover:text-white" onClick={() => setOpen(true)}>
               <Menu size={22} />
