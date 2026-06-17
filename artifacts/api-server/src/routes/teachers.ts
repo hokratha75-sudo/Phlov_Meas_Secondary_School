@@ -1,17 +1,53 @@
 import { Router } from "express";
 import bcrypt from "bcryptjs";
 import { db, teachers } from "@workspace/db";
-import { eq, count } from "drizzle-orm";
+import { eq, count, desc, and, sql } from "drizzle-orm";
 import { requireAuth, requireAdmin } from "./auth";
 
 const router = Router();
 
-router.get("/teachers", async (_req, res) => {
+router.get("/teachers", async (req: any, res) => {
   console.log("[GET] /api/teachers - Fetching teachers list...");
   try {
+    const limit = Number(req.query["limit"]) || 50;
+    const offset = Number(req.query["offset"]) || 0;
+    const search = req.query["search"] as string | undefined;
+    const sortField = req.query["sortField"] as string | undefined;
+    const sortDir = req.query["sortDir"] as string | undefined;
+
+    const conditions = [];
+    if (search) {
+      conditions.push(
+        sql`${teachers.nameKh} ILIKE ${`%${search}%`} OR 
+            ${teachers.nameEn} ILIKE ${`%${search}%`} OR 
+            ${teachers.subjectEn} ILIKE ${`%${search}%`} OR
+            ${teachers.subjectKh} ILIKE ${`%${search}%`}`
+      );
+    }
+
+    const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
+
+    let orderByClause = desc(teachers.createdAt);
+    if (sortField) {
+      const field = sortField === "nameKh" ? teachers.nameKh :
+                    sortField === "nameEn" ? teachers.nameEn :
+                    sortField === "subjectEn" ? teachers.subjectEn :
+                    sortField === "subjectKh" ? teachers.subjectKh :
+                    teachers.createdAt;
+      
+      orderByClause = sortDir === "asc" ? sql`${field} ASC` : sql`${field} DESC`;
+    }
+
     const [items, [total]] = await Promise.all([
-      db.select().from(teachers),
-      db.select({ count: count() }).from(teachers),
+      db.query.teachers.findMany({
+        where: whereClause,
+        orderBy: [orderByClause],
+        limit,
+        offset,
+      }),
+      db.select({ count: count() })
+        .from(teachers)
+        .where(whereClause),
     ]);
     console.log(`[GET] /api/teachers - Success: Found ${items.length} teachers.`);
     // Never expose passwordHash to the client

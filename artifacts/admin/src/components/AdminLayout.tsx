@@ -3,52 +3,91 @@ import { Link, useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import api from "@/lib/axiosConfig";
 import {
-  LayoutDashboard, Newspaper, Activity, GraduationCap, Users, Mail, LogOut, Menu, School, Settings, FileText, ClipboardList, Award, BookOpen, Languages, ChevronDown, Calendar, Book, Bell, Search, Moon, Sun, Palette
+  LayoutDashboard, Database, CalendarDays, ClipboardList, MessageSquare, Settings, Users, GraduationCap, School, BookOpen, Calendar, Clock, CheckSquare, Award, Library, Sparkles, Bell, UserCircle, Newspaper, Activity, Inbox, Send, FileText, History, DatabaseBackup, LogOut, Menu, Languages, ChevronDown, Moon, Sun, Palette, Mail, Search
 } from "lucide-react";
 
 type Lang = "en" | "km";
 
 const navItems = [
+  // 📊 ផ្ទាំងគ្រប់គ្រង (Dashboard)
   { href: "/", icon: LayoutDashboard, en: "Dashboard", km: "ផ្ទាំងគ្រប់គ្រង", roles: ["admin", "teacher"] },
-  { href: "/news", icon: Newspaper, en: "News", km: "ព័ត៌មាន", roles: ["admin"] },
-  { href: "/activities", icon: Activity, en: "Activities", km: "សកម្មភាព", roles: ["admin"] },
-  { href: "/teachers", icon: GraduationCap, en: "Teachers", km: "គ្រូបង្រៀន", roles: ["admin"] },
-  { href: "/classrooms", icon: School, en: "Classrooms", km: "ថ្នាក់រៀន", roles: ["admin"] },
-  { href: "/schedule/master", icon: Calendar, en: "Master Timetable", km: "កាលវិភាគរួម", roles: ["admin"] },
-  { href: "/schedule/teacher-load", icon: Users, en: "Teacher Load", km: "ម៉ោងបង្រៀនគ្រូ", roles: ["admin"] },
-  { href: "/students", icon: Users, en: "Students", km: "សិស្សានុសិស្ស", roles: ["admin", "teacher"] },
-  { href: "/contacts", icon: Mail, en: "Messages", km: "សារទំនាក់ទំនង", roles: ["admin"] },
-  { href: "/my-profile", icon: GraduationCap, en: "My Profile", km: "ប្រវត្តិរូបរបស់ខ្ញុំ", roles: ["teacher"] },
-  { href: "/documents", icon: FileText, en: "School Documents", km: "ឯកសារសាលារៀន", roles: ["admin", "teacher"] },
 
-  { 
-    href: "/administrative", 
-    icon: ClipboardList, 
-    en: "Admin Work", 
-    km: "ការងាររដ្ឋបាល",
+  // 📚 ទិន្នន័យមូលដ្ឋាន (Master Data)
+  {
+    href: "/master-data",
+    icon: Database,
+    en: "Master Data",
+    km: "ទិន្នន័យមូលដ្ឋាន",
     roles: ["admin", "teacher"],
     subItems: [
-      { href: "/administrative/attendance", icon: Calendar, en: "Attendance List", km: "បញ្ជីវត្តមាន", roles: ["admin", "teacher"] },
-      { href: "/administrative/grades", icon: Award, en: "Grades Management", km: "កម្មវិធីគ្រប់គ្រងពិន្ទុ", roles: ["admin", "teacher"] },
-
-      { href: "/administrative/gradebook", icon: BookOpen, en: "Grade Book", km: "សៀវភៅសិក្ខាគារិកមធ្យមសិក្សា", roles: ["admin", "teacher"] },
-      { href: "/administrative/library", icon: Book, en: "Library Log", km: "បញ្ជីខ្ចី-សងសៀវភៅ", roles: ["admin"] },
-      { href: "/administrative/cleaning", icon: Calendar, en: "Cleaning Schedule", km: "បញ្ជីវេនសម្អាត", roles: ["admin", "teacher"] },
-      { href: "/reports", icon: FileText, en: "Reports", km: "របាយការណ៍", roles: ["admin", "teacher"] },
-      { href: "/leave-requests", icon: Bell, en: "Leave Requests", km: "ពាក្យសុំច្បាប់", roles: ["admin", "teacher"], badge: true },
-      { href: "/administrative/id-cards", icon: FileText, en: "ID Card Studio", km: "បង្កើតកាតសិស្ស", roles: ["admin", "teacher"] },
+      { href: "/students", icon: Users, en: "Students", km: "សិស្សានុសិស្ស", roles: ["admin", "teacher"] },
+      { href: "/teachers", icon: GraduationCap, en: "Teachers", km: "គ្រូបង្រៀន", roles: ["admin"] },
+      { href: "/classrooms", icon: School, en: "Classrooms", km: "ថ្នាក់រៀន", roles: ["admin"] },
+      { href: "/settings/subjects", icon: BookOpen, en: "Subjects", km: "មុខវិជ្ជា", roles: ["admin"] },
     ]
   },
-  { 
-    href: "/settings", 
-    icon: Settings, 
-    en: "Site Settings", 
-    km: "ការកំណត់គេហទំព័រ", 
+
+  // 📅 កាលវិភាគ (Schedules)
+  {
+    href: "/schedules",
+    icon: CalendarDays,
+    en: "Schedules",
+    km: "កាលវិភាគ",
     roles: ["admin"],
     subItems: [
-      { href: "/settings", icon: Settings, en: "General Settings", km: "ការកំណត់ទូទៅ", roles: ["admin"] },
+      { href: "/schedule/master", icon: Calendar, en: "Master Timetable", km: "កាលវិភាគរួម", roles: ["admin"] },
+      { href: "/schedule/teacher-load", icon: Clock, en: "Teacher Load", km: "បន្ទុកបង្រៀន", roles: ["admin"] },
+    ]
+  },
+
+  // 📋 ការងារប្រចាំថ្ងៃ (Daily Ops)
+  {
+    href: "/daily-ops",
+    icon: ClipboardList,
+    en: "Daily Ops",
+    km: "ការងារប្រចាំថ្ងៃ",
+    roles: ["admin", "teacher"],
+    subItems: [
+      { href: "/administrative/attendance", icon: CheckSquare, en: "Attendance", km: "បញ្ជីវត្តមាន", roles: ["admin", "teacher"] },
+      { href: "/administrative/grades", icon: Award, en: "Grades", km: "ពិន្ទុសិស្ស", roles: ["admin", "teacher"] },
+      { href: "/administrative/gradebook", icon: BookOpen, en: "Grade Book", km: "តារាងពិន្ទុរួម", roles: ["admin", "teacher"] },
+      { href: "/administrative/library", icon: Library, en: "Library Log", km: "បណ្ណាល័យ", roles: ["admin"] },
+      { href: "/administrative/cleaning", icon: Sparkles, en: "Cleaning Schedule", km: "កាលវិភាគសម្អាត", roles: ["admin", "teacher"] },
+      { href: "/leave-requests", icon: Bell, en: "Leave Requests", km: "ពាក្យសុំច្បាប់", roles: ["admin", "teacher"], badge: true },
+      { href: "/administrative/id-cards", icon: UserCircle, en: "ID Card Studio", km: "បង្កើតកាតសិស្ស", roles: ["admin", "teacher"] },
+    ]
+  },
+
+  // 📢 ទំនាក់ទំនង & ខ្លឹមសារ (Communication)
+  {
+    href: "/communication",
+    icon: MessageSquare,
+    en: "Communication",
+    km: "ទំនាក់ទំនង & ខ្លឹមសារ",
+    roles: ["admin", "teacher"],
+    subItems: [
+      { href: "/news", icon: Newspaper, en: "News", km: "ព័ត៌មាន", roles: ["admin"] },
+      { href: "/activities", icon: Activity, en: "Activities", km: "សកម្មភាព", roles: ["admin"] },
+      { href: "/contacts", icon: Inbox, en: "Inbox", km: "ប្រអប់សារ", roles: ["admin"] },
+      { href: "/telegram-inbox", icon: Send, en: "Telegram Inbox", km: "ប្រអប់សារ Telegram", roles: ["admin"] },
+      { href: "/documents", icon: FileText, en: "School Documents", km: "ឯកសារសាលា", roles: ["admin", "teacher"] },
+    ]
+  },
+
+  // 🛠️ ការកំណត់ & ថែទាំ (Settings)
+  {
+    href: "/settings-group",
+    icon: Settings,
+    en: "Settings & Maintenance",
+    km: "ការកំណត់ & ថែទាំ",
+    roles: ["admin", "teacher"],
+    subItems: [
+      { href: "/settings", icon: Settings, en: "System Settings", km: "ការកំណត់ប្រព័ន្ធ", roles: ["admin"] },
       { href: "/settings/grading-standards", icon: Award, en: "Grading Standards", km: "កំណត់ស្ដង់ដារពិន្ទុ", roles: ["admin"] },
-      { href: "/settings/subjects", icon: BookOpen, en: "Manage Subjects", km: "គ្រប់គ្រងមុខវិជ្ជា", roles: ["admin"] },
+      { href: "/settings/telegram", icon: Send, en: "Telegram Settings", km: "ការកំណត់ Telegram", roles: ["admin"] },
+      { href: "/my-profile", icon: UserCircle, en: "My Profile", km: "ប្រវត្តិរូបរបស់ខ្ញុំ", roles: ["teacher"] },
+      { href: "/settings/audit-logs", icon: History, en: "Audit Logs", km: "ប្រវត្តិការងារ", roles: ["admin"] },
+      { href: "/settings/backup", icon: DatabaseBackup, en: "Backup & Restore", km: "បម្រុងទុក & ស្តារ", roles: ["admin"] },
     ]
   },
 ];

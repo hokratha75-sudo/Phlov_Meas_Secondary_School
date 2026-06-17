@@ -169,8 +169,8 @@ export default function AttendancePage() {
     request: { headers: { Authorization: `Bearer ${token}` } } 
   });
 
-  const { data: teachers } = useListTeachers({ 
-    request: { headers: { Authorization: `Bearer ${token}` } } 
+  const { data: teachers } = useListTeachers(undefined, {
+    request: { headers: { Authorization: `Bearer ${token}` } }
   });
 
   const { data: studentsData, isLoading: isLoadingStudents } = useListStudents(undefined, { 

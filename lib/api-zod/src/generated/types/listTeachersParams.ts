@@ -5,14 +5,12 @@
  * API specification
  * OpenAPI spec version: 0.1.0
  */
-import type { ListStudentsSortDir } from "./listStudentsSortDir";
+import type { ListTeachersSortDir } from "./listTeachersSortDir";
 
-export type ListStudentsParams = {
+export type ListTeachersParams = {
   limit?: number;
   offset?: number;
-  grade?: string;
-  classId?: number;
   search?: string;
   sortField?: string;
-  sortDir?: ListStudentsSortDir;
+  sortDir?: ListTeachersSortDir;
 };

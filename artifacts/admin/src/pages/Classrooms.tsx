@@ -23,7 +23,7 @@ export default function Classrooms() {
   });
 
   const { data: classData, refetch, isLoading: classLoading, isError } = useListClassrooms({ request: { headers } });
-  const { data: teachersData } = useListTeachers({ request: { headers } });
+  const { data: teachersData } = useListTeachers(undefined, { request: { headers: { Authorization: `Bearer ${token}` } } });
   const isLoading = classLoading;
 
   const createMutation = useCreateClassroom({ request: { headers } });

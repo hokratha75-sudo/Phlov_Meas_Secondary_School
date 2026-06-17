@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
 import { useListTeachers, useCreateTeacher, useUpdateTeacher, useDeleteTeacher } from "@workspace/api-client-react";
 import { useAuth } from "@/lib/auth";
 import { Plus, Pencil, Trash2, X, GraduationCap, Search, Phone, Mail, KeyRound, ShieldCheck, ShieldOff, FileSpreadsheet, FileText, Link2, Bot } from "lucide-react";
@@ -376,8 +377,21 @@ export default function TeachersPage() {
   const [modal, setModal] = useState<Teacher | null | "new">(null);
   const [generatingLink, setGeneratingLink] = useState<number | null>(null);
   const [linkCodeResult, setLinkCodeResult] = useState<{ code: string; teacherName: string } | null>(null);
+  
+  const [page, setPage] = useState(0);
+  const [sortField, setSortField] = useState<"nameEn" | "subjectEn" | "createdAt">("createdAt");
+  const [sortDir, setSortDir] = useState<"asc" | "desc">("desc");
+  const limit = 50;
+
+  const debouncedSearch = useDebounce(search, 500);
 
   const { data, refetch, isLoading, isError, error } = useListTeachers({
+    search: debouncedSearch || undefined,
+    sortField: sortField === "createdAt" ? undefined : sortField,
+    sortDir,
+    limit,
+    offset: page * limit
+  }, {
     request: { headers: { Authorization: `Bearer ${token}` } }
   });
 
@@ -406,12 +420,7 @@ export default function TeachersPage() {
     }
   };
 
-  const filtered = data?.data.filter(tData =>
-    tData.nameEn.toLowerCase().includes(search.toLowerCase()) ||
-    tData.nameKh.includes(search) ||
-    tData.subjectEn.toLowerCase().includes(search.toLowerCase()) ||
-    tData.subjectKh.includes(search)
-  ) ?? [];
+  const teachers = data?.data || [];
 
   const handleGenerateLinkCode = async (teacherId: number) => {
     setGeneratingLink(teacherId);
@@ -452,7 +461,7 @@ export default function TeachersPage() {
               className="pl-10 pr-4 py-2 border dark:border-gray-700 rounded-lg text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 w-64 shadow-sm bg-white dark:bg-gray-800 dark:text-gray-100"
             />
           </div>
-          <button onClick={() => exportTeachersListToExcel(filtered)} className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition-all shadow-md active:scale-95">
+          <button onClick={() => exportTeachersListToExcel(teachers)} className="flex items-center gap-2 bg-green-600 text-white px-4 py-2 rounded-lg text-sm font-semibold hover:bg-green-700 transition-all shadow-md active:scale-95">
             <FileSpreadsheet size={18} /> ទាញយក Excel
           </button>
           <button onClick={() => setModal("new")} className="flex items-center gap-2 bg-primary text-white px-4 py-2 rounded-lg text-sm font-semibold hover:opacity-90 transition-all shadow-md active:scale-95">
@@ -477,7 +486,7 @@ export default function TeachersPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700/50">
-              {filtered.map((tData) => (
+              {teachers.map((tData) => (
                 <tr key={tData.id} className="hover:bg-gray-50/50 dark:hover:bg-blue-900/20 transition-colors group dark:bg-gray-900/50">
                   <td className="px-6 py-4">
                     <div className="w-12 h-12 rounded-lg overflow-hidden border dark:border-gray-700 bg-gray-50 dark:bg-gray-800 shrink-0">
@@ -570,7 +579,7 @@ export default function TeachersPage() {
                   </td>
                 </tr>
               ))}
-              {filtered.length === 0 && (
+              {teachers.length === 0 && (
                 <tr>
                   <td colSpan={8} className="px-6 py-12 text-center text-gray-400 dark:text-gray-500">
                     {t("noData")}
@@ -580,9 +589,34 @@ export default function TeachersPage() {
             </tbody>
           </table>
         </div>
+        
+        {/* Pagination */}
+        {data && data.total > limit && (
+          <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex items-center justify-between dark:bg-gray-800 dark:border-gray-700">
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              {t("showing")} {page * limit + 1} {t("to")} {Math.min((page + 1) * limit, data.total)} {t("of")} {data.total} {t("entries")}
+            </span>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => setPage(p => Math.max(0, p - 1))} 
+                disabled={page === 0}
+                className="px-3 py-1.5 border rounded-lg text-sm font-medium hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed dark:border-gray-600 dark:hover:bg-gray-700"
+              >
+                {t("previous")}
+              </button>
+              <button 
+                onClick={() => setPage(p => p + 1)} 
+                disabled={(page + 1) * limit >= data.total}
+                className="px-3 py-1.5 border rounded-lg text-sm font-medium hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed dark:border-gray-600 dark:hover:bg-gray-700"
+              >
+                {t("next")}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
-      {modal && <TeacherModal item={modal === "new" ? null : modal} onClose={() => setModal(null)} onSave={handleSave} />}
+      {modal && <TeacherModal item={modal === "new" ? null : (modal as Teacher)} onClose={() => setModal(null)} onSave={handleSave} />}
 
       {/* Link Code Modal */}
       {linkCodeResult && (
@@ -592,14 +626,14 @@ export default function TeachersPage() {
               <Link2 size={24} className="text-blue-600" />
             </div>
             <h3 className="text-lg font-bold text-gray-900 dark:text-gray-100 mb-1">Link Code</h3>
-            <p className="text-sm text-gray-500 mb-4">សម្រាប់ {linkCodeResult.teacherName}</p>
+            <p className="text-sm text-gray-500 mb-4">សម្រាប់ {linkCodeResult?.teacherName}</p>
             <div className="bg-gray-100 dark:bg-gray-900 rounded-lg p-3 mb-4">
-              <p className="text-xl font-mono font-bold text-primary dark:text-blue-400 tracking-wider">{linkCodeResult.code}</p>
+              <p className="text-xl font-mono font-bold text-primary dark:text-blue-400 tracking-wider">{linkCodeResult?.code}</p>
             </div>
-            <p className="text-xs text-gray-400 mb-4">គ្រូត្រូវផ្ញើ <code className="bg-gray-100 px-1 rounded">/link {linkCodeResult.code}</code> ទៅ Bot</p>
+            <p className="text-xs text-gray-400 mb-4">គ្រូត្រូវផ្ញើ <code className="bg-gray-100 px-1 rounded">/link {linkCodeResult?.code}</code> ទៅ Bot</p>
             <div className="flex gap-2">
               <button
-                onClick={() => { navigator.clipboard.writeText(`/link ${linkCodeResult.code}`); }}
+                onClick={() => { if(linkCodeResult?.code) navigator.clipboard.writeText(`/link ${linkCodeResult.code}`); }}
                 className="flex-1 px-3 py-2 bg-primary text-white rounded-lg text-sm hover:opacity-90 transition-colors"
               >
                 📋 Copy

@@ -446,12 +446,39 @@ export type ListActivitiesParams = {
   offset?: number;
 };
 
+export type ListTeachersParams = {
+  limit?: number;
+  offset?: number;
+  search?: string;
+  sortField?: string;
+  sortDir?: ListTeachersSortDir;
+};
+
+export type ListTeachersSortDir =
+  (typeof ListTeachersSortDir)[keyof typeof ListTeachersSortDir];
+
+export const ListTeachersSortDir = {
+  asc: "asc",
+  desc: "desc",
+} as const;
+
 export type ListStudentsParams = {
   limit?: number;
   offset?: number;
   grade?: string;
   classId?: number;
+  search?: string;
+  sortField?: string;
+  sortDir?: ListStudentsSortDir;
 };
+
+export type ListStudentsSortDir =
+  (typeof ListStudentsSortDir)[keyof typeof ListStudentsSortDir];
+
+export const ListStudentsSortDir = {
+  asc: "asc",
+  desc: "desc",
+} as const;
 
 export type ListContactsParams = {
   limit?: number;

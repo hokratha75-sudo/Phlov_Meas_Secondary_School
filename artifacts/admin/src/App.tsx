@@ -36,6 +36,8 @@ import { TranslationProvider } from "@/lib/i18n";
 import TelegramSettings from "@/pages/TelegramSettings";
 import StudentTelegramManager from "@/pages/StudentTelegramManager";
 import ParentTelegramManager from "@/pages/ParentTelegramManager";
+import AuditLogsPage from "@/pages/Settings/AuditLogs";
+import BackupRestorePage from "@/pages/Settings/BackupRestore";
 import PWAInstallBanner from "@/components/PWAInstallBanner";
 import { SecurityProvider, useSecurity } from "@/lib/security";
 import { setupAxiosInterceptors } from "@/lib/axiosConfig";
@@ -267,6 +269,12 @@ function ProtectedApp() {
         </Route>
         <Route path="/settings/telegram">
           <AdminOnly component={TelegramSettings} />
+        </Route>
+        <Route path="/settings/audit-logs">
+          <AdminOnly component={AuditLogsPage} />
+        </Route>
+        <Route path="/settings/backup">
+          <AdminOnly component={BackupRestorePage} />
         </Route>
       </Switch>
     </AdminLayout>

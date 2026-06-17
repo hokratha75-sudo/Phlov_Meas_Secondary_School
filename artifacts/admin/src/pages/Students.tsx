@@ -1,4 +1,5 @@
-import { useState, useMemo } from "react";
+import { useState } from "react";
+import { useDebounce } from "@/hooks/useDebounce";
 import { useListStudents, useCreateStudent, useUpdateStudent, useDeleteStudent, useCreateDisciplineLog, useListClassrooms } from "@workspace/api-client-react";
 import { useAuth } from "@/lib/auth";
 import { Pencil, Trash2, X, Search, UserPlus, AlertTriangle, ArrowUpDown, Eye, ShieldAlert, IdCard, Users, FileSpreadsheet, Upload, FileText } from "lucide-react";
@@ -281,8 +282,18 @@ export default function StudentsPage() {
   const [modal, setModal] = useState<Student | null | "new">(null);
   const [disciplineModal, setDisciplineModal] = useState<Student | null>(null);
   const [idCardStudioStudents, setIdCardStudioStudents] = useState<Student[] | null>(null);
+  const [page, setPage] = useState(0);
+  const limit = 50;
 
-  const { data, refetch, isLoading, isError, error } = useListStudents(undefined, { request: { headers } });
+  const debouncedSearch = useDebounce(search, 500);
+
+  const { data, refetch, isLoading, isError, error } = useListStudents({
+    search: debouncedSearch || undefined,
+    sortField: sortField === "createdAt" ? undefined : sortField,
+    sortDir,
+    limit,
+    offset: page * limit
+  }, { request: { headers } });
   const { data: classroomsData } = useListClassrooms({ request: { headers } });
   const classrooms = classroomsData?.data || [];
   
@@ -293,27 +304,6 @@ export default function StudentsPage() {
 
   const students = data?.data || [];
 
-  const filteredAndSorted = useMemo(() => {
-    let result = [...students];
-    // Filter
-    if (search) {
-      const q = search.toLowerCase();
-      result = result.filter(s => 
-        s.studentId?.toLowerCase().includes(q) || 
-        s.nameEn?.toLowerCase().includes(q) || 
-        s.nameKh?.includes(q)
-      );
-    }
-    // Sort
-    result.sort((a, b) => {
-      let aVal = a[sortField] || "";
-      let bVal = b[sortField] || "";
-      if (aVal < bVal) return sortDir === "asc" ? -1 : 1;
-      if (aVal > bVal) return sortDir === "asc" ? 1 : -1;
-      return 0;
-    });
-    return result;
-  }, [students, search, sortField, sortDir]);
 
   const handleSort = (field: typeof sortField) => {
     if (sortField === field) {
@@ -371,9 +361,9 @@ export default function StudentsPage() {
             <Trash2 size={18} /> {t("clearAll") || "Clear All"}
           </button>
           <button 
-            onClick={() => setIdCardStudioStudents(filteredAndSorted)} 
+            onClick={() => setIdCardStudioStudents(students)} 
             className="flex items-center gap-2 bg-purple-50 text-purple-600 px-4 py-2 rounded-lg text-sm font-semibold hover:bg-purple-100 transition-all border border-purple-200 shadow-sm active:scale-95"
-            disabled={filteredAndSorted.length === 0}
+            disabled={students.length === 0}
           >
             <IdCard size={18} /> {t("batchIdCards") || "Batch ID Cards"}
           </button>
@@ -454,7 +444,7 @@ export default function StudentsPage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100">
-              {filteredAndSorted.map(s => {
+              {students.map(s => {
                 const logsCount = (s as any).disciplineLogs?.length || 0;
                 return (
                   <tr key={s.id} className="hover:bg-primary/[0.02] transition-colors group">
@@ -504,7 +494,7 @@ export default function StudentsPage() {
                   </tr>
                 );
               })}
-              {filteredAndSorted.length === 0 && (
+              {students.length === 0 && (
                 <tr>
                   <td colSpan={5} className="px-6 py-16 text-center">
                     <div className="inline-flex items-center justify-center w-16 h-16 rounded-full bg-gray-50 mb-4 dark:bg-gray-900/50">
@@ -518,6 +508,31 @@ export default function StudentsPage() {
             </tbody>
           </table>
         </div>
+        
+        {/* Pagination */}
+        {data && data.total > limit && (
+          <div className="px-6 py-4 border-t border-gray-100 bg-gray-50 flex items-center justify-between dark:bg-gray-800 dark:border-gray-700">
+            <span className="text-sm text-gray-500 dark:text-gray-400">
+              {t("showing")} {page * limit + 1} {t("to")} {Math.min((page + 1) * limit, data.total)} {t("of")} {data.total} {t("entries")}
+            </span>
+            <div className="flex items-center gap-2">
+              <button 
+                onClick={() => setPage(p => Math.max(0, p - 1))} 
+                disabled={page === 0}
+                className="px-3 py-1.5 border rounded-lg text-sm font-medium hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed dark:border-gray-600 dark:hover:bg-gray-700"
+              >
+                {t("previous")}
+              </button>
+              <button 
+                onClick={() => setPage(p => p + 1)} 
+                disabled={(page + 1) * limit >= data.total}
+                className="px-3 py-1.5 border rounded-lg text-sm font-medium hover:bg-white disabled:opacity-50 disabled:cursor-not-allowed dark:border-gray-600 dark:hover:bg-gray-700"
+              >
+                {t("next")}
+              </button>
+            </div>
+          </div>
+        )}
       </div>
 
       {modal && <StudentModal item={modal === "new" ? null : modal} onClose={() => setModal(null)} onSave={handleSave} token={token} classrooms={classrooms} />}

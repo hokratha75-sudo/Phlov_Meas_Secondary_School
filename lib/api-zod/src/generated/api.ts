@@ -316,6 +316,17 @@ export const DeleteActivityResponse = zod.object({
 /**
  * @summary List all teachers
  */
+export const listTeachersQueryLimitDefault = 50;
+export const listTeachersQueryOffsetDefault = 0;
+
+export const ListTeachersQueryParams = zod.object({
+  limit: zod.coerce.number().default(listTeachersQueryLimitDefault),
+  offset: zod.coerce.number().default(listTeachersQueryOffsetDefault),
+  search: zod.coerce.string().optional(),
+  sortField: zod.coerce.string().optional(),
+  sortDir: zod.enum(["asc", "desc"]).optional(),
+});
+
 export const ListTeachersResponse = zod.object({
   data: zod.array(
     zod.object({
@@ -632,6 +643,9 @@ export const ListStudentsQueryParams = zod.object({
   offset: zod.coerce.number().default(listStudentsQueryOffsetDefault),
   grade: zod.coerce.string().optional(),
   classId: zod.coerce.number().optional(),
+  search: zod.coerce.string().optional(),
+  sortField: zod.coerce.string().optional(),
+  sortDir: zod.enum(["asc", "desc"]).optional(),
 });
 
 export const ListStudentsResponse = zod.object({

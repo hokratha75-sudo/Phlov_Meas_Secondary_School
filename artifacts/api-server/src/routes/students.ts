@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { db, students, classrooms } from "@workspace/db";
-import { eq, count, desc, and, inArray } from "drizzle-orm";
+import { eq, count, desc, and, inArray, sql } from "drizzle-orm";
 import { requireAuth } from "./auth";
 
 const router = Router();
@@ -8,6 +8,9 @@ const router = Router();
 router.get("/students", requireAuth, async (req: any, res) => {
   const limit = Number(req.query["limit"]) || 50;
   const offset = Number(req.query["offset"]) || 0;
+  const search = req.query["search"] as string | undefined;
+  const sortField = req.query["sortField"] as string | undefined;
+  const sortDir = req.query["sortDir"] as string | undefined;
   const grade = req.query["grade"] as string | undefined;
   const classId = req.query["classId"] ? Number(req.query["classId"]) : undefined;
   
@@ -16,6 +19,13 @@ router.get("/students", requireAuth, async (req: any, res) => {
 
   const conditions = [];
   if (grade) conditions.push(eq(students.grade, grade));
+  if (search) {
+    conditions.push(
+      sql`${students.nameKh} ILIKE ${`%${search}%`} OR 
+          ${students.nameEn} ILIKE ${`%${search}%`} OR 
+          ${students.studentId} ILIKE ${`%${search}%`}`
+    );
+  }
 
   if (role === "teacher") {
     // 1. Identify Teacher's Classes
@@ -51,10 +61,21 @@ router.get("/students", requireAuth, async (req: any, res) => {
 
   const whereClause = conditions.length > 0 ? and(...conditions) : undefined;
 
+  let orderByClause = desc(students.createdAt);
+  if (sortField) {
+    const field = sortField === "nameKh" ? students.nameKh :
+                  sortField === "nameEn" ? students.nameEn :
+                  sortField === "studentId" ? students.studentId :
+                  sortField === "grade" ? students.grade :
+                  students.createdAt;
+    
+    orderByClause = sortDir === "asc" ? sql`${field} ASC` : sql`${field} DESC`;
+  }
+
   const [items, [total]] = await Promise.all([
     db.query.students.findMany({
       where: whereClause,
-      orderBy: [desc(students.createdAt)],
+      orderBy: [orderByClause],
       limit,
       offset,
       with: {

@@ -50,6 +50,7 @@ import type {
   ListLibraryLogsParams,
   ListNewsParams,
   ListStudentsParams,
+  ListTeachersParams,
   LoginRequest,
   LoginResponse,
   MessageResponse,
@@ -1488,41 +1489,57 @@ export const useDeleteActivity = <
 /**
  * @summary List all teachers
  */
-export const getListTeachersUrl = () => {
-  return `/api/teachers`;
+export const getListTeachersUrl = (params?: ListTeachersParams) => {
+  const normalizedParams = new URLSearchParams();
+
+  Object.entries(params || {}).forEach(([key, value]) => {
+    if (value !== undefined) {
+      normalizedParams.append(key, value === null ? "null" : value.toString());
+    }
+  });
+
+  const stringifiedParams = normalizedParams.toString();
+
+  return stringifiedParams.length > 0
+    ? `/api/teachers?${stringifiedParams}`
+    : `/api/teachers`;
 };
 
 export const listTeachers = async (
+  params?: ListTeachersParams,
   options?: RequestInit,
 ): Promise<TeacherListResponse> => {
-  return customFetch<TeacherListResponse>(getListTeachersUrl(), {
+  return customFetch<TeacherListResponse>(getListTeachersUrl(params), {
     ...options,
     method: "GET",
   });
 };
 
-export const getListTeachersQueryKey = () => {
-  return [`/api/teachers`] as const;
+export const getListTeachersQueryKey = (params?: ListTeachersParams) => {
+  return [`/api/teachers`, ...(params ? [params] : [])] as const;
 };
 
 export const getListTeachersQueryOptions = <
   TData = Awaited<ReturnType<typeof listTeachers>>,
   TError = ErrorType<unknown>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof listTeachers>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}) => {
+>(
+  params?: ListTeachersParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listTeachers>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+) => {
   const { query: queryOptions, request: requestOptions } = options ?? {};
 
-  const queryKey = queryOptions?.queryKey ?? getListTeachersQueryKey();
+  const queryKey = queryOptions?.queryKey ?? getListTeachersQueryKey(params);
 
   const queryFn: QueryFunction<Awaited<ReturnType<typeof listTeachers>>> = ({
     signal,
-  }) => listTeachers({ signal, ...requestOptions });
+  }) => listTeachers(params, { signal, ...requestOptions });
 
   return { queryKey, queryFn, ...queryOptions } as UseQueryOptions<
     Awaited<ReturnType<typeof listTeachers>>,
@@ -1543,15 +1560,18 @@ export type ListTeachersQueryError = ErrorType<unknown>;
 export function useListTeachers<
   TData = Awaited<ReturnType<typeof listTeachers>>,
   TError = ErrorType<unknown>,
->(options?: {
-  query?: UseQueryOptions<
-    Awaited<ReturnType<typeof listTeachers>>,
-    TError,
-    TData
-  >;
-  request?: SecondParameter<typeof customFetch>;
-}): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
-  const queryOptions = getListTeachersQueryOptions(options);
+>(
+  params?: ListTeachersParams,
+  options?: {
+    query?: UseQueryOptions<
+      Awaited<ReturnType<typeof listTeachers>>,
+      TError,
+      TData
+    >;
+    request?: SecondParameter<typeof customFetch>;
+  },
+): UseQueryResult<TData, TError> & { queryKey: QueryKey } {
+  const queryOptions = getListTeachersQueryOptions(params, options);
 
   const query = useQuery(queryOptions) as UseQueryResult<TData, TError> & {
     queryKey: QueryKey;
