@@ -1,27 +1,73 @@
-import { useState } from "react";
+import { useQuery, useMutation, useQueryClient } from "@tanstack/react-query";
+import api from "@/lib/axiosConfig";
 import { useTranslation } from "@/lib/i18n";
-import { DatabaseBackup, Download, Server, HardDrive, Play, RefreshCw, CheckCircle2, XCircle } from "lucide-react";
+import { DatabaseBackup, Download, Server, HardDrive, Play, RefreshCw, CheckCircle2, XCircle, Send } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
 
-// Mock Data
-const mockBackups = [
-  { id: 1, filename: "backup_db_2026-06-17.sql", size: "14.2 MB", date: "2026-06-17 02:00:00", status: "success" },
-  { id: 2, filename: "backup_db_2026-06-16.sql", size: "14.1 MB", date: "2026-06-16 02:00:00", status: "success" },
-  { id: 3, filename: "backup_db_2026-06-15.sql", size: "0 MB", date: "2026-06-15 02:00:00", status: "failed" },
-  { id: 4, filename: "backup_db_2026-06-14.sql", size: "13.9 MB", date: "2026-06-14 02:00:00", status: "success" },
-];
+type BackupFile = {
+  id: number;
+  filename: string;
+  size: string;
+  date: string;
+  status: "success" | "failed";
+};
 
 export default function BackupRestorePage() {
   const { t, lang } = useTranslation();
-  const [isBackingUp, setIsBackingUp] = useState(false);
+  const { toast } = useToast();
+  const queryClient = useQueryClient();
+
+  const { data: backups = [], isLoading } = useQuery<BackupFile[]>({
+    queryKey: ["backups"],
+    queryFn: () => api.get("/backups").then((res) => res.data),
+  });
+
+  const backupMutation = useMutation({
+    mutationFn: () => api.post("/backups").then((res) => res.data),
+    onSuccess: () => {
+      toast({
+        title: lang === "km" ? "ជោគជ័យ" : "Success",
+        description: lang === "km" ? "ការបម្រុងទុកបានជោគជ័យ!" : "Backup completed successfully!",
+      });
+      queryClient.invalidateQueries({ queryKey: ["backups"] });
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: lang === "km" ? "បរាជ័យ" : "Failed",
+        description: error?.response?.data?.message || "Failed to create backup",
+      });
+    },
+  });
+
+  const sendTelegramMutation = useMutation({
+    mutationFn: (filename: string) => api.post(`/backups/${filename}/send-telegram`).then((res) => res.data),
+    onSuccess: (data) => {
+      toast({
+        title: lang === "km" ? "ជោគជ័យ" : "Success",
+        description: data.message || "Sent to Telegram successfully",
+      });
+    },
+    onError: (error: any) => {
+      toast({
+        variant: "destructive",
+        title: lang === "km" ? "បរាជ័យ" : "Failed",
+        description: error?.response?.data?.message || "Failed to send to Telegram",
+      });
+    },
+  });
 
   const handleBackup = () => {
-    setIsBackingUp(true);
-    // Simulate backup delay
-    setTimeout(() => {
-      setIsBackingUp(false);
-      alert(lang === "km" ? "ការបម្រុងទុកបានជោគជ័យ!" : "Backup completed successfully!");
-    }, 3000);
+    backupMutation.mutate();
   };
+
+  const handleDownload = (filename: string) => {
+    window.open(`${api.defaults.baseURL}/backups/${filename}`, "_blank");
+  };
+
+  const isBackingUp = backupMutation.isPending;
+  const lastSuccess = backups.find(b => b.status === "success");
+  const totalSizeStr = backups.length > 0 ? backups[0].size : "0 MB"; // Simple representation
 
   return (
     <div className="space-y-6">
@@ -42,7 +88,7 @@ export default function BackupRestorePage() {
           <div className="space-y-4">
             <div className="flex justify-between items-center py-2 border-b dark:border-gray-700">
               <span className="text-sm text-gray-500 dark:text-gray-400">{lang === "km" ? "ការបម្រុងទុកចុងក្រោយ" : "Last Successful Backup"}</span>
-              <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">2026-06-17 02:00:00</span>
+              <span className="text-sm font-semibold text-gray-800 dark:text-gray-200">{lastSuccess ? lastSuccess.date : "N/A"}</span>
             </div>
             <div className="flex justify-between items-center py-2 border-b dark:border-gray-700">
               <span className="text-sm text-gray-500 dark:text-gray-400">{lang === "km" ? "ទំហំផ្ទុកសរុប (Storage Used)" : "Storage Used"}</span>
@@ -104,7 +150,20 @@ export default function BackupRestorePage() {
               </tr>
             </thead>
             <tbody className="divide-y divide-gray-100 dark:divide-gray-700">
-              {mockBackups.map((backup) => (
+              {isLoading ? (
+                <tr>
+                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                    <RefreshCw className="animate-spin inline-block mr-2" size={20} />
+                    Loading...
+                  </td>
+                </tr>
+              ) : backups.length === 0 ? (
+                <tr>
+                  <td colSpan={5} className="px-6 py-8 text-center text-gray-500">
+                    No backups found.
+                  </td>
+                </tr>
+              ) : backups.map((backup) => (
                 <tr key={backup.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-700/50 transition-colors">
                   <td className="px-6 py-4 text-sm font-medium text-gray-800 dark:text-gray-200 flex items-center gap-2">
                     <DatabaseBackup size={16} className="text-gray-400" />
@@ -124,14 +183,25 @@ export default function BackupRestorePage() {
                     )}
                   </td>
                   <td className="px-6 py-4 text-right">
-                    <button 
-                      disabled={backup.status !== "success"}
-                      onClick={() => alert(`Downloading ${backup.filename}...`)}
-                      className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                      <Download size={16} />
-                      {lang === "km" ? "ទាញយក" : "Download"}
-                    </button>
+                    <div className="flex justify-end gap-2">
+                      <button 
+                        disabled={backup.status !== "success" || sendTelegramMutation.isPending}
+                        onClick={() => sendTelegramMutation.mutate(backup.filename)}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium border border-blue-200 dark:border-blue-800 rounded-lg bg-blue-50 hover:bg-blue-100 dark:bg-blue-900/30 dark:hover:bg-blue-900/50 text-blue-700 dark:text-blue-400 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                        title={lang === "km" ? "ផ្ញើទៅ Telegram" : "Send to Telegram"}
+                      >
+                        <Send size={16} />
+                        <span className="hidden sm:inline">{lang === "km" ? "ផ្ញើទៅ Telegram" : "Telegram"}</span>
+                      </button>
+                      <button 
+                        disabled={backup.status !== "success"}
+                        onClick={() => handleDownload(backup.filename)}
+                        className="inline-flex items-center gap-1 px-3 py-1.5 text-sm font-medium border border-gray-200 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-700 text-gray-700 dark:text-gray-300 disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                      >
+                        <Download size={16} />
+                        <span className="hidden sm:inline">{lang === "km" ? "ទាញយក" : "Download"}</span>
+                      </button>
+                    </div>
                   </td>
                 </tr>
               ))}

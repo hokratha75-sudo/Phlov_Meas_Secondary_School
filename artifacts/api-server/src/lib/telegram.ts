@@ -1,5 +1,6 @@
 import { env } from 'process';
 import { db, telegramMessageLog } from '@workspace/db';
+import fs from 'fs';
 
 const TELEGRAM_BOT_TOKEN = env.TELEGRAM_BOT_TOKEN;
 const MAIN_CHANNEL_ID = env.TELEGRAM_MAIN_CHANNEL_ID || env.TELEGRAM_MAIN_CHANNEL_NAME;
@@ -286,3 +287,44 @@ export function getChannelConfig() {
     botConfigured: !!TELEGRAM_BOT_TOKEN,
   };
 }
+
+export async function sendDocumentToAdmin(filePath: string, filename: string, caption: string = ""): Promise<boolean> {
+  const adminChatId = env.TELEGRAM_ADMIN_CHAT_ID;
+  if (!TELEGRAM_BOT_TOKEN || !adminChatId) {
+    console.warn('⚠️ TELEGRAM_BOT_TOKEN or TELEGRAM_ADMIN_CHAT_ID not configured for sending documents.');
+    return false;
+  }
+
+  const url = `https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendDocument`;
+  
+  try {
+    const fileBuffer = await fs.promises.readFile(filePath);
+    const blob = new Blob([fileBuffer]);
+    
+    const formData = new FormData();
+    formData.append('chat_id', adminChatId);
+    formData.append('document', blob, filename);
+    if (caption) {
+      formData.append('caption', caption);
+      formData.append('parse_mode', 'HTML');
+    }
+
+    const response = await fetch(url, {
+      method: 'POST',
+      body: formData,
+    });
+
+    const result = await response.json() as any;
+    if (result.ok) {
+      console.log(`✅ Telegram document sent to Admin`);
+      return true;
+    } else {
+      console.error(`❌ Telegram document error: ${result.description}`);
+      return false;
+    }
+  } catch (error: any) {
+    console.error('❌ Failed to send Telegram document:', error.message);
+    return false;
+  }
+}
+

@@ -451,6 +451,37 @@ paths:
               schema:
                 $ref: "#/components/schemas/MessageResponse"
 
+  /backups:
+    get:
+      operationId: listBackups
+      tags: [backups]
+      summary: List all backups
+      responses:
+        "200":
+          description: OK
+    post:
+      operationId: createBackup
+      tags: [backups]
+      summary: Create backup
+      responses:
+        "200":
+          description: OK
+
+  /backups/{filename}/send-telegram:
+    post:
+      operationId: sendBackupTelegram
+      tags: [backups]
+      summary: Send backup to Telegram
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        "200":
+          description: OK
+
   /classrooms:
     get:
       operationId: listClassrooms
@@ -1089,8 +1120,82 @@ paths:
               schema:
                 $ref: '#/components/schemas/TelegramMessage'
 
+  /backups:
+    get:
+      operationId: getBackups
+      tags: [settings]
+      summary: Get backup history
+      responses:
+        '200':
+          description: A list of backup files
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/BackupFile'
+    post:
+      operationId: createBackup
+      tags: [settings]
+      summary: Trigger a manual system backup
+      responses:
+        '200':
+          description: Backup completed
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BackupFile'
+        '500':
+          description: Internal server error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /backups/{filename}:
+    get:
+      operationId: downloadBackup
+      tags: [settings]
+      summary: Download a backup file
+      parameters:
+        - name: filename
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: The backup file
+          content:
+            application/octet-stream:
+              schema:
+                type: string
+                format: binary
+        '404':
+          description: File not found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
 components:
   schemas:
+    BackupFile:
+      type: object
+      properties:
+        id:
+          type: integer
+        filename:
+          type: string
+        size:
+          type: string
+        date:
+          type: string
+        status:
+          type: string
+          enum: [success, failed]
+      required: [id, filename, size, date, status]
+
     HealthStatus:
       type: object
       properties:

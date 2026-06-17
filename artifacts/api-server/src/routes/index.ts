@@ -26,6 +26,7 @@ import scheduleRouter from "./schedule";
 import telegramRouter from "./telegram";
 import telegramInboxRouter from "./telegram-inbox";
 import parentsRouter from "./parents";
+import { backupsRouter } from "./backups";
 
 const router: IRouter = Router();
 
@@ -57,6 +58,7 @@ router.use("/schedule", scheduleRouter);
 router.use(telegramRouter);
 router.use("/telegram", telegramInboxRouter);
 router.use(parentsRouter);
+router.use("/backups", backupsRouter);
 
 export default router;
 
