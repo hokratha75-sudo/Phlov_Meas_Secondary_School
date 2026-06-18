@@ -205,4 +205,23 @@ router.get("/auth/me", requireAuth, async (req: any, res) => {
   }
 });
 
+router.put("/auth/me/password", requireAuth, async (req: any, res) => {
+  const { newPassword } = req.body;
+  if (!newPassword || newPassword.length < 6) {
+    res.status(400).json({ error: "Password must be at least 6 characters long" });
+    return;
+  }
+  
+  const role = req.adminUser.role as "admin" | "teacher";
+  if (role !== "admin") {
+    res.status(403).json({ error: "Teachers should use their profile page to change password" });
+    return;
+  }
+
+  const hashedPassword = await bcrypt.hash(newPassword, 10);
+  await db.update(adminUsers).set({ passwordHash: hashedPassword }).where(eq(adminUsers.id, req.adminUser.id));
+  
+  res.json({ message: "Password updated successfully" });
+});
+
 export default router;
