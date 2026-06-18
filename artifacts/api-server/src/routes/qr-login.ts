@@ -31,16 +31,14 @@ router.post(
                 return res.status(404).json({ error: 'រកមិនឃើញគ្រូបង្រៀន' });
             }
 
-            // Clean up expired tokens for this teacher (optional)
+            // Delete ALL existing tokens for this teacher so only the new one is active
             await db.delete(qrLoginTokens)
-                .where(and(
-                    eq(qrLoginTokens.userId, teacherId),
-                    lt(qrLoginTokens.expiresAt, new Date())
-                ));
+                .where(eq(qrLoginTokens.userId, teacherId));
 
             // Generate token
             const token = generateSecureToken(32);
-            const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+            // Token is valid for 5 years
+            const expiresAt = new Date(Date.now() + 5 * 365 * 24 * 60 * 60 * 1000); 
 
             // Save to database
             const [newToken] = await db.insert(qrLoginTokens).values({
@@ -85,12 +83,11 @@ router.get('/auth/qr-login', async (req: any, res: any) => {
     }
 
     try {
-        // Find valid token (not used, not expired)
+        // Find valid token (not expired)
         const [tokenRecord] = await db.select()
             .from(qrLoginTokens)
             .where(and(
                 eq(qrLoginTokens.token, token),
-                eq(qrLoginTokens.isUsed, false),
                 gt(qrLoginTokens.expiresAt, new Date())
             ))
             .limit(1);
@@ -99,10 +96,7 @@ router.get('/auth/qr-login', async (req: any, res: any) => {
             return res.redirect('/login?error=invalid_token');
         }
 
-        // Mark as used (Prevent replay attack)
-        await db.update(qrLoginTokens)
-            .set({ isUsed: true })
-            .where(eq(qrLoginTokens.id, tokenRecord.id));
+        // Removed isUsed check and update so it can be reused multiple times
 
         // Get teacher data
         const [teacher] = await db.select()

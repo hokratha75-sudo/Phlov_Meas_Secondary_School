@@ -99,10 +99,7 @@ const TeacherQRModal: React.FC<TeacherQRModalProps> = ({ teacherId, teacherName,
                                     <img src={qrData.qrCode} alt="QR Code" width={220} height={220} />
                                 </div>
 
-                                {/* Expiry Info */}
-                                <p className="text-sm text-gray-500 mt-3">
-                                    ⏰ {lang === 'km' ? 'ផុតកំណត់នៅ' : 'Expires at'}: {new Date(qrData.expiresAt).toLocaleString(lang === 'km' ? 'km-KH' : 'en-US')}
-                                </p>
+                                {/* Removed Expiry Info */}
 
                                 {/* Action Buttons */}
                                 <div className="flex gap-3 mt-4 justify-center flex-wrap">
@@ -130,7 +127,7 @@ const TeacherQRModal: React.FC<TeacherQRModalProps> = ({ teacherId, teacherName,
                                         <li>{lang === 'km' ? 'បើកកម្មវិធីស្កេន QR Code (Telegram, Google Lens)' : 'Open QR Scanner app (Telegram, Google Lens)'}</li>
                                         <li>{lang === 'km' ? 'ស្កេន QR Code ខាងឆ្វេងនេះ' : 'Scan the QR Code on the left'}</li>
                                         <li>{lang === 'km' ? 'ប្រព័ន្ធនឹង Login ដោយស្វ័យប្រវត្តិ' : 'The system will auto-login'}</li>
-                                        <li className="text-xs text-red-600 mt-2 font-medium">⚠️ {lang === 'km' ? 'QR Code នេះមានសុពលភាពត្រឹមតែ ៥ នាទីប៉ុណ្ណោះ' : 'This QR Code is valid for 5 minutes only'}</li>
+                                        <li className="text-xs text-blue-600 mt-2 font-medium">ℹ️ {lang === 'km' ? 'QR Code នេះប្រើបានរហូត លុះត្រាតែមានការប្តូរលេខសម្ងាត់ថ្មី។' : 'This QR Code is valid permanently until the password is changed.'}</li>
                                     </ol>
                                 </div>
 

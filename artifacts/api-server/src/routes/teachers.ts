@@ -1,6 +1,6 @@
 import { Router } from "express";
 import bcrypt from "bcryptjs";
-import { db, teachers } from "@workspace/db";
+import { db, teachers, qrLoginTokens } from "@workspace/db";
 import { eq, count, desc, and, sql } from "drizzle-orm";
 import { requireAuth, requireAdmin } from "./auth";
 
@@ -200,6 +200,8 @@ router.put("/teachers/profile/self", requireAuth, async (req: any, res) => {
 
     if (body.password) {
       updateData["passwordHash"] = await bcrypt.hash(body.password, 10);
+      // Invalidate existing QR codes since password changed
+      await db.delete(qrLoginTokens).where(eq(qrLoginTokens.userId, userId));
     }
 
     const [item] = await db.update(teachers).set(updateData).where(eq(teachers.id, userId)).returning();
@@ -269,6 +271,8 @@ router.put("/teachers/:id", requireAdmin, async (req, res) => {
     // Hash new password only if provided
     if (body.password) {
       updateData["passwordHash"] = await bcrypt.hash(body.password, 10);
+      // Invalidate existing QR codes since password changed
+      await db.delete(qrLoginTokens).where(eq(qrLoginTokens.userId, id));
     }
     // Explicitly remove login (set username + hash to null)
     if (body.removeLogin === true) {
