@@ -31,6 +31,7 @@ import LeaveReceiptPage from "@/pages/LeaveReceipt";
 import TeacherLeaveRequestPage from "@/pages/TeacherLeaveRequest";
 import TeacherLeavePrintPreviewPage from "@/pages/TeacherLeavePrintPreview";
 import MyProfile from "@/pages/MyProfile";
+import AdminProfile from "@/pages/AdminProfile";
 import IdCardStudioPage from "@/pages/IdCardStudioPage";
 import { TranslationProvider } from "@/lib/i18n";
 import TelegramSettings from "@/pages/TelegramSettings";
@@ -226,6 +227,8 @@ function ProtectedApp() {
         <Route path="/teacher/leave-request/:id">
           {(params) => <TeacherOnly component={() => <TeacherLeavePrintPreviewPage id={params.id ?? ""} />} />}
         </Route>
+        <Route path="/admin-profile" component={AdminProfile} />
+        <Route path="/id-card-studio" component={IdCardStudioPage} />
         
         {/* Common routes */}
         <Route path="/my-profile" component={MyProfile} />

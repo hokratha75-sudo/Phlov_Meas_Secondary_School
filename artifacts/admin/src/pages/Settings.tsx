@@ -2,9 +2,7 @@ import { useState, useEffect } from "react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useGetSiteSettings, useUpdateSiteSetting, getGetSiteSettingsQueryKey } from "@workspace/api-client-react";
 import { useAuth } from "@/lib/auth";
-import { Save, ChevronDown, ChevronUp, Plus, Trash2, Check, Smartphone, Download, Wifi, Lock } from "lucide-react";
-import api from "@/lib/axiosConfig";
-import { useToast } from "@/hooks/use-toast";
+import { Save, ChevronDown, ChevronUp, Plus, Trash2, Check, Smartphone, Download, Wifi } from "lucide-react";
 
 
 
@@ -152,35 +150,6 @@ export default function SettingsPage() {
   const [contact, setContact] = useState({ phone: "", email: "", addressEn: "", addressKh: "", facebookUrl: "" });
   const [uploadingKey, setUploadingKey] = useState<string | null>(null);
 
-  // Admin password state
-  const { toast } = useToast();
-  const [newPassword, setNewPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordSaving, setPasswordSaving] = useState(false);
-
-  const handlePasswordChange = async () => {
-    if (!newPassword) return;
-    if (newPassword !== confirmPassword) {
-      toast({ title: "Error", description: "Passwords do not match", variant: "destructive" });
-      return;
-    }
-    if (newPassword.length < 6) {
-      toast({ title: "Error", description: "Password must be at least 6 characters", variant: "destructive" });
-      return;
-    }
-    setPasswordSaving(true);
-    try {
-      await api.put("/auth/me/password", { newPassword });
-      toast({ title: "Success", description: "Admin password updated successfully" });
-      setNewPassword("");
-      setConfirmPassword("");
-    } catch (err: any) {
-      toast({ title: "Error", description: err.response?.data?.error || "Failed to update password", variant: "destructive" });
-    } finally {
-      setPasswordSaving(false);
-    }
-  };
-
   useEffect(() => {
     if (!settings) return;
     if (settings["hero"]) setHero(parseJson(settings["hero"], hero));
@@ -256,37 +225,6 @@ export default function SettingsPage() {
           </div>
         </div>
       </div>
-
-      {/* Admin Account Security */}
-      <Section title="Admin Account Security" defaultOpen={true}>
-        <div className="flex items-start gap-4 mb-4">
-          <div className="w-10 h-10 bg-red-50 rounded-lg flex items-center justify-center border border-red-100 flex-shrink-0">
-            <Lock size={20} className="text-red-500" />
-          </div>
-          <div>
-            <h4 className="text-sm font-bold text-gray-800">Change Admin Password</h4>
-            <p className="text-xs text-gray-500 mt-1">Leave blank if you do not wish to change your password.</p>
-          </div>
-        </div>
-        <div className="grid grid-cols-1 md:grid-cols-2 gap-3 mb-4">
-          <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-1">New Password</label>
-            <input type="password" value={newPassword} onChange={e => setNewPassword(e.target.value)} placeholder="••••••••"
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          </div>
-          <div>
-            <label className="block text-xs font-semibold text-gray-500 mb-1">Confirm New Password</label>
-            <input type="password" value={confirmPassword} onChange={e => setConfirmPassword(e.target.value)} placeholder="••••••••"
-              className="w-full border rounded-lg px-3 py-2 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500" />
-          </div>
-        </div>
-        <div className="flex justify-end">
-          <button onClick={handlePasswordChange} disabled={passwordSaving || !newPassword}
-            className="flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-semibold bg-red-600 text-white hover:bg-red-700 disabled:opacity-50 transition-colors">
-            {passwordSaving ? "Saving..." : "Update Password"}
-          </button>
-        </div>
-      </Section>
 
       {/* Hero Section */}
       <Section title="Hero Section" defaultOpen={true}>
