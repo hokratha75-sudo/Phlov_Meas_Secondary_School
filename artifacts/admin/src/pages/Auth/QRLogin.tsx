@@ -2,9 +2,11 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { useTranslation } from '@/lib/i18n';
 import api from '@/lib/axiosConfig';
+import { useAuth } from '@/lib/auth';
 
 const QRLogin: React.FC = () => {
     const [, setLocation] = useLocation();
+    const { login } = useAuth();
     
     // Parse query params from window.location
     const searchParams = new URLSearchParams(window.location.search);
@@ -23,9 +25,12 @@ const QRLogin: React.FC = () => {
         if (token) {
             // Make AJAX request to verify token and set cookies
             api.get(`/auth/qr-login?token=${token}`)
-                .then(() => {
-                    // Successfully authenticated! Redirect to dashboard or home
-                    window.location.href = '/';
+                .then((res) => {
+                    // Update auth state in localStorage
+                    login('', undefined, res.data.accessToken, res.data.user).then(() => {
+                        // Use wouter to navigate without full page reload
+                        setLocation('/');
+                    });
                 })
                 .catch((err: any) => {
                     console.error('QR Login failed:', err);
@@ -35,7 +40,7 @@ const QRLogin: React.FC = () => {
             // No token, redirect to login
             setLocation('/login');
         }
-    }, [token, error, setLocation]);
+    }, [token, error, setLocation, login]);
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-50">
