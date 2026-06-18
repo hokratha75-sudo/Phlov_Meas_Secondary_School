@@ -6,10 +6,10 @@ async function main() {
   });
   await dbClient.connect();
   try {
-    const { rows } = await dbClient.query(`SELECT id FROM teachers LIMIT 1`);
-    console.log("Teacher ID:", rows[0]?.id);
+    const { rows } = await dbClient.query(`SELECT * FROM qr_login_tokens LIMIT 1`);
+    console.log("Table exists!");
   } catch (err) {
-    console.error("Failed:", err.message);
+    console.error("DB Query Failed:", err.message);
   }
   await dbClient.end();
 }

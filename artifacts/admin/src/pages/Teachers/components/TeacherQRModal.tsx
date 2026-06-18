@@ -61,7 +61,7 @@ const TeacherQRModal: React.FC<TeacherQRModalProps> = ({ teacherId, teacherName,
 
     return (
         <div className="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4">
-            <div className="bg-white rounded-xl shadow-2xl max-w-md w-full max-h-[90vh] overflow-y-auto">
+            <div className="bg-white rounded-xl shadow-2xl max-w-3xl w-full max-h-[90vh] flex flex-col overflow-hidden">
                 {/* Header */}
                 <div className="flex justify-between items-center p-6 border-b border-gray-100">
                     <h3 className="text-xl font-bold text-gray-800">
@@ -76,7 +76,7 @@ const TeacherQRModal: React.FC<TeacherQRModalProps> = ({ teacherId, teacherName,
                 </div>
 
                 {/* Body */}
-                <div className="p-6">
+                <div className="p-6 overflow-y-auto">
                     {!qrData ? (
                         <div className="text-center py-8">
                             <p className="text-gray-600 mb-4">
@@ -91,64 +91,68 @@ const TeacherQRModal: React.FC<TeacherQRModalProps> = ({ teacherId, teacherName,
                             </button>
                         </div>
                     ) : (
-                        <div className="text-center">
-                            {/* QR Code Display */}
-                            <div className="bg-white p-4 rounded-lg shadow-md inline-block">
-                                <img src={qrData.qrCode} alt="QR Code" width={220} height={220} />
+                        <div className="flex flex-col md:flex-row gap-8 items-start">
+                            {/* Left Side: QR Code & Actions */}
+                            <div className="w-full md:w-1/2 flex flex-col items-center">
+                                {/* QR Code Display */}
+                                <div className="bg-white p-4 rounded-lg shadow-md inline-block">
+                                    <img src={qrData.qrCode} alt="QR Code" width={220} height={220} />
+                                </div>
+
+                                {/* Expiry Info */}
+                                <p className="text-sm text-gray-500 mt-3">
+                                    ⏰ {lang === 'km' ? 'ផុតកំណត់នៅ' : 'Expires at'}: {new Date(qrData.expiresAt).toLocaleString(lang === 'km' ? 'km-KH' : 'en-US')}
+                                </p>
+
+                                {/* Action Buttons */}
+                                <div className="flex gap-3 mt-4 justify-center flex-wrap">
+                                    <button
+                                        onClick={downloadQR}
+                                        className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition flex items-center gap-2"
+                                    >
+                                        <Download className="w-4 h-4" /> {lang === 'km' ? 'ទាញយក' : 'Download'}
+                                    </button>
+                                    <button
+                                        onClick={generateQR}
+                                        className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
+                                    >
+                                        <RefreshCw className="w-4 h-4" /> {lang === 'km' ? 'បង្កើតថ្មី' : 'Regenerate'}
+                                    </button>
+                                </div>
                             </div>
 
-                            {/* Expiry Info */}
-                            <p className="text-sm text-gray-500 mt-3">
-                                ⏰ {lang === 'km' ? 'ផុតកំណត់នៅ' : 'Expires at'}: {new Date(qrData.expiresAt).toLocaleString(lang === 'km' ? 'km-KH' : 'en-US')}
-                            </p>
+                            {/* Right Side: Instructions & History */}
+                            <div className="w-full md:w-1/2 flex flex-col space-y-6">
+                                {/* Instruction for Teacher */}
+                                <div className="bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800 text-left w-full">
+                                    <p className="font-semibold">📌 {lang === 'km' ? 'ការណែនាំសម្រាប់គ្រូ៖' : 'Instructions for Teacher:'}</p>
+                                    <ol className="list-decimal ml-5 mt-2 space-y-1">
+                                        <li>{lang === 'km' ? 'បើកកម្មវិធីស្កេន QR Code (Telegram, Google Lens)' : 'Open QR Scanner app (Telegram, Google Lens)'}</li>
+                                        <li>{lang === 'km' ? 'ស្កេន QR Code ខាងឆ្វេងនេះ' : 'Scan the QR Code on the left'}</li>
+                                        <li>{lang === 'km' ? 'ប្រព័ន្ធនឹង Login ដោយស្វ័យប្រវត្តិ' : 'The system will auto-login'}</li>
+                                        <li className="text-xs text-red-600 mt-2 font-medium">⚠️ {lang === 'km' ? 'QR Code នេះមានសុពលភាពត្រឹមតែ ៥ នាទីប៉ុណ្ណោះ' : 'This QR Code is valid for 5 minutes only'}</li>
+                                    </ol>
+                                </div>
 
-                            {/* Action Buttons */}
-                            <div className="flex gap-3 mt-4 justify-center flex-wrap">
-                                <button
-                                    onClick={downloadQR}
-                                    className="bg-green-600 text-white px-5 py-2 rounded-lg hover:bg-green-700 transition flex items-center gap-2"
-                                >
-                                    <Download className="w-4 h-4" /> {lang === 'km' ? 'ទាញយក' : 'Download'}
-                                </button>
-                                <button
-                                    onClick={generateQR}
-                                    className="bg-blue-600 text-white px-5 py-2 rounded-lg hover:bg-blue-700 transition flex items-center gap-2"
-                                >
-                                    <RefreshCw className="w-4 h-4" /> {lang === 'km' ? 'បង្កើតថ្មី' : 'Regenerate'}
-                                </button>
-                            </div>
-                        </div>
-                    )}
-
-                    {/* History (if available) */}
-                    {history.length > 0 && (
-                        <div className="mt-6 border-t border-gray-100 pt-4">
-                            <h4 className="text-sm font-semibold text-gray-600 mb-2">
-                                📋 {lang === 'km' ? 'ប្រវត្តិ QR Code' : 'QR Code History'}
-                            </h4>
-                            <div className="max-h-32 overflow-y-auto space-y-1">
-                                {history.slice(0, 5).map((item) => (
-                                    <div key={item.id} className="text-xs text-gray-500 flex justify-between border-b border-gray-50 py-1">
-                                        <span>{new Date(item.createdAt).toLocaleString(lang === 'km' ? 'km-KH' : 'en-US')}</span>
-                                        <span className={item.isUsed ? 'text-green-600' : 'text-yellow-600'}>
-                                            {item.isUsed ? (lang === 'km' ? '✅ បានប្រើ' : '✅ Used') : (lang === 'km' ? '⏳ មិនទាន់ប្រើ' : '⏳ Unused')}
-                                        </span>
+                                {/* History (if available) */}
+                                {history.length > 0 && (
+                                    <div className="border border-gray-100 rounded-lg p-4 bg-gray-50/50 w-full">
+                                        <h4 className="text-sm font-semibold text-gray-700 mb-3 flex items-center gap-2">
+                                            📋 {lang === 'km' ? 'ប្រវត្តិ QR Code' : 'QR Code History'}
+                                        </h4>
+                                        <div className="max-h-32 overflow-y-auto space-y-2 pr-2 custom-scrollbar">
+                                            {history.slice(0, 5).map((item) => (
+                                                <div key={item.id} className="text-xs flex justify-between items-center bg-white border border-gray-100 p-2 rounded">
+                                                    <span className="text-gray-500 font-medium">{new Date(item.createdAt).toLocaleString(lang === 'km' ? 'km-KH' : 'en-US')}</span>
+                                                    <span className={`px-2 py-1 rounded-full text-[10px] font-bold ${item.isUsed ? 'bg-green-100 text-green-700' : 'bg-yellow-100 text-yellow-700'}`}>
+                                                        {item.isUsed ? (lang === 'km' ? 'បានប្រើរួច' : 'Used') : (lang === 'km' ? 'មិនទាន់ប្រើ' : 'Unused')}
+                                                    </span>
+                                                </div>
+                                            ))}
+                                        </div>
                                     </div>
-                                ))}
+                                )}
                             </div>
-                        </div>
-                    )}
-
-                    {/* Instruction for Teacher */}
-                    {qrData && (
-                        <div className="mt-6 bg-blue-50 border border-blue-200 rounded-lg p-4 text-sm text-blue-800 text-left">
-                            <p className="font-semibold">📌 {lang === 'km' ? 'ការណែនាំសម្រាប់គ្រូ៖' : 'Instructions for Teacher:'}</p>
-                            <ol className="list-decimal ml-5 mt-1 space-y-1">
-                                <li>{lang === 'km' ? 'បើកកម្មវិធីស្កេន QR Code (Telegram, Google Lens)' : 'Open QR Scanner app (Telegram, Google Lens)'}</li>
-                                <li>{lang === 'km' ? 'ស្កេន QR Code ខាងលើ' : 'Scan the QR Code above'}</li>
-                                <li>{lang === 'km' ? 'ប្រព័ន្ធនឹង Login ដោយស្វ័យប្រវត្តិ' : 'The system will auto-login'}</li>
-                                <li className="text-xs text-red-600">⚠️ {lang === 'km' ? 'QR Code នេះផុតកំណត់ក្នុងរយៈពេល ៥ នាទី' : 'This QR Code expires in 5 minutes'}</li>
-                            </ol>
                         </div>
                     )}
                 </div>

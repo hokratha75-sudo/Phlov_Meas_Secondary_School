@@ -16,55 +16,60 @@ router.post(
     '/teachers/:teacherId/qr-code',
     requireAuth,
     requireAdmin,
-    async (req: any, res: any) => {
-        const teacherId = parseInt(req.params.teacherId);
-        const adminId = req.adminUser.id;
+    async (req: any, res: any, next: any) => {
+        try {
+            const teacherId = parseInt(req.params.teacherId);
+            const adminId = req.adminUser.id;
 
-        // Validate teacher exists
-        const teacher = await db.select()
-            .from(teachers)
-            .where(eq(teachers.id, teacherId))
-            .limit(1);
+            // Validate teacher exists
+            const teacher = await db.select()
+                .from(teachers)
+                .where(eq(teachers.id, teacherId))
+                .limit(1);
 
-        if (teacher.length === 0) {
-            return res.status(404).json({ error: 'រកមិនឃើញគ្រូបង្រៀន' });
+            if (teacher.length === 0) {
+                return res.status(404).json({ error: 'រកមិនឃើញគ្រូបង្រៀន' });
+            }
+
+            // Clean up expired tokens for this teacher (optional)
+            await db.delete(qrLoginTokens)
+                .where(and(
+                    eq(qrLoginTokens.userId, teacherId),
+                    lt(qrLoginTokens.expiresAt, new Date())
+                ));
+
+            // Generate token
+            const token = generateSecureToken(32);
+            const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
+
+            // Save to database
+            const [newToken] = await db.insert(qrLoginTokens).values({
+                userId: teacherId,
+                token: token,
+                expiresAt: expiresAt,
+                createdBy: adminId,
+            }).returning();
+
+            // Generate QR Code
+            const loginUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/auth/qr-login?token=${token}`;
+            const qrCodeBase64 = await generateQRCodeBase64(loginUrl);
+
+            // Audit log (optional but recommended)
+            console.log(`[AUDIT] QR Code generated for Teacher ${teacherId} by Admin ${adminId}`);
+
+            res.json({
+                success: true,
+                teacherId: teacherId,
+                teacherName: teacher[0].nameKh || teacher[0].nameEn,
+                token: token,
+                qrCode: qrCodeBase64,
+                expiresAt: expiresAt.toISOString(),
+                message: 'QR Code ត្រូវបានបង្កើតដោយជោគជ័យ',
+            });
+        } catch (error) {
+            console.error('[QR-Code Generation Error]:', error);
+            res.status(500).json({ error: 'មានបញ្ហាក្នុងការបង្កើត QR Code' });
         }
-
-        // Clean up expired tokens for this teacher (optional)
-        await db.delete(qrLoginTokens)
-            .where(and(
-                eq(qrLoginTokens.userId, teacherId),
-                lt(qrLoginTokens.expiresAt, new Date())
-            ));
-
-        // Generate token
-        const token = generateSecureToken(32);
-        const expiresAt = new Date(Date.now() + 5 * 60 * 1000); // 5 minutes
-
-        // Save to database
-        const [newToken] = await db.insert(qrLoginTokens).values({
-            userId: teacherId,
-            token: token,
-            expiresAt: expiresAt,
-            createdBy: adminId,
-        }).returning();
-
-        // Generate QR Code
-        const loginUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/auth/qr-login?token=${token}`;
-        const qrCodeBase64 = await generateQRCodeBase64(loginUrl);
-
-        // Audit log (optional but recommended)
-        console.log(`[AUDIT] QR Code generated for Teacher ${teacherId} by Admin ${adminId}`);
-
-        res.json({
-            success: true,
-            teacherId: teacherId,
-            teacherName: teacher[0].nameKh || teacher[0].nameEn,
-            token: token,
-            qrCode: qrCodeBase64,
-            expiresAt: expiresAt.toISOString(),
-            message: 'QR Code ត្រូវបានបង្កើតដោយជោគជ័យ',
-        });
     }
 );
 

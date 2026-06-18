@@ -1,4 +1,5 @@
 import pg from "pg";
+import fs from "fs";
 
 async function main() {
   const dbClient = new pg.Client({
@@ -6,10 +7,11 @@ async function main() {
   });
   await dbClient.connect();
   try {
-    const { rows } = await dbClient.query(`SELECT id FROM teachers LIMIT 1`);
-    console.log("Teacher ID:", rows[0]?.id);
+    const sql = fs.readFileSync("sql/0009_qr_login_tokens.sql", "utf-8");
+    await dbClient.query(sql);
+    console.log("Migration executed successfully!");
   } catch (err) {
-    console.error("Failed:", err.message);
+    console.error("Migration Failed:", err.message);
   }
   await dbClient.end();
 }
