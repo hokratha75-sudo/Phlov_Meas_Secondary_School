@@ -497,12 +497,14 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                 <>
                   <div className="fixed inset-0 z-40" onClick={() => setIsProfileOpen(false)}></div>
                   <div className="absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 border border-gray-100 dark:border-gray-700 rounded-xl shadow-lg z-50 overflow-hidden py-1">
-                    <Link href="/my-profile" onClick={() => setIsProfileOpen(false)}>
-                      <div className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer dark:bg-gray-900/50">
-                        <GraduationCap size={16} />
-                        {lang === "km" ? "ប្រវត្តិរូបរបស់ខ្ញុំ" : "My Profile"}
-                      </div>
-                    </Link>
+                    {user?.role === "teacher" && (
+                      <Link href="/my-profile" onClick={() => setIsProfileOpen(false)}>
+                        <div className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer dark:bg-gray-900/50">
+                          <GraduationCap size={16} />
+                          {lang === "km" ? "ប្រវត្តិរូបរបស់ខ្ញុំ" : "My Profile"}
+                        </div>
+                      </Link>
+                    )}
                     {user?.role === "admin" && (
                       <Link href="/settings" onClick={() => setIsProfileOpen(false)}>
                         <div className="flex items-center gap-2 px-4 py-2 text-sm text-gray-700 dark:text-gray-200 hover:bg-gray-50 dark:hover:bg-gray-700 cursor-pointer dark:bg-gray-900/50">
