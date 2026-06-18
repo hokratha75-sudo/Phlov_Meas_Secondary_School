@@ -51,7 +51,8 @@ router.post(
             }).returning();
 
             // Generate QR Code
-            const loginUrl = `${process.env.FRONTEND_URL || 'http://localhost:5173'}/auth/qr-login?token=${token}`;
+            const frontendUrl = req.headers.origin || process.env.FRONTEND_URL || 'http://localhost:5173';
+            const loginUrl = `${frontendUrl}/auth/qr-login?token=${token}`;
             const qrCodeBase64 = await generateQRCodeBase64(loginUrl);
 
             // Audit log (optional but recommended)
