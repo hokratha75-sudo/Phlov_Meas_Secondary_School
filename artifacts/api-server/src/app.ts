@@ -45,8 +45,8 @@ app.use(cors(corsConfig));
 
 // 4. Body parsers and Cookie parser
 app.use(cookieParser());
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: "10mb" }));
+app.use(express.urlencoded({ extended: true, limit: "10mb" }));
 
 // 5. CSRF Protection
 // Note: We bypass CSRF for /api/auth/login if needed, but doubleCsrf typically ignores GET/HEAD/OPTIONS.
