@@ -27,6 +27,7 @@ import telegramRouter from "./telegram";
 import telegramInboxRouter from "./telegram-inbox";
 import parentsRouter from "./parents";
 import { backupsRouter } from "./backups";
+import qrLoginRouter from "./qr-login";
 
 const router: IRouter = Router();
 
@@ -59,6 +60,7 @@ router.use(telegramRouter);
 router.use("/telegram", telegramInboxRouter);
 router.use(parentsRouter);
 router.use("/backups", backupsRouter);
+router.use(qrLoginRouter);
 
 export default router;
 

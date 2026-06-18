@@ -23,5 +23,5 @@ export * from "./id_card_templates.ts";
 export * from "./telegram_sessions.ts";
 export * from "./telegram_message_log.ts";
 export * from "./telegram_messages.ts";
+export * from "./qr_login_tokens.ts";
 export * from "./parents.ts";
-

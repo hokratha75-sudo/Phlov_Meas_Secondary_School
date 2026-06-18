@@ -38,6 +38,7 @@ import StudentTelegramManager from "@/pages/StudentTelegramManager";
 import ParentTelegramManager from "@/pages/ParentTelegramManager";
 import AuditLogsPage from "@/pages/Settings/AuditLogs";
 import BackupRestorePage from "@/pages/Settings/BackupRestore";
+import QRLogin from "@/pages/Auth/QRLogin";
 import PWAInstallBanner from "@/components/PWAInstallBanner";
 import { SecurityProvider, useSecurity } from "@/lib/security";
 import { setupAxiosInterceptors } from "@/lib/axiosConfig";
@@ -288,7 +289,13 @@ function App() {
         <SecurityProvider>
           <TranslationProvider>
             <WouterRouter base={import.meta.env.BASE_URL.replace(/\/$/, "")}>
-              <ProtectedApp />
+              <Switch>
+                <Route path="/auth/qr-login" component={QRLogin} />
+                <Route path="/login" component={Login} />
+                <Route path="*">
+                  <ProtectedApp />
+                </Route>
+              </Switch>
             </WouterRouter>
             <Toaster />
             <PWAInstallBanner />

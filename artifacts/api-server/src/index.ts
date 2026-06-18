@@ -20,13 +20,12 @@ console.log("🔍 Loading .env from:", envPath);
 
 dotenv.config({ path: envPath });
 
-const [{ default: app }, { logger }] = await Promise.all([
+const [{ default: app }, { logger }, { initTelegramBot }, { setupDatabaseListeners }] = await Promise.all([
   import("./app"),
   import("./lib/logger"),
+  import("./lib/bot"),
+  import("./lib/notifications"),
 ]);
-
-import { initTelegramBot } from "./lib/bot";
-import { setupDatabaseListeners } from "./lib/notifications";
 
 // Default to 8080 for local dev; on Replit PORT was required.
 console.log("CRITICAL: Server starting on port 8080...");

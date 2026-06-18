@@ -2,7 +2,7 @@ import { useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useListTeachers, useCreateTeacher, useUpdateTeacher, useDeleteTeacher } from "@workspace/api-client-react";
 import { useAuth } from "@/lib/auth";
-import { Plus, Pencil, Trash2, X, GraduationCap, Search, Phone, Mail, KeyRound, ShieldCheck, ShieldOff, FileSpreadsheet, FileText, Link2, Bot } from "lucide-react";
+import { Plus, Pencil, Trash2, X, GraduationCap, Search, Phone, Mail, KeyRound, ShieldCheck, ShieldOff, FileSpreadsheet, FileText, Link2, Bot, QrCode } from "lucide-react";
 import type { Teacher, CreateTeacherRequest } from "@workspace/api-client-react";
 
 import { exportTeachersListToExcel, exportTeacherProfileToExcel } from "@/utils/excelExport";
@@ -11,6 +11,7 @@ import ImageUpload from "@/components/ImageUpload";
 import { GeoDropdowns } from "@/components/GeoDropdowns";
 import { useTranslation } from "@/lib/i18n";
 import api, { resolveUrl } from "@/lib/axiosConfig";
+import TeacherQRModal from "./Teachers/components/TeacherQRModal";
 
 // Extended form type to include login credentials
 type TeacherForm = CreateTeacherRequest & {
@@ -369,6 +370,7 @@ function TeacherModal({ item, onClose, onSave }: {
     </div>
   );
 }
+// ... (existing code for TeacherModal remains same)
 
 export default function TeachersPage() {
   const { token } = useAuth();
@@ -376,6 +378,7 @@ export default function TeachersPage() {
   const [search, setSearch] = useState("");
   const [modal, setModal] = useState<Teacher | null | "new">(null);
   const [generatingLink, setGeneratingLink] = useState<number | null>(null);
+  const [qrModal, setQrModal] = useState<Teacher | null>(null);
   const [linkCodeResult, setLinkCodeResult] = useState<{ code: string; teacherName: string } | null>(null);
   
   const [page, setPage] = useState(0);
@@ -572,6 +575,7 @@ export default function TeachersPage() {
                   </td>
                   <td className="px-6 py-4 text-right">
                     <div className="flex items-center justify-end gap-2">
+                      <button onClick={() => setQrModal(tData)} title="QR Login" className="p-2 text-gray-400 hover:text-blue-600 border dark:border-gray-700 rounded-lg hover:bg-white dark:hover:bg-gray-700 shadow-sm transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"><QrCode size={14} /></button>
                       <button onClick={() => exportTeacherProfileToExcel(tData)} title="ទាញយកប្រវត្តិរូប" className="p-2 text-gray-400 hover:text-green-600 border dark:border-gray-700 rounded-lg hover:bg-white dark:hover:bg-gray-700 shadow-sm transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"><FileText size={14} /></button>
                       <button onClick={() => setModal(tData)} className="p-2 text-gray-400 hover:text-primary border dark:border-gray-700 rounded-lg hover:bg-white dark:hover:bg-gray-700 shadow-sm transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"><Pencil size={14} /></button>
                       <button onClick={() => { if (window.confirm(t("confirmDelete"))) remove({ id: tData.id }, { onSuccess: () => refetch() }); }} className="p-2 text-gray-400 hover:text-red-600 border dark:border-gray-700 rounded-lg hover:bg-white dark:hover:bg-gray-700 shadow-sm transition-all dark:bg-gray-800 dark:border-gray-700 dark:text-gray-100"><Trash2 size={14} /></button>
@@ -617,6 +621,14 @@ export default function TeachersPage() {
       </div>
 
       {modal && <TeacherModal item={modal === "new" ? null : (modal as Teacher)} onClose={() => setModal(null)} onSave={handleSave} />}
+      
+      {qrModal && (
+        <TeacherQRModal
+          teacherId={qrModal.id}
+          teacherName={lang === "km" ? qrModal.nameKh : qrModal.nameEn}
+          onClose={() => setQrModal(null)}
+        />
+      )}
 
       {/* Link Code Modal */}
       {linkCodeResult && (
