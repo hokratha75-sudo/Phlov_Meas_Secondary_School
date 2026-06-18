@@ -18,7 +18,7 @@ router.post(
     requireAdmin,
     async (req: any, res: any) => {
         const teacherId = parseInt(req.params.teacherId);
-        const adminId = req.user.id;
+        const adminId = req.adminUser.id;
 
         // Validate teacher exists
         const teacher = await db.select()
