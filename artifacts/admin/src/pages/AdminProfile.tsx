@@ -45,8 +45,15 @@ export default function AdminProfile() {
       await api.put("/auth/me/profile", { photoUrl });
       toast({ title: "Success", description: "Profile updated successfully" });
       setPhotoSaved(true);
+      
+      if (user) {
+        const updatedUser = { ...user, photoUrl: photoUrl || undefined };
+        localStorage.setItem('admin_user', JSON.stringify(updatedUser));
+        // We do a quick reload to refresh the context everywhere simply
+        setTimeout(() => window.location.reload(), 1000);
+      }
+
       setTimeout(() => setPhotoSaved(false), 2000);
-      // We'd ideally reload user data here, but for now just show success
     } catch (err) {
       toast({ title: "Error", description: "Failed to save profile", variant: "destructive" });
     } finally {
