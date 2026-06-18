@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { useLocation } from "wouter";
 import { useAuth } from "@/lib/auth";
 import api, { resolveUrl } from "@/lib/axiosConfig";
 import { useTranslation } from "@/lib/i18n";
@@ -49,6 +50,7 @@ export default function MyProfile() {
   const [profile, setProfile] = useState<TeacherProfile | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [, setLocation] = useLocation();
 
   // Form states
   const [phone, setPhone] = useState("");
@@ -69,6 +71,11 @@ export default function MyProfile() {
   const [confirmPassword, setConfirmPassword] = useState("");
 
   useEffect(() => {
+    if (user?.role === "admin") {
+      setLocation("/");
+      return;
+    }
+
     const fetchProfile = async () => {
       try {
         const data = await api.get("/teachers/profile/self").then(res => res.data);
