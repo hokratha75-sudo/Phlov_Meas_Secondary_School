@@ -483,8 +483,12 @@ export default function AdminLayout({ children }: { children: ReactNode }) {
                 onClick={() => setIsProfileOpen(!isProfileOpen)}
                 className="flex items-center gap-2 pl-1 sm:pl-2 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800 p-1.5 rounded-lg transition-colors dark:bg-gray-900/50"
               >
-                <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shadow-sm border border-transparent dark:border-gray-600">
-                   {user?.username?.[0]?.toUpperCase() || 'A'}
+                <div className="w-8 h-8 rounded-full bg-primary text-white flex items-center justify-center font-bold text-sm shadow-sm border border-transparent dark:border-gray-600 overflow-hidden">
+                   {user?.photoUrl ? (
+                     <img src={user.photoUrl} alt="Avatar" className="w-full h-full object-cover" />
+                   ) : (
+                     user?.username?.[0]?.toUpperCase() || 'A'
+                   )}
                 </div>
                 <div className="hidden lg:block text-left min-w-[80px]">
                   <p className="text-sm font-semibold text-gray-700 dark:text-gray-200 leading-tight truncate">{user?.username || 'Admin'}</p>

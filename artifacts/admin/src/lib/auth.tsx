@@ -8,6 +8,7 @@ interface User {
   createdAt?: string;
   nameKh?: string;
   nameEn?: string;
+  photoUrl?: string; // Added for admin profile picture
 }
 
 interface AuthContextType {

@@ -201,7 +201,7 @@ router.get("/auth/me", requireAuth, async (req: any, res) => {
   } else {
     const [u] = await db.select().from(adminUsers).where(eq(adminUsers.id, req.adminUser.id));
     if (!u) { res.status(401).json({ error: "User not found" }); return; }
-    res.json({ id: u.id, username: u.username, role: "admin", createdAt: u.createdAt.toISOString() });
+    res.json({ id: u.id, username: u.username, role: "admin", photoUrl: u.photoUrl, createdAt: u.createdAt.toISOString() });
   }
 });
 
@@ -222,6 +222,19 @@ router.put("/auth/me/password", requireAuth, async (req: any, res) => {
   await db.update(adminUsers).set({ passwordHash: hashedPassword }).where(eq(adminUsers.id, req.adminUser.id));
   
   res.json({ message: "Password updated successfully" });
+});
+
+router.put("/auth/me/profile", requireAuth, async (req: any, res) => {
+  const { photoUrl } = req.body;
+  const role = req.adminUser.role as "admin" | "teacher";
+  
+  if (role !== "admin") {
+    res.status(403).json({ error: "Only admins can use this endpoint" });
+    return;
+  }
+
+  await db.update(adminUsers).set({ photoUrl }).where(eq(adminUsers.id, req.adminUser.id));
+  res.json({ message: "Profile updated successfully", photoUrl });
 });
 
 export default router;

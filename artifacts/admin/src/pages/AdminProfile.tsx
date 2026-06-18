@@ -3,16 +3,56 @@ import { useAuth } from "@/lib/auth";
 import api from "@/lib/axiosConfig";
 import { useTranslation } from "@/lib/i18n";
 import { useToast } from "@/hooks/use-toast";
-import { UserCircle, ShieldCheck, Lock, Save, UserCheck } from "lucide-react";
+import { UserCircle, ShieldCheck, Lock, Save, UserCheck, Camera, Check } from "lucide-react";
+import { useQueryClient } from "@tanstack/react-query";
+
+function imageFileToDataUrl(file: File) {
+  return new Promise<string>((resolve, reject) => {
+    const reader = new FileReader();
+    reader.onload = () => resolve(String(reader.result ?? ""));
+    reader.onerror = reject;
+    reader.readAsDataURL(file);
+  });
+}
 
 export default function AdminProfile() {
-  const { user } = useAuth();
+  const { user, login } = useAuth();
   const { lang, t } = useTranslation();
   const { toast } = useToast();
+  const queryClient = useQueryClient();
 
   const [newPassword, setNewPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [passwordSaving, setPasswordSaving] = useState(false);
+
+  const [photoUrl, setPhotoUrl] = useState<string | null>(user?.photoUrl || null);
+  const [photoSaving, setPhotoSaving] = useState(false);
+  const [photoSaved, setPhotoSaved] = useState(false);
+
+  const handlePhotoUpload = async (file: File | null) => {
+    if (!file) return;
+    try {
+      const dataUrl = await imageFileToDataUrl(file);
+      setPhotoUrl(dataUrl);
+    } catch (err) {
+      toast({ title: "Error", description: "Failed to read image file", variant: "destructive" });
+    }
+  };
+
+  const saveProfile = async () => {
+    setPhotoSaving(true);
+    try {
+      await api.put("/auth/me/profile", { photoUrl });
+      toast({ title: "Success", description: "Profile updated successfully" });
+      setPhotoSaved(true);
+      setTimeout(() => setPhotoSaved(false), 2000);
+      // We'd ideally reload user data here, but for now just show success
+    } catch (err) {
+      toast({ title: "Error", description: "Failed to save profile", variant: "destructive" });
+    } finally {
+      setPhotoSaving(false);
+    }
+  };
 
   const handlePasswordChange = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -78,18 +118,44 @@ export default function AdminProfile() {
             </h2>
           </div>
           <div className="p-6 bg-slate-50/30 flex items-center gap-6">
-            <div className="w-20 h-20 rounded-2xl overflow-hidden border-2 border-white ring-1 ring-gray-100 shrink-0 bg-primary flex items-center justify-center shadow-md">
-              <span className="text-3xl font-bold text-white uppercase">
-                {user?.username?.[0] || 'A'}
-              </span>
+            <div className="relative group">
+              <div className="w-24 h-24 rounded-2xl overflow-hidden border-4 border-white ring-1 ring-gray-100 shrink-0 bg-primary flex items-center justify-center shadow-md">
+                {photoUrl ? (
+                  <img src={photoUrl} alt="Profile" className="w-full h-full object-cover" />
+                ) : (
+                  <span className="text-4xl font-bold text-white uppercase">
+                    {user?.username?.[0] || 'A'}
+                  </span>
+                )}
+              </div>
+              <label className="absolute bottom-0 right-0 bg-white p-1.5 rounded-full shadow-lg border border-gray-100 cursor-pointer hover:bg-gray-50 transition-colors text-primary">
+                <Camera size={16} />
+                <input type="file" accept="image/*" className="hidden" onChange={e => handlePhotoUpload(e.target.files?.[0] || null)} />
+              </label>
             </div>
-            <div>
+            
+            <div className="flex-1">
               <p className="font-black text-gray-400 uppercase tracking-wider text-[10px] mb-1">{lang === "km" ? "ឈ្មោះគណនី (Username)" : "Account Username"}</p>
               <h3 className="font-bold text-2xl text-primary mb-2">@{user?.username || "admin"}</h3>
               <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-100 text-blue-700 text-xs font-bold border border-blue-200">
                 <ShieldCheck size={14} />
                 {lang === "km" ? "អ្នកគ្រប់គ្រងប្រព័ន្ធ (System Admin)" : "System Administrator"}
               </div>
+            </div>
+
+            <div>
+              <button 
+                onClick={saveProfile} 
+                disabled={photoSaving || photoUrl === user?.photoUrl}
+                className={`flex items-center gap-2 px-6 py-3 rounded-xl font-bold transition-all ${
+                  photoSaved 
+                    ? "bg-green-500 text-white shadow-lg shadow-green-500/20" 
+                    : "bg-white border-2 border-primary text-primary hover:bg-primary hover:text-white"
+                } disabled:opacity-50`}
+              >
+                {photoSaved ? <Check size={18} /> : <Save size={18} />}
+                {photoSaved ? "Saved!" : (photoSaving ? "Saving..." : "Save Profile")}
+              </button>
             </div>
           </div>
         </div>
