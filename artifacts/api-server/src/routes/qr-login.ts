@@ -133,11 +133,19 @@ router.get('/auth/qr-login', async (req: any, res: any) => {
         // Audit log
         console.log(`[AUDIT] Teacher ${teacher.id} logged in via QR Code`);
 
-        // Redirect to dashboard
-        return res.redirect('/');
+        // Return JSON instead of redirect so the frontend AJAX call can handle it cleanly
+        return res.json({
+            success: true,
+            accessToken,
+            user: {
+                id: teacher.id,
+                username: teacher.username || `qr-teacher-${teacher.id}`,
+                role: "teacher"
+            }
+        });
     } catch (error) {
         console.error('QR Login error:', error);
-        return res.redirect('/login?error=server_error');
+        return res.status(500).json({ error: 'server_error' });
     }
 });
 

@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'wouter';
 import { useTranslation } from '@/lib/i18n';
+import api from '@/lib/axiosConfig';
 
 const QRLogin: React.FC = () => {
     const [, setLocation] = useLocation();
@@ -20,10 +21,16 @@ const QRLogin: React.FC = () => {
 
         // If token exists, redirect to backend for verification
         if (token) {
-            // The backend will handle verification and set cookie
-            // Then redirect back to the frontend
-            // In Vite dev, the proxy handles /api
-            window.location.href = `/api/auth/qr-login?token=${token}`;
+            // Make AJAX request to verify token and set cookies
+            api.get(`/auth/qr-login?token=${token}`)
+                .then(() => {
+                    // Successfully authenticated! Redirect to dashboard or home
+                    window.location.href = '/';
+                })
+                .catch((err: any) => {
+                    console.error('QR Login failed:', err);
+                    setLocation('/login?error=invalid_token');
+                });
         } else {
             // No token, redirect to login
             setLocation('/login');
